@@ -19,10 +19,12 @@ public class CoffeeController {
     }
 
     public void newCoffee(Coffee coffee) {
-        if (coffeeRepository.findById(coffee.getId()).isEmpty()) {
-            coffeeRepository.save(coffee);
-            coffeeView.coffeeAdded(coffee);
-        }
+        coffeeRepository.findById(coffee.getId())
+                .ifPresentOrElse(existing -> coffeeView.showExistingCoffeeError(existing), () -> {
+                    coffeeRepository.save(coffee);
+                    coffeeView.coffeeAdded(coffee);
+                });
+
     }
 
 }
