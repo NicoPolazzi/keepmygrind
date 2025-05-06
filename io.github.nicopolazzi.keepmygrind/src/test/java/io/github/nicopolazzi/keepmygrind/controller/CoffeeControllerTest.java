@@ -34,7 +34,7 @@ class CoffeeControllerTest {
         List<Coffee> coffees = asList(new Coffee());
         when(coffeeRepository.findAll()).thenReturn(coffees);
         coffeeController.allCoffees();
-        verify(coffeeView).showAllCoffees();
+        verify(coffeeView).showAllCoffees(coffees);
     }
 
 }
