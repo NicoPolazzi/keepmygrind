@@ -28,8 +28,10 @@ public class CoffeeController {
     }
 
     public void deleteCoffee(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        coffeeRepository.findById(coffee.getId()).ifPresent(existing -> {
+            coffeeRepository.delete(coffee);
+            coffeeView.coffeeDeleted(coffee);
+        });
     }
 
 }
