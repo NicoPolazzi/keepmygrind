@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.controller;
 
+import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 import io.github.nicopolazzi.keepmygrind.view.CoffeeView;
 
@@ -15,6 +16,11 @@ public class CoffeeController {
 
     public void allCoffees() {
         coffeeView.showAllCoffees(coffeeRepository.findAll());
+    }
+
+    public void newCoffee(Coffee coffee) {
+        // TODO Auto-generated method stub
+
     }
 
 }

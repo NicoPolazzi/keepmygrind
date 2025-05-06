@@ -8,4 +8,6 @@ public interface CoffeeView {
 
     void showAllCoffees(List<Coffee> coffees);
 
+    void coffeeAdded(Coffee coffee);
+
 }
