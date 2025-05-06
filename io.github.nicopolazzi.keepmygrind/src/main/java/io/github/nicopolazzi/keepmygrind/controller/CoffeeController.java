@@ -27,4 +27,9 @@ public class CoffeeController {
 
     }
 
+    public void deleteCoffee(Coffee coffee) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

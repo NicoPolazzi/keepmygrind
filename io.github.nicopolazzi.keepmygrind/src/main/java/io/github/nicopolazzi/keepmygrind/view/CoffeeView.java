@@ -12,4 +12,6 @@ public interface CoffeeView {
 
     void showExistingCoffeeError(Coffee existingCoffee);
 
+    void coffeeDeleted(Coffee coffee);
+
 }

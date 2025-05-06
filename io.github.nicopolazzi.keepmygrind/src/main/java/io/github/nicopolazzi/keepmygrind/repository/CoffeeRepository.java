@@ -13,4 +13,6 @@ public interface CoffeeRepository {
 
     void save(Coffee coffee);
 
+    void delete(Coffee coffee);
+
 }
