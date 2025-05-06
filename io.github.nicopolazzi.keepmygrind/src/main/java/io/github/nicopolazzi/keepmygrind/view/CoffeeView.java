@@ -10,4 +10,6 @@ public interface CoffeeView {
 
     void coffeeAdded(Coffee coffee);
 
+    void showExistingCoffeeError(Coffee existingCoffee);
+
 }

@@ -48,4 +48,15 @@ class CoffeeControllerTest {
         inOrder.verify(coffeeView).coffeeAdded(coffee);
     }
 
+    @Test
+    void testNewCoffeeWhenCoffeeAlreadyExists() {
+        var coffeeToAdd = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
+        var existingCoffee = new Coffee("1", "testOrigin2", "testProcessMethod", "testRoastMethod");
+        when(coffeeRepository.findById("1")).thenReturn(Optional.of(existingCoffee));
+        coffeeController.newCoffee(coffeeToAdd);
+        verify(coffeeView).showExistingCoffeeError(existingCoffee);
+        verifyNoMoreInteractions(ignoreStubs(coffeeRepository));
+
+    }
+
 }
