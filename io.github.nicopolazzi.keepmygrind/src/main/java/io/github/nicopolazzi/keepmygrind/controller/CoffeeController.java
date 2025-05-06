@@ -19,8 +19,10 @@ public class CoffeeController {
     }
 
     public void newCoffee(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        if (coffeeRepository.findById(coffee.getId()).isEmpty()) {
+            coffeeRepository.save(coffee);
+            coffeeView.coffeeAdded(coffee);
+        }
     }
 
 }
