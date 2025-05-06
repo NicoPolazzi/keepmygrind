@@ -12,7 +12,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
-    <junit.version>5.12.2</junit.version>
+    <junit.version>5.9.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
     <argLine></argLine>
   </properties>
@@ -95,6 +95,30 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.2</version>
+        </plugin>
+        <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.15.2</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-junit5-plugin</artifactId>
+                    <version>1.2.2</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <targetClasses>
+                    <param>${project.groupId}.keepmygrind.controller.*</param>
+                </targetClasses>
+                <targetTests>
+                    <param>${project.groupId}.keepmygrind.*</param>
+                </targetTests>
+                <mutators>
+                    <mutator>DEFAULTS</mutator>
+                </mutators>
+                <mutationThreshold>100</mutationThreshold>
+            </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
