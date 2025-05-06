@@ -68,4 +68,12 @@ class CoffeeControllerTest {
         inOrder.verify(coffeeView).coffeeDeleted(coffee);
     }
 
+    @Test
+    void testDeleteCoffeeWhenCoffeeDoesntAlreadyExist() {
+        var coffee = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
+        when(coffeeRepository.findById("1")).thenReturn(Optional.empty());
+        coffeeController.newCoffee(coffee);
+        verify(coffeeView).showNotExistingCoffeeError(coffee);
+        verifyNoMoreInteractions(ignoreStubs(coffeeRepository));
+    }
 }
