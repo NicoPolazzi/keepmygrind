@@ -28,10 +28,10 @@ public class CoffeeController {
     }
 
     public void deleteCoffee(Coffee coffee) {
-        coffeeRepository.findById(coffee.getId()).ifPresent(existing -> {
-            coffeeRepository.delete(coffee);
-            coffeeView.coffeeDeleted(coffee);
-        });
+        coffeeRepository.findById(coffee.getId()).ifPresentOrElse(existing -> {
+            coffeeRepository.delete(existing);
+            coffeeView.coffeeDeleted(existing);
+        }, () -> coffeeView.showNotExistingCoffeeError(coffee));
     }
 
 }
