@@ -8,6 +8,7 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <name>keepmygrind</name>
+  <url>https://github.com/NicoPolazzi/keepmygrind</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -72,7 +73,6 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.13.0</version>
-          
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -97,32 +97,51 @@
           <version>3.1.2</version>
         </plugin>
         <plugin>
-            <groupId>org.pitest</groupId>
-            <artifactId>pitest-maven</artifactId>
-            <version>1.15.2</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-junit5-plugin</artifactId>
-                    <version>1.2.2</version>
-                </dependency>
-            </dependencies>
-            <configuration>
-                <targetClasses>
-                    <param>${project.groupId}.keepmygrind.controller.*</param>
-                </targetClasses>
-                <targetTests>
-                    <param>${project.groupId}.keepmygrind.*</param>
-                </targetTests>
-                <mutators>
-                    <mutator>DEFAULTS</mutator>
-                </mutators>
-                <mutationThreshold>100</mutationThreshold>
-            </configuration>
+          <groupId>org.pitest</groupId>
+          <artifactId>pitest-maven</artifactId>
+          <version>1.15.2</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.pitest</groupId>
+              <artifactId>pitest-junit5-plugin</artifactId>
+              <version>1.2.2</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <!-- targetClasses and targetTests are no longer required because new version of pitest will scan 
+            the project to determine which classes are present.  https://pitest.org/quickstart/maven/-->
+            <excludedClasses>
+              <param>${project.groupId}.${project.artifactId}.model.*</param>
+            </excludedClasses>
+            <mutators>
+                <mutator>DEFAULTS</mutator>
+            </mutators>
+            <mutationThreshold>100</mutationThreshold>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
-    
   </build>
   
+  <profiles>
+    <profile>
+      <id>mutation-testing</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>mutationCoverage</goal>
+                </goals>
+                <phase>verify</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
