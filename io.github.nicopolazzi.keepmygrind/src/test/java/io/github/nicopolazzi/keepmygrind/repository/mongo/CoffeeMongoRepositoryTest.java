@@ -7,6 +7,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -82,4 +83,14 @@ class CoffeeMongoRepositoryTest {
     void testFindByIdNotFound() {
         assertThat(coffeeRepository.findById("1")).isEmpty();
     }
+
+    @Test
+    void testFindByIdFound() {
+        var coffee1 = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
+        var coffee2 = new Coffee("2", "testOrigin", "testProcessMethod", "testRoastMethod");
+        List<Coffee> coffees = asList(coffee1, coffee2);
+        coffeeCollection.insertMany(coffees);
+        assertThat(coffeeRepository.findById("2")).isEqualTo(Optional.of(coffee2));
+    }
+
 }
