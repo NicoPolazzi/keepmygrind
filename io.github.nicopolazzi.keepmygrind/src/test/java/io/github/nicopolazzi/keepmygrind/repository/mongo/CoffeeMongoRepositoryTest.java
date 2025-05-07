@@ -78,4 +78,8 @@ class CoffeeMongoRepositoryTest {
         assertThat(coffeeRepository.findAll()).containsExactly(coffee1, coffee2);
     }
 
+    @Test
+    void testFindByIdNotFound() {
+        assertThat(coffeeRepository.findById("1")).isEmpty();
+    }
 }
