@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       workdir: io.github.nicopolazzi.keepmygrind
-      COVERALLS_REPO_TOKEN: ${secrets.COVERALLS_TOKEN}
+      COVERALLS_REPO_TOKEN: ${{secrets.COVERALLS_TOKEN}}
       
     name: Build with Java 17 on Linux
     steps:
