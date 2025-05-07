@@ -1,16 +1,28 @@
-name: Java CI with Maven in Linux
+name: Java CI with Maven on Linux
 
 on:
   push:
+    paths-ignore:
+      - '**.md' 
   pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
   build:
     runs-on: ubuntu-24.04
-    
+    env:
+      workdir: io.github.nicopolazzi.keepmygrind
+      COVERALLS_REPO_TOKEN: ${{secrets.COVERALLS_TOKEN}}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+    name: Build with Java 17 on Linux
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          # Shallow clones should be disabled for a better relevancy of SonarQube analysis
+          fetch-depth: 0
       
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -21,11 +33,22 @@ jobs:
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
-          path: ~/.m2
+          path: |
+            ~/.m2
+            ~/.sonar/cache
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: ${{ runner.os }}-m2-
+      
+      - name: Set Maven Additional Options
+        run: |
+            echo "ADDITIONAL_MAVEN_OPTIONS=-Pmutation-testing,coveralls sonar:sonar" >> $GITHUB_ENV
+        if: ${{ env.COVERALLS_REPO_TOKEN && env.SONAR_TOKEN }}
             
       - name: Build and test with Maven
-        run: mvn verify
-        working-directory: io.github.nicopolazzi.keepmygrind
-                     
+        run: >
+          mvn verify $ADDITIONAL_MAVEN_OPTIONS
+          -Dsonar.organization=nicopolazzi-github
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.projectKey=NicoPolazzi_keepmygrind
+        working-directory: ${{env.workdir}}
+                       
