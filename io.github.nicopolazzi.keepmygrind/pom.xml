@@ -16,7 +16,23 @@
     <junit.version>5.9.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
     <argLine></argLine>
+    
+    <sonar.host.url>http://localhost:9000</sonar.host.url>
+    
+    <sonar.tests>
+      ${project.basedir}/src/test/java
+    </sonar.tests>
+    
+    <sonar.junit.reportPaths>
+      ${project.build.directory}/surefire-reports
+    </sonar.junit.reportPaths>
+    
+    <sonar.coverage.exclusions>
+      **/model/*.*
+    </sonar.coverage.exclusions>
   </properties>
+  
+  
 
   <dependencyManagement>
     <dependencies>
@@ -183,6 +199,11 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>5.0.0.4389</version>
         </plugin>
       </plugins>
     </pluginManagement>
