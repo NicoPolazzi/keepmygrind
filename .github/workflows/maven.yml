@@ -32,7 +32,7 @@ jobs:
       - name: Set Maven Additional Options
         run: |
             echo "ADDITIONAL_MAVEN_OPTIONS=-Pcoveralls" >> $GITHUB_ENV
-            if: ${{ env.COVERALLS_REPO_TOKEN }}
+        if: ${{ env.COVERALLS_REPO_TOKEN }}
             
       - name: Build and test with Maven
         run: >
