@@ -1,11 +1,17 @@
 package io.github.nicopolazzi.keepmygrind.repository.mongo;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoCollection;
 
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
@@ -15,16 +21,18 @@ public class CoffeeMongoRepository implements CoffeeRepository {
 
     public static final String KEEPMYGRIND_DB_NAME = "keepmygrind";
     public static final String COFFEE_COLLECTION_NAME = "coffee";
-    private MongoCollection<Document> coffeeCollection;
+    private MongoCollection<Coffee> coffeeCollection;
 
     public CoffeeMongoRepository(MongoClient client) {
-        coffeeCollection = client.getDatabase(KEEPMYGRIND_DB_NAME).getCollection(COFFEE_COLLECTION_NAME);
+        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+        coffeeCollection = client.getDatabase(KEEPMYGRIND_DB_NAME).withCodecRegistry(pojoCodecRegistry)
+                .getCollection(COFFEE_COLLECTION_NAME, Coffee.class);
     }
 
     @Override
     public List<Coffee> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return coffeeCollection.find().into(new ArrayList<>());
     }
 
     @Override
