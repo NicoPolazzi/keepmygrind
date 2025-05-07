@@ -1,10 +1,12 @@
 package io.github.nicopolazzi.keepmygrind.repository.mongo;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -65,6 +67,15 @@ class CoffeeMongoRepositoryTest {
     @Test
     void testFindAllWhenDatabaseIsEmpty() {
         assertThat(coffeeRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    void testFindAllWhenDatabaseIsNotEmpty() {
+        var coffee1 = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
+        var coffee2 = new Coffee("2", "testOrigin", "testProcessMethod", "testRoastMethod");
+        List<Coffee> coffees = asList(coffee1, coffee2);
+        coffeeCollection.insertMany(coffees);
+        assertThat(coffeeRepository.findAll()).containsExactly(coffee1, coffee2);
     }
 
 }
