@@ -15,6 +15,7 @@
     <maven.compiler.release>17</maven.compiler.release>
     <junit.version>5.9.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
+    <assertj.version>3.27.3</assertj.version>
     <argLine></argLine>
     
     <sonar.host.url>http://localhost:9000</sonar.host.url>
@@ -53,6 +54,26 @@
         <artifactId>mockito-junit-jupiter</artifactId>
         <version>${mockito.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>3.12.14</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.2.13</version>
+      </dependency>
+      <dependency>
+        <groupId>de.bwaldvogel</groupId>
+        <artifactId>mongo-java-server</artifactId>
+        <version>1.46.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -71,6 +92,24 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-junit-jupiter</artifactId>
         <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>de.bwaldvogel</groupId>
+      <artifactId>mongo-java-server</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
     </dependency>
   </dependencies>
 
