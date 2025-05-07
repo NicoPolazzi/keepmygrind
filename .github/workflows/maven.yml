@@ -7,7 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    
+    env:
+      workdir: io.github.nicopolazzi.keepmygrind
+      COVERALLS_REPO_TOKEN: ${secrets.COVERALLS_TOKEN}
+      
+    name: Build with Java 17 on Linux
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -24,8 +28,14 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: ${{ runner.os }}-m2-
+      
+      - name: Set Maven Additional Options
+        run: |
+            echo "ADDITIONAL_MAVEN_OPTIONS=-Pcoveralls" >> $GITHUB_ENV
+            if: ${{ env.COVERALLS_REPO_TOKEN }}
             
       - name: Build and test with Maven
-        run: mvn verify
-        working-directory: io.github.nicopolazzi.keepmygrind
-                     
+        run: >
+          mvn verify $ADDITIONAL_MAVEN_OPTIONS
+        working-directory: ${{env.workdir}}
+                       
