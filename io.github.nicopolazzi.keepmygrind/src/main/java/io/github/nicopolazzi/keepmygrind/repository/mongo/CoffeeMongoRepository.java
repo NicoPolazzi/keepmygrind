@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.repository.mongo;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -36,9 +37,8 @@ public class CoffeeMongoRepository implements CoffeeRepository {
     }
 
     @Override
-    public Optional<Coffee> findById(String string) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+    public Optional<Coffee> findById(String id) {
+        return Optional.ofNullable(coffeeCollection.find(eq("_id", id)).first());
     }
 
     @Override

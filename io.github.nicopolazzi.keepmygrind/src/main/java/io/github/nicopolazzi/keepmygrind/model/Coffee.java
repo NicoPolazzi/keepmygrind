@@ -2,8 +2,14 @@ package io.github.nicopolazzi.keepmygrind.model;
 
 import java.util.Objects;
 
+import org.bson.codecs.pojo.annotations.BsonId;
+
 public class Coffee {
 
+    /**
+     * required for MongoDB mapping with _id
+     */
+    @BsonId
     private String id;
     private String origin;
     private String processMethod;
