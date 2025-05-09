@@ -102,7 +102,7 @@ class CoffeeMongoRepositoryTest {
     void testSave() {
         var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         coffeeRepository.save(coffee);
-        assertThat(coffeeCollection.find()).hasSize(1).allMatch(d -> d.equals(coffee));
+        assertThat(coffeeCollection.find()).containsExactly(coffee);
     }
 
     @Test
