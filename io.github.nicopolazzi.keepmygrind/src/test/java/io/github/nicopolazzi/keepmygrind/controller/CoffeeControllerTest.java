@@ -21,6 +21,10 @@ import io.github.nicopolazzi.keepmygrind.view.CoffeeView;
 @ExtendWith(MockitoExtension.class)
 class CoffeeControllerTest {
 
+    private static final String COFFEE_FIXTURE_ID = "1";
+    private static final String COFFEE_FIXTURE_ORIGIN = "origin";
+    private static final String COFFEE_FIXTURE_PROCESS = "process";
+
     @Mock
     private CoffeeRepository coffeeRepository;
 
@@ -40,8 +44,8 @@ class CoffeeControllerTest {
 
     @Test
     void testNewCoffeeWhenCoffeeDoesntAlreadyExist() {
-        var coffee = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
-        when(coffeeRepository.findById("1")).thenReturn(Optional.empty());
+        var coffee = new Coffee(COFFEE_FIXTURE_ID, COFFEE_FIXTURE_ORIGIN, COFFEE_FIXTURE_PROCESS);
+        when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.empty());
         coffeeController.newCoffee(coffee);
         InOrder inOrder = inOrder(coffeeRepository, coffeeView);
         inOrder.verify(coffeeRepository).save(coffee);
@@ -50,9 +54,9 @@ class CoffeeControllerTest {
 
     @Test
     void testNewCoffeeWhenCoffeeAlreadyExists() {
-        var coffeeToAdd = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
-        var existingCoffee = new Coffee("1", "testOrigin2", "testProcessMethod", "testRoastMethod");
-        when(coffeeRepository.findById("1")).thenReturn(Optional.of(existingCoffee));
+        var coffeeToAdd = new Coffee(COFFEE_FIXTURE_ID, COFFEE_FIXTURE_ORIGIN, COFFEE_FIXTURE_PROCESS);
+        var existingCoffee = new Coffee(COFFEE_FIXTURE_ID, "origin2", "process2");
+        when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.of(existingCoffee));
         coffeeController.newCoffee(coffeeToAdd);
         verify(coffeeView).showExistingCoffeeError(existingCoffee);
         verifyNoMoreInteractions(ignoreStubs(coffeeRepository));
@@ -60,8 +64,8 @@ class CoffeeControllerTest {
 
     @Test
     void testDeleteCoffeeWhenCoffeeAlreadyExists() {
-        var coffee = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
-        when(coffeeRepository.findById("1")).thenReturn(Optional.of(coffee));
+        var coffee = new Coffee(COFFEE_FIXTURE_ID, COFFEE_FIXTURE_ORIGIN, COFFEE_FIXTURE_PROCESS);
+        when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.of(coffee));
         coffeeController.deleteCoffee(coffee);
         InOrder inOrder = inOrder(coffeeRepository, coffeeView);
         inOrder.verify(coffeeRepository).delete(coffee);
@@ -70,8 +74,8 @@ class CoffeeControllerTest {
 
     @Test
     void testDeleteCoffeeWhenCoffeeDoesntAlreadyExist() {
-        var coffee = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
-        when(coffeeRepository.findById("1")).thenReturn(Optional.empty());
+        var coffee = new Coffee(COFFEE_FIXTURE_ID, COFFEE_FIXTURE_ORIGIN, COFFEE_FIXTURE_PROCESS);
+        when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.empty());
         coffeeController.deleteCoffee(coffee);
         verify(coffeeView).showNotExistingCoffeeError(coffee);
         verifyNoMoreInteractions(ignoreStubs(coffeeRepository));

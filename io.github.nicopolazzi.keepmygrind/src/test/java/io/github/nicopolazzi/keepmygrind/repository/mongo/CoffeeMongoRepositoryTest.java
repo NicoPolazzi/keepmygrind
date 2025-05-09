@@ -1,5 +1,7 @@
 package io.github.nicopolazzi.keepmygrind.repository.mongo;
 
+import static io.github.nicopolazzi.keepmygrind.repository.mongo.CoffeeMongoRepository.COFFEE_COLLECTION_NAME;
+import static io.github.nicopolazzi.keepmygrind.repository.mongo.CoffeeMongoRepository.KEEPMYGRIND_DB_NAME;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -30,6 +32,13 @@ import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 
 class CoffeeMongoRepositoryTest {
 
+    private static final String COFFEE_FIXTURE_1_ID = "1";
+    private static final String COFFEE_FIXTURE_1_ORIGIN = "origin1";
+    private static final String COFFEE_FIXTURE_1_PROCESS = "process1";
+    private static final String COFFEE_FIXTURE_2_ID = "2";
+    private static final String COFFEE_FIXTURE_2_ORIGIN = "origin2";
+    private static final String COFFEE_FIXTURE_2_PROCESS = "process2";
+
     private static MongoServer server;
     private static InetSocketAddress serverAddress;
 
@@ -54,10 +63,9 @@ class CoffeeMongoRepositoryTest {
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
         client = new MongoClient(new ServerAddress(serverAddress));
         coffeeRepository = new CoffeeMongoRepository(client);
-        MongoDatabase database = client.getDatabase(CoffeeMongoRepository.KEEPMYGRIND_DB_NAME)
-                .withCodecRegistry(pojoCodecRegistry);
+        MongoDatabase database = client.getDatabase(KEEPMYGRIND_DB_NAME).withCodecRegistry(pojoCodecRegistry);
         database.drop();
-        coffeeCollection = database.getCollection(CoffeeMongoRepository.COFFEE_COLLECTION_NAME, Coffee.class);
+        coffeeCollection = database.getCollection(COFFEE_COLLECTION_NAME, Coffee.class);
     }
 
     @AfterEach
@@ -72,25 +80,23 @@ class CoffeeMongoRepositoryTest {
 
     @Test
     void testFindAllWhenDatabaseIsNotEmpty() {
-        var coffee1 = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
-        var coffee2 = new Coffee("2", "testOrigin", "testProcessMethod", "testRoastMethod");
-        List<Coffee> coffees = asList(coffee1, coffee2);
-        coffeeCollection.insertMany(coffees);
+        var coffee1 = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var coffee2 = new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS);
+        coffeeCollection.insertMany(asList(coffee1, coffee2));
         assertThat(coffeeRepository.findAll()).containsExactly(coffee1, coffee2);
     }
 
     @Test
     void testFindByIdNotFound() {
-        assertThat(coffeeRepository.findById("1")).isEmpty();
+        assertThat(coffeeRepository.findById(COFFEE_FIXTURE_1_ID)).isEmpty();
     }
 
     @Test
     void testFindByIdFound() {
-        var coffee1 = new Coffee("1", "testOrigin", "testProcessMethod", "testRoastMethod");
-        var coffee2 = new Coffee("2", "testOrigin", "testProcessMethod", "testRoastMethod");
-        List<Coffee> coffees = asList(coffee1, coffee2);
-        coffeeCollection.insertMany(coffees);
-        assertThat(coffeeRepository.findById("2")).isEqualTo(Optional.of(coffee2));
+        var coffee1 = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var coffee2 = new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS);
+        coffeeCollection.insertMany(asList(coffee1, coffee2));
+        assertThat(coffeeRepository.findById(COFFEE_FIXTURE_2_ID)).isEqualTo(Optional.of(coffee2));
     }
 
 }

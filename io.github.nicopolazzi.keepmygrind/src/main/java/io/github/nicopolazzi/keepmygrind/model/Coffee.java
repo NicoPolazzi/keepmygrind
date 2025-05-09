@@ -13,16 +13,14 @@ public class Coffee {
     private String id;
     private String origin;
     private String processMethod;
-    private String roastMethod;
 
     public Coffee() {
     }
 
-    public Coffee(String id, String origin, String processMethod, String roastMethod) {
+    public Coffee(String id, String origin, String processMethod) {
         this.id = id;
         this.origin = origin;
         this.processMethod = processMethod;
-        this.roastMethod = roastMethod;
     }
 
     public String getId() {
@@ -49,17 +47,9 @@ public class Coffee {
         this.processMethod = processMethod;
     }
 
-    public String getRoastMethod() {
-        return roastMethod;
-    }
-
-    public void setRoastMethod(String roastMethod) {
-        this.roastMethod = roastMethod;
-    }
-
     @Override
     public int hashCode() {
-        return Objects.hash(id, origin, processMethod, roastMethod);
+        return Objects.hash(id, origin, processMethod);
     }
 
     @Override
@@ -72,13 +62,12 @@ public class Coffee {
             return false;
         Coffee other = (Coffee) obj;
         return Objects.equals(id, other.id) && Objects.equals(origin, other.origin)
-                && Objects.equals(processMethod, other.processMethod) && Objects.equals(roastMethod, other.roastMethod);
+                && Objects.equals(processMethod, other.processMethod);
     }
 
     @Override
     public String toString() {
-        return "Coffee [id=" + id + ", origin=" + origin + ", processMethod=" + processMethod + ", roastMethod="
-                + roastMethod + "]";
+        return "Coffee [id=" + id + ", origin=" + origin + ", processMethod=" + processMethod + "]";
     }
 
 }
