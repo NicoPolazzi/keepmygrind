@@ -8,7 +8,6 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import java.net.InetSocketAddress;
-import java.util.List;
 import java.util.Optional;
 
 import org.bson.codecs.configuration.CodecRegistry;
@@ -97,6 +96,13 @@ class CoffeeMongoRepositoryTest {
         var coffee2 = new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS);
         coffeeCollection.insertMany(asList(coffee1, coffee2));
         assertThat(coffeeRepository.findById(COFFEE_FIXTURE_2_ID)).isEqualTo(Optional.of(coffee2));
+    }
+
+    @Test
+    void testSave() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        coffeeRepository.save(coffee);
+        assertThat(coffeeCollection.find()).hasSize(1).allMatch(d -> d.equals(coffee));
     }
 
 }
