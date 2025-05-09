@@ -48,8 +48,7 @@ public class CoffeeMongoRepository implements CoffeeRepository {
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-
+        coffeeCollection.deleteOne(eq("_id", id));
     }
 
 }
