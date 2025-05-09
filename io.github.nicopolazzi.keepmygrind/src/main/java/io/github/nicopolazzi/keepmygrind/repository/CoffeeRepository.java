@@ -9,10 +9,10 @@ public interface CoffeeRepository {
 
     List<Coffee> findAll();
 
-    Optional<Coffee> findById(String string);
+    Optional<Coffee> findById(String id);
 
     void save(Coffee coffee);
 
-    void delete(Coffee coffee);
+    void delete(String id);
 
 }
