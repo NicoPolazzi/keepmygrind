@@ -68,7 +68,7 @@ class CoffeeControllerTest {
         when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.of(coffee));
         coffeeController.deleteCoffee(coffee);
         InOrder inOrder = inOrder(coffeeRepository, coffeeView);
-        inOrder.verify(coffeeRepository).delete(coffee);
+        inOrder.verify(coffeeRepository).delete(COFFEE_FIXTURE_ID);
         inOrder.verify(coffeeView).coffeeDeleted(coffee);
     }
 

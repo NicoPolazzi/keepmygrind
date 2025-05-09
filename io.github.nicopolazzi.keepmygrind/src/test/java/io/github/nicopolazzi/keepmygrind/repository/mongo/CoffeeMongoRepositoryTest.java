@@ -105,4 +105,11 @@ class CoffeeMongoRepositoryTest {
         assertThat(coffeeCollection.find()).hasSize(1).allMatch(d -> d.equals(coffee));
     }
 
+    @Test
+    void testDelete() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        coffeeCollection.insertOne(coffee);
+        coffeeRepository.delete(COFFEE_FIXTURE_1_ID);
+        assertThat(coffeeCollection.find()).isEmpty();
+    }
 }

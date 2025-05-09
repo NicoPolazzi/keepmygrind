@@ -43,12 +43,11 @@ public class CoffeeMongoRepository implements CoffeeRepository {
 
     @Override
     public void save(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        coffeeCollection.insertOne(coffee);
     }
 
     @Override
-    public void delete(Coffee coffee) {
+    public void delete(String id) {
         // TODO Auto-generated method stub
 
     }
