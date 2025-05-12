@@ -67,4 +67,19 @@ class CoffeeSqlRepositoryTest {
     void testFindByIdNotFound() {
         assertThat(coffeeRepository.findById(COFFEE_FIXTURE_1_ID)).isEmpty();
     }
+
+    @Test
+    void testFindByIdFound() {
+        var coffee1 = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var coffee2 = new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS);
+
+        sessionFactory.inTransaction(session -> {
+            session.persist(coffee1);
+            session.persist(coffee2);
+        });
+
+        assertThat(coffeeRepository.findById(COFFEE_FIXTURE_2_ID)).isEqualTo(coffee2);
+
+    }
+
 }
