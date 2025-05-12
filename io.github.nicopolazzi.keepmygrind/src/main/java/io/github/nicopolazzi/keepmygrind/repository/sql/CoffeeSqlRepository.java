@@ -29,8 +29,7 @@ public class CoffeeSqlRepository implements CoffeeRepository {
 
     @Override
     public void save(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        sessionFactory.inTransaction(session -> session.persist(coffee));
     }
 
     @Override
