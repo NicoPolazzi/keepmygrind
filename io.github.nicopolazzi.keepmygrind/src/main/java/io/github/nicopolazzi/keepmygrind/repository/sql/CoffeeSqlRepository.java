@@ -23,8 +23,7 @@ public class CoffeeSqlRepository implements CoffeeRepository {
 
     @Override
     public Optional<Coffee> findById(String id) {
-        Coffee foundCoffee = sessionFactory.fromSession(session -> session.find(Coffee.class, id));
-        return Optional.ofNullable(foundCoffee);
+        return Optional.ofNullable(sessionFactory.fromSession(session -> session.find(Coffee.class, id)));
     }
 
     @Override
@@ -34,10 +33,7 @@ public class CoffeeSqlRepository implements CoffeeRepository {
 
     @Override
     public void delete(String id) {
-        sessionFactory.inTransaction(session -> {
-            Coffee deletingCoffee = session.find(Coffee.class, id);
-            session.remove(deletingCoffee);
-        });
+        sessionFactory.inTransaction(session -> session.remove(session.find(Coffee.class, id)));
     }
 
 }
