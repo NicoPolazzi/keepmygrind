@@ -34,8 +34,10 @@ public class CoffeeSqlRepository implements CoffeeRepository {
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-
+        sessionFactory.inTransaction(session -> {
+            Coffee deletingCoffee = session.find(Coffee.class, id);
+            session.remove(deletingCoffee);
+        });
     }
 
 }
