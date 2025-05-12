@@ -94,4 +94,13 @@ class CoffeeSqlRepositoryTest {
         assertThat(coffees).containsExactly(coffee);
     }
 
+    @Test
+    void testDelete() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        sessionFactory.inTransaction(session -> session.persist(coffee));
+        coffeeRepository.delete(COFFEE_FIXTURE_1_ID);
+        Coffee retrivedCoffee = sessionFactory.fromSession(session -> session.find(Coffee.class, COFFEE_FIXTURE_1_ID));
+        assertThat(retrivedCoffee).isNull();
+    }
+
 }
