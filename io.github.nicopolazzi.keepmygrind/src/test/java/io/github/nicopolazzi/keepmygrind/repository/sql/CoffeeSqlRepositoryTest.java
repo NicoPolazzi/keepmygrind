@@ -90,7 +90,7 @@ class CoffeeSqlRepositoryTest {
         var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         coffeeRepository.save(coffee);
         List<Coffee> coffees = sessionFactory
-                .fromTransaction(session -> session.createSelectionQuery("from Coffee", Coffee.class).getResultList());
+                .fromSession(session -> session.createSelectionQuery("from Coffee", Coffee.class).getResultList());
         assertThat(coffees).containsExactly(coffee);
     }
 
