@@ -4,12 +4,17 @@ import java.util.Objects;
 
 import org.bson.codecs.pojo.annotations.BsonId;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Coffee {
 
     /**
      * required for MongoDB mapping with _id
      */
     @BsonId
+    @Id
     private String id;
     private String origin;
     private String processMethod;

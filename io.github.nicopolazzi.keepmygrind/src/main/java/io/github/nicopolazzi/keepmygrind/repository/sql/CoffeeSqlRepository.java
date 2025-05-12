@@ -17,8 +17,8 @@ public class CoffeeSqlRepository implements CoffeeRepository {
 
     @Override
     public List<Coffee> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return sessionFactory
+                .fromSession(session -> session.createSelectionQuery("from Coffee", Coffee.class).getResultList());
     }
 
     @Override
