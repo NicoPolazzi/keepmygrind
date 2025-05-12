@@ -2,6 +2,7 @@ package io.github.nicopolazzi.keepmygrind.repository.sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.SessionFactory;
@@ -82,6 +83,15 @@ class CoffeeSqlRepositoryTest {
 
         assertThat(coffeeRepository.findById(COFFEE_FIXTURE_2_ID)).isEqualTo(Optional.of(coffee2));
 
+    }
+
+    @Test
+    void testSave() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        coffeeRepository.save(coffee);
+        List<Coffee> coffees = sessionFactory
+                .fromTransaction(session -> session.createSelectionQuery("from Coffee", Coffee.class).getResultList());
+        assertThat(coffees).containsExactly(coffee);
     }
 
 }
