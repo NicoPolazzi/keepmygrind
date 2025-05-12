@@ -23,8 +23,8 @@ public class CoffeeSqlRepository implements CoffeeRepository {
 
     @Override
     public Optional<Coffee> findById(String id) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        Coffee foundCoffee = sessionFactory.fromSession(session -> session.find(Coffee.class, id));
+        return Optional.ofNullable(foundCoffee);
     }
 
     @Override

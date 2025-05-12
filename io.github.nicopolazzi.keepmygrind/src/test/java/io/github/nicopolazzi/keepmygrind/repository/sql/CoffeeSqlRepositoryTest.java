@@ -2,6 +2,8 @@ package io.github.nicopolazzi.keepmygrind.repository.sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
@@ -78,7 +80,7 @@ class CoffeeSqlRepositoryTest {
             session.persist(coffee2);
         });
 
-        assertThat(coffeeRepository.findById(COFFEE_FIXTURE_2_ID)).isEqualTo(coffee2);
+        assertThat(coffeeRepository.findById(COFFEE_FIXTURE_2_ID)).isEqualTo(Optional.of(coffee2));
 
     }
 
