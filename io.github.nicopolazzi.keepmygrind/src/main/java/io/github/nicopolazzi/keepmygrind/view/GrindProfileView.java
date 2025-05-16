@@ -1,0 +1,11 @@
+package io.github.nicopolazzi.keepmygrind.view;
+
+import java.util.List;
+
+import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
+
+public interface GrindProfileView {
+
+    void showAllGrindProfiles(List<GrindProfile> profiles);
+
+}
