@@ -94,7 +94,7 @@ class GrindProfileControllerTest {
         grindProfileController.deleteGrindProfile(profile);
         InOrder inOrder = inOrder(grindProfileRepository, grindProfileView);
         inOrder.verify(grindProfileRepository).delete(GRINDPROFILE_FIXTURE_ID);
-        inOrder.verify(grindProfileView).grindProfileDeleted(profile);
+        inOrder.verify(grindProfileView).grindProfileRemoved(profile);
     }
 
     @Test

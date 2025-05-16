@@ -10,7 +10,7 @@ public interface GrindProfileView {
 
     void grindProfileAdded(GrindProfile profile);
 
-    void grindProfileDeleted(GrindProfile profile);
+    void grindProfileRemoved(GrindProfile profile);
 
     void showExistingGrindProfileError(GrindProfile existingProfile);
 

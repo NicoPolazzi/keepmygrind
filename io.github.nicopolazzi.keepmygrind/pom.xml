@@ -216,7 +216,7 @@
             </targetClasses>
             <targetTests>
               <param>io.github.nicopolazzi.keepmygrind.repository.**.*Test</param>
-              <param>io.github.nicopolazzi.keepmygrind.controller.**.*Test</param>
+              <param>io.github.nicopolazzi.keepmygrind.controller.*Test</param>
             </targetTests>
             <mutators>
                 <mutator>STRONGER</mutator>
