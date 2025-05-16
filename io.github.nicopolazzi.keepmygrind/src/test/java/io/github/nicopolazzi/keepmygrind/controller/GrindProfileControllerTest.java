@@ -16,6 +16,7 @@ import static org.mockito.Mockito.*;
 
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
+import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
@@ -33,6 +34,9 @@ class GrindProfileControllerTest {
 
     @Mock
     private GrindProfileView grindProfileView;
+
+    @Mock
+    private CoffeeRepository coffeeRepository;
 
     @InjectMocks
     private GrindProfileController grindProfileController;
@@ -57,7 +61,7 @@ class GrindProfileControllerTest {
     }
 
     @Test
-    void testNewGrindProfileWhenGrindProfiletAlreadyExists() {
+    void testNewGrindProfileWhenGrindProfileAlreadyExists() {
         var existingProfile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
                 GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
         var profileToAdd = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), "espresso", 10, 100, 30);
@@ -65,6 +69,16 @@ class GrindProfileControllerTest {
         grindProfileController.newGrindProfile(profileToAdd);
         verify(grindProfileView).showExistingGrindProfileError(existingProfile);
         verifyNoMoreInteractions(ignoreStubs(grindProfileRepository));
+    }
+
+    @Test
+    void testNewGrindProfileWhenCoffeeDoesntAlreadyExist() {
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
+                GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
+        when(coffeeRepository.findById("1")).thenReturn(Optional.empty());
+        grindProfileController.newGrindProfile(profile);
+        verify(grindProfileView).showCoffeeNotFoundError("1");
+        verifyNoMoreInteractions(ignoreStubs(coffeeRepository));
     }
 
 }

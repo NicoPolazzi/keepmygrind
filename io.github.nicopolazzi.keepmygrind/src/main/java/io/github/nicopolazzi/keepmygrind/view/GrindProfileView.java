@@ -12,4 +12,6 @@ public interface GrindProfileView {
 
     void showExistingGrindProfileError(GrindProfile existingProfile);
 
+    void showCoffeeNotFoundError(String coffeeId);
+
 }
