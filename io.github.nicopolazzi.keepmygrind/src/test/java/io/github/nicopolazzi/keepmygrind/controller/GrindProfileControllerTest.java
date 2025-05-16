@@ -49,4 +49,14 @@ class GrindProfileControllerTest {
         inOrder.verify(grindProfileView).grindProfileAdded(profile);
     }
 
+    @Test
+    void testNewGrindProfileWhenGrindProfiletAlreadyExists() {
+        var existingProfile = new GrindProfile("1", new Coffee(), "V60", 18, 250, 60);
+        var profileToAdd = new GrindProfile("1", new Coffee(), "espresso", 18, 250, 60);
+        when(grindProfileRepository.findById("1")).thenReturn(Optional.of(existingProfile));
+        grindProfileController.newGrindProfile(profileToAdd);
+        verify(grindProfileView).showExistingGrindProfileError(existingProfile);
+        verifyNoMoreInteractions(ignoreStubs(grindProfileRepository));
+    }
+
 }
