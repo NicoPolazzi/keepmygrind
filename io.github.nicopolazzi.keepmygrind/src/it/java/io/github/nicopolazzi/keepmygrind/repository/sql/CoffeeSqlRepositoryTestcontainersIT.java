@@ -13,11 +13,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 
-class CoffeeSqlRepositoryTest {
+@Testcontainers
+class CoffeeSqlRepositoryTestcontainersIT {
 
     private static final String COFFEE_FIXTURE_1_ID = "1";
     private static final String COFFEE_FIXTURE_1_ORIGIN = "origin1";
@@ -26,13 +30,19 @@ class CoffeeSqlRepositoryTest {
     private static final String COFFEE_FIXTURE_2_ORIGIN = "origin2";
     private static final String COFFEE_FIXTURE_2_PROCESS = "process2";
 
+    @Container
+    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8");
+
     private static SessionFactory sessionFactory;
     private CoffeeRepository coffeeRepository;
 
     @BeforeAll
-    static void setupSessionFactory() {
+    static void buildSessionFactory() {
         sessionFactory = new Configuration().addAnnotatedClass(Coffee.class)
-                .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1")
+                .setProperty(AvailableSettings.JAKARTA_JDBC_URL, mysql.getJdbcUrl())
+                .setProperty(AvailableSettings.JAKARTA_JDBC_DRIVER, "com.mysql.cj.jdbc.Driver")
+                .setProperty(AvailableSettings.JAKARTA_JDBC_USER, mysql.getUsername())
+                .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, mysql.getPassword())
                 .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_CREATE_THEN_DROP)
                 .buildSessionFactory();
     }
@@ -49,12 +59,7 @@ class CoffeeSqlRepositoryTest {
     }
 
     @Test
-    void testFindAllWhenDatabaseIsEmpty() {
-        assertThat(coffeeRepository.findAll()).isEmpty();
-    }
-
-    @Test
-    void testFindAllWhenDatabaseIsNotEmpty() {
+    void testFindAll() {
         var coffee1 = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         var coffee2 = new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS);
 
@@ -67,12 +72,7 @@ class CoffeeSqlRepositoryTest {
     }
 
     @Test
-    void testFindByIdNotFound() {
-        assertThat(coffeeRepository.findById(COFFEE_FIXTURE_1_ID)).isEmpty();
-    }
-
-    @Test
-    void testFindByIdFound() {
+    void testFindById() {
         var coffee1 = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         var coffee2 = new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS);
 

@@ -13,9 +13,16 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
-    <junit.version>5.9.2</junit.version>
+    <junit.version>5.12.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
     <assertj.version>3.27.3</assertj.version>
+    <mongo.version>3.12.14</mongo.version>
+    <mongo.server.version>1.46.0</mongo.server.version>
+    <hibernate.version>6.6.13.Final</hibernate.version>
+    <h2.version>2.3.232</h2.version>
+    <mysql.version>9.3.0</mysql.version>
+    <testcontainers.version>1.21.0</testcontainers.version>
+    <logback.version>1.5.18</logback.version>
     <argLine></argLine>
     
     <sonar.host.url>http://localhost:9000</sonar.host.url>
@@ -32,8 +39,6 @@
       **/model/*.*
     </sonar.coverage.exclusions>
   </properties>
-  
-  
 
   <dependencyManagement>
     <dependencies>
@@ -45,34 +50,18 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
-        <artifactId>mockito-junit-jupiter</artifactId>
+        <artifactId>mockito-bom</artifactId>
         <version>${mockito.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${assertj.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mongodb</groupId>
-        <artifactId>mongo-java-driver</artifactId>
-        <version>3.12.14</version>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.2.13</version>
-      </dependency>
-      <dependency>
-        <groupId>de.bwaldvogel</groupId>
-        <artifactId>mongo-java-server</artifactId>
-        <version>1.46.0</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -96,49 +85,83 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>de.bwaldvogel</groupId>
       <artifactId>mongo-java-server</artifactId>
+      <version>${mongo.server.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>2.3.232</version>
+      <version>${h2.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>6.6.13.Final</version>
+      <version>${hibernate.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongo-java-driver</artifactId>
+      <version>${mongo.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mongodb</artifactId>
+      <scope>test</scope>  
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>${mysql.version}</version>
     </dependency>
   </dependencies>
-
 
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.4.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.3.1</version>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.6.0</version>
+          <executions>
+            <execution>
+              <id>add-test-source</id>
+              <phase>generate-test-sources</phase>
+              <goals>
+                <goal>add-test-source</goal>
+              </goals>
+              <configuration>
+                <sources>
+                  <source>src/it/java</source>
+                </sources>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.13.0</version>
+          <version>3.14.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -149,6 +172,19 @@
            <configuration>
                 <argLine>@{argLine} -Xshare:off</argLine>
             </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.5.2</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
@@ -165,7 +201,7 @@
         <plugin>
           <groupId>org.pitest</groupId>
           <artifactId>pitest-maven</artifactId>
-          <version>1.15.2</version>
+          <version>1.19.1</version>
           <dependencies>
             <dependency>
               <groupId>org.pitest</groupId>
@@ -174,11 +210,14 @@
             </dependency>
           </dependencies>
           <configuration>
-            <!-- targetClasses and targetTests are no longer required because new version of pitest will scan 
-            the project to determine which classes are present.  https://pitest.org/quickstart/maven/-->
-            <excludedClasses>
-              <param>${project.groupId}.${project.artifactId}.model.*</param>
-            </excludedClasses>
+            <targetClasses>
+              <param>io.github.nicopolazzi.keepmygrind.repository.*</param>
+              <param>io.github.nicopolazzi.keepmygrind.controller.*</param>
+            </targetClasses>
+            <targetTests>
+              <param>io.github.nicopolazzi.keepmygrind.repository.**.*Test</param>
+              <param>io.github.nicopolazzi.keepmygrind.controller.**.*Test</param>
+            </targetTests>
             <mutators>
                 <mutator>STRONGER</mutator>
             </mutators>
@@ -257,6 +296,17 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+    </plugins>
   </build>
   
   <profiles>
