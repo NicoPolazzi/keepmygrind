@@ -36,10 +36,10 @@ public class GrindProfileController {
     }
 
     public void deleteGrindProfile(GrindProfile profile) {
-        grindProfileRepository.findById(profile.getId()).ifPresent(existing -> {
+        grindProfileRepository.findById(profile.getId()).ifPresentOrElse(existing -> {
             grindProfileRepository.delete(profile.getId());
             grindProfileView.grindProfileDeleted(profile);
-        });
+        }, () -> grindProfileView.showNotExistingGrindProfileError(profile));
     }
 
 }
