@@ -97,4 +97,14 @@ class GrindProfileControllerTest {
         inOrder.verify(grindProfileView).grindProfileDeleted(profile);
     }
 
+    @Test
+    void testDeleteGrindProfileWhenGrindProfileDoesntAlreadyExist() {
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, GRINDPROFILE_FIXTURE_COFFEE, GRINDPROFILE_FIXTURE_BREW,
+                GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
+        when(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_ID)).thenReturn(Optional.empty());
+        grindProfileController.deleteGrindProfile(profile);
+        verify(grindProfileView).showNotExistingGrindProfileError(profile);
+        verifyNoMoreInteractions(ignoreStubs(grindProfileRepository));
+    }
+
 }
