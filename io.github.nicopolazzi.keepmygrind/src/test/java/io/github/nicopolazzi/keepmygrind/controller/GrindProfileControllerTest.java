@@ -51,9 +51,11 @@ class GrindProfileControllerTest {
 
     @Test
     void testNewGrindProfileWhenCoffeetAlreadyExistsAndGrindProfileDoesnt() {
-        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
+        var coffee = new Coffee("1", "test", "test");
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, coffee, GRINDPROFILE_FIXTURE_BREW,
                 GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
         when(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_ID)).thenReturn(Optional.empty());
+        when(coffeeRepository.findById("1")).thenReturn(Optional.of(coffee));
         grindProfileController.newGrindProfile(profile);
         InOrder inOrder = inOrder(grindProfileRepository, grindProfileView);
         inOrder.verify(grindProfileRepository).save(profile);
@@ -61,19 +63,22 @@ class GrindProfileControllerTest {
     }
 
     @Test
-    void testNewGrindProfileWhenGrindProfileAlreadyExists() {
-        var existingProfile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
+    void testNewGrindProfileWhenGrindProfileAndCoffeeAlreadyExist() {
+        var coffee = new Coffee("1", "test", "test");
+        var existingProfile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, coffee, GRINDPROFILE_FIXTURE_BREW,
                 GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
-        var profileToAdd = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), "espresso", 10, 100, 30);
+        var profileToAdd = new GrindProfile(GRINDPROFILE_FIXTURE_ID, coffee, "espresso", 10, 100, 30);
         when(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_ID)).thenReturn(Optional.of(existingProfile));
+        when(coffeeRepository.findById("1")).thenReturn(Optional.of(coffee));
         grindProfileController.newGrindProfile(profileToAdd);
         verify(grindProfileView).showExistingGrindProfileError(existingProfile);
-        verifyNoMoreInteractions(ignoreStubs(grindProfileRepository));
+        verifyNoMoreInteractions(ignoreStubs(grindProfileRepository, coffeeRepository));
     }
 
     @Test
     void testNewGrindProfileWhenCoffeeDoesntAlreadyExist() {
-        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
+        var coffee = new Coffee("1", "test", "test");
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, coffee, GRINDPROFILE_FIXTURE_BREW,
                 GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
         when(coffeeRepository.findById("1")).thenReturn(Optional.empty());
         grindProfileController.newGrindProfile(profile);

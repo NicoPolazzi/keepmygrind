@@ -22,6 +22,11 @@ public class GrindProfileController {
     }
 
     public void newGrindProfile(GrindProfile profile) {
+        if (coffeeRepository.findById(profile.getCoffee().getId()).isEmpty()) {
+            grindProfileView.showCoffeeNotFoundError(profile.getCoffee().getId());
+            return;
+        }
+
         grindProfileRepository.findById(profile.getId())
                 .ifPresentOrElse(existing -> grindProfileView.showExistingGrindProfileError(existing), () -> {
                     grindProfileRepository.save(profile);
