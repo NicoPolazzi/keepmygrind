@@ -18,10 +18,11 @@ public class GrindProfileController {
     }
 
     public void newGrindProfile(GrindProfile profile) {
-        if (grindProfileRepository.findById(profile.getId()).isEmpty()) {
-            grindProfileRepository.save(profile);
-            grindProfileView.grindProfileAdded(profile);
-        }
+        grindProfileRepository.findById(profile.getId())
+                .ifPresentOrElse(existing -> grindProfileView.showExistingGrindProfileError(existing), () -> {
+                    grindProfileRepository.save(profile);
+                    grindProfileView.grindProfileAdded(profile);
+                });
     }
 
 }
