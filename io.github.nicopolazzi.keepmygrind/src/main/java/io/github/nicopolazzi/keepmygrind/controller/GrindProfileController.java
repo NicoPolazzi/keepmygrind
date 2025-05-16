@@ -36,8 +36,10 @@ public class GrindProfileController {
     }
 
     public void deleteGrindProfile(GrindProfile profile) {
-        // TODO Auto-generated method stub
-
+        grindProfileRepository.findById(profile.getId()).ifPresent(existing -> {
+            grindProfileRepository.delete(profile.getId());
+            grindProfileView.grindProfileDeleted(profile);
+        });
     }
 
 }
