@@ -35,4 +35,9 @@ public class GrindProfileController {
                 });
     }
 
+    public void deleteGrindProfile(GrindProfile profile) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

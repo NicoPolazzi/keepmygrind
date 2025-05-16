@@ -13,4 +13,6 @@ public interface GrindProfileRepository {
 
     void save(GrindProfile profile);
 
+    void delete(String id);
+
 }

@@ -10,6 +10,8 @@ public interface GrindProfileView {
 
     void grindProfileAdded(GrindProfile profile);
 
+    void grindProfileDeleted(GrindProfile profile);
+
     void showExistingGrindProfileError(GrindProfile existingProfile);
 
     void showCoffeeNotFoundError(String coffeeId);
