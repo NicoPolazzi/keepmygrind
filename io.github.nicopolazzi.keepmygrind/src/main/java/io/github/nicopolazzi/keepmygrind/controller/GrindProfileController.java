@@ -18,8 +18,10 @@ public class GrindProfileController {
     }
 
     public void newGrindProfile(GrindProfile profile) {
-        // TODO Auto-generated method stub
-
+        if (grindProfileRepository.findById(profile.getId()).isEmpty()) {
+            grindProfileRepository.save(profile);
+            grindProfileView.grindProfileAdded(profile);
+        }
     }
 
 }
