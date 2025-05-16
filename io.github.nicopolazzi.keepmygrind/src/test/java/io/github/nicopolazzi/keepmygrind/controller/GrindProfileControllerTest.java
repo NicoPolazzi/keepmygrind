@@ -22,6 +22,12 @@ import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 @ExtendWith(MockitoExtension.class)
 class GrindProfileControllerTest {
 
+    private static final String GRINDPROFILE_FIXTURE_ID = "1";
+    private static final String GRINDPROFILE_FIXTURE_BREW = "V60";
+    private static final int GRINDPROFILE_FIXTURE_BEANS_GRAMS = 18;
+    private static final int GRINDPROFILE_FIXTURE_WATER_MILLILITERS = 250;
+    private static final int GRINDPROFILE_FIXTURE_CLICKS = 60;
+
     @Mock
     private GrindProfileRepository grindProfileRepository;
 
@@ -41,8 +47,9 @@ class GrindProfileControllerTest {
 
     @Test
     void testNewGrindProfileWhenCoffeetAlreadyExistsAndGrindProfileDoesnt() {
-        var profile = new GrindProfile("1", new Coffee(), "V60", 18, 250, 60);
-        when(grindProfileRepository.findById("1")).thenReturn(Optional.empty());
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
+                GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
+        when(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_ID)).thenReturn(Optional.empty());
         grindProfileController.newGrindProfile(profile);
         InOrder inOrder = inOrder(grindProfileRepository, grindProfileView);
         inOrder.verify(grindProfileRepository).save(profile);
@@ -51,9 +58,10 @@ class GrindProfileControllerTest {
 
     @Test
     void testNewGrindProfileWhenGrindProfiletAlreadyExists() {
-        var existingProfile = new GrindProfile("1", new Coffee(), "V60", 18, 250, 60);
-        var profileToAdd = new GrindProfile("1", new Coffee(), "espresso", 18, 250, 60);
-        when(grindProfileRepository.findById("1")).thenReturn(Optional.of(existingProfile));
+        var existingProfile = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), GRINDPROFILE_FIXTURE_BREW,
+                GRINDPROFILE_FIXTURE_BEANS_GRAMS, GRINDPROFILE_FIXTURE_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_CLICKS);
+        var profileToAdd = new GrindProfile(GRINDPROFILE_FIXTURE_ID, new Coffee(), "espresso", 10, 100, 30);
+        when(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_ID)).thenReturn(Optional.of(existingProfile));
         grindProfileController.newGrindProfile(profileToAdd);
         verify(grindProfileView).showExistingGrindProfileError(existingProfile);
         verifyNoMoreInteractions(ignoreStubs(grindProfileRepository));
