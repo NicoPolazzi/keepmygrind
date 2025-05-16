@@ -8,4 +8,6 @@ public interface GrindProfileView {
 
     void showAllGrindProfiles(List<GrindProfile> profiles);
 
+    void grindProfileAdded(GrindProfile profile);
+
 }

@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.controller;
 
+import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
@@ -14,6 +15,11 @@ public class GrindProfileController {
 
     public void allGrindProfiles() {
         grindProfileView.showAllGrindProfiles(grindProfileRepository.findAll());
+    }
+
+    public void newGrindProfile(GrindProfile profile) {
+        // TODO Auto-generated method stub
+
     }
 
 }
