@@ -22,8 +22,9 @@ public class GrindProfileController {
     }
 
     public void newGrindProfile(GrindProfile profile) {
-        if (coffeeRepository.findById(profile.getCoffee().getId()).isEmpty()) {
-            grindProfileView.showCoffeeNotFoundError(profile.getCoffee().getId());
+        String coffeeId = profile.getCoffee().getId();
+        if (coffeeRepository.findById(coffeeId).isEmpty()) {
+            grindProfileView.showCoffeeNotFoundError(coffeeId);
             return;
         }
 
