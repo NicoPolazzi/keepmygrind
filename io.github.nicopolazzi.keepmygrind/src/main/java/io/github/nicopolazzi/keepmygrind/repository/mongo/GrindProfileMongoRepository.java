@@ -44,8 +44,7 @@ public class GrindProfileMongoRepository implements GrindProfileRepository {
 
     @Override
     public void save(GrindProfile profile) {
-        // TODO Auto-generated method stub
-
+        grindProfileCollection.insertOne(profile);
     }
 
     @Override
