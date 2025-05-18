@@ -122,4 +122,14 @@ class GrindProfileMongoRepositoryTest {
         grindProfileRepository.save(profile);
         assertThat(grindProfileCollection.find()).containsExactly(profile);
     }
+
+    @Test
+    void testDelete() {
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+        grindProfileCollection.insertOne(profile);
+        grindProfileRepository.delete(GRINDPROFILE_FIXTURE_1_ID);
+        assertThat(grindProfileCollection.find()).isEmpty();
+    }
 }
