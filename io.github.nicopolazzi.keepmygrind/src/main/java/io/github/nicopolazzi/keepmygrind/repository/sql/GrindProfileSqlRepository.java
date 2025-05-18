@@ -33,8 +33,7 @@ public class GrindProfileSqlRepository implements GrindProfileRepository {
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-
+        session.remove(session.find(GrindProfile.class, id));
     }
 
 }

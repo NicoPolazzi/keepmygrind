@@ -130,7 +130,7 @@ class GrindProfileSqlRepositoryTest {
                     GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
             session.persist(GRINDPROFILE_FIXTURE_COFFEE);
             session.persist(profile);
-            grindProfileRepository.delete(GRINDPROFILE_FIXTURE_1_BREW);
+            grindProfileRepository.delete(GRINDPROFILE_FIXTURE_1_ID);
             GrindProfile retrivedProfile = session.find(GrindProfile.class, GRINDPROFILE_FIXTURE_1_ID);
             assertThat(retrivedProfile).isNull();
         });
