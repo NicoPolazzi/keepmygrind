@@ -113,4 +113,13 @@ class GrindProfileMongoRepositoryTest {
         grindProfileCollection.insertMany(asList(profile1, profile2));
         assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
     }
+
+    @Test
+    void testSave() {
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+        grindProfileRepository.save(profile);
+        assertThat(grindProfileCollection.find()).containsExactly(profile);
+    }
 }
