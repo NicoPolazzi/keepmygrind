@@ -52,7 +52,6 @@ class CoffeeSqlRepositoryTest {
             CoffeeRepository coffeeRepository = new CoffeeSqlRepository(session);
             assertThat(coffeeRepository.findAll()).isEmpty();
         });
-
     }
 
     @Test
