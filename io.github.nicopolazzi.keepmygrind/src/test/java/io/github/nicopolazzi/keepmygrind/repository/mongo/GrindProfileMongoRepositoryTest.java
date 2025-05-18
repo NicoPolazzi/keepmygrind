@@ -2,6 +2,7 @@ package io.github.nicopolazzi.keepmygrind.repository.mongo;
 
 import static io.github.nicopolazzi.keepmygrind.repository.mongo.GrindProfileMongoRepository.GRINDPROFILE_COLLECTION_NAME;
 import static io.github.nicopolazzi.keepmygrind.repository.mongo.GrindProfileMongoRepository.KEEPMYGRIND_DB_NAME;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -10,6 +11,7 @@ import java.net.InetSocketAddress;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,8 +58,14 @@ class GrindProfileMongoRepositoryTest {
         grindProfileCollection = database.getCollection(GRINDPROFILE_COLLECTION_NAME, GrindProfile.class);
     }
 
+    @AfterEach
+    void tearDown() {
+        client.close();
+    }
+
     @Test
-    void test() {
+    void testFindAllWhenDatabaseIsEmpty() {
+        assertThat(grindProfileRepository.findAll()).isEmpty();
     }
 
 }
