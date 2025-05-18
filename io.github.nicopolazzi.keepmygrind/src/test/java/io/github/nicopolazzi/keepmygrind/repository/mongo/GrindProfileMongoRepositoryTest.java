@@ -95,4 +95,9 @@ class GrindProfileMongoRepositoryTest {
         assertThat(grindProfileRepository.findAll()).containsExactly(profile1, profile2);
     }
 
+    @Test
+    void testFindByIdNotFound() {
+        assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_1_ID)).isEmpty();
+    }
+
 }
