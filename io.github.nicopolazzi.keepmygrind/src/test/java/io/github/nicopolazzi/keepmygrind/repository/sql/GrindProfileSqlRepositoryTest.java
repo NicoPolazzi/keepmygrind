@@ -76,4 +76,12 @@ class GrindProfileSqlRepositoryTest {
         });
     }
 
+    @Test
+    void testFindByIdNotFound() {
+        sessionFactory.inTransaction(session -> {
+            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
+            assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_1_ID)).isEmpty();
+        });
+    }
+
 }
