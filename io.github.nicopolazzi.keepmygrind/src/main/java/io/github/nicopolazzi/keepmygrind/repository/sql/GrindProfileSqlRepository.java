@@ -28,8 +28,7 @@ public class GrindProfileSqlRepository implements GrindProfileRepository {
 
     @Override
     public void save(GrindProfile profile) {
-        // TODO Auto-generated method stub
-
+        session.persist(profile);
     }
 
     @Override
