@@ -49,8 +49,7 @@ public class GrindProfileMongoRepository implements GrindProfileRepository {
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-
+        grindProfileCollection.deleteOne(eq("_id", id));
     }
 
 }
