@@ -2,6 +2,7 @@ package io.github.nicopolazzi.keepmygrind.repository.sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.SessionFactory;
@@ -102,6 +103,20 @@ class GrindProfileSqlRepositoryTest {
             session.persist(profile2);
 
             assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
+        });
+    }
+
+    @Test
+    void testSave() {
+        sessionFactory.inTransaction(session -> {
+            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
+            var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                    GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                    GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+            grindProfileRepository.save(profile);
+            List<GrindProfile> profiles = session.createSelectionQuery("from GrindProfile", GrindProfile.class)
+                    .getResultList();
+            assertThat(profiles).containsExactly(profile);
         });
     }
 
