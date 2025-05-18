@@ -33,7 +33,7 @@ public class GrindProfileMongoRepository implements GrindProfileRepository {
 
     @Override
     public List<GrindProfile> findAll() {
-        return new ArrayList<>();
+        return grindProfileCollection.find().into(new ArrayList<>());
     }
 
     @Override
