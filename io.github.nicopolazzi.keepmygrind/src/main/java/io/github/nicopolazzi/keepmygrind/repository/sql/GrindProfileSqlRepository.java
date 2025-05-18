@@ -23,8 +23,7 @@ public class GrindProfileSqlRepository implements GrindProfileRepository {
 
     @Override
     public Optional<GrindProfile> findById(String id) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        return Optional.ofNullable(session.find(GrindProfile.class, id));
     }
 
     @Override

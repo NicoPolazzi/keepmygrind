@@ -2,6 +2,8 @@ package io.github.nicopolazzi.keepmygrind.repository.sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
@@ -99,7 +101,7 @@ class GrindProfileSqlRepositoryTest {
             session.persist(profile1);
             session.persist(profile2);
 
-            assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(profile2);
+            assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
         });
     }
 
