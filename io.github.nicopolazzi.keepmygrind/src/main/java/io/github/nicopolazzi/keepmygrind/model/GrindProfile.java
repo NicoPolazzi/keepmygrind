@@ -2,10 +2,20 @@ package io.github.nicopolazzi.keepmygrind.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class GrindProfile {
 
+    @Id
     private String id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Coffee coffee;
+
     private String brew;
     private double beanGrams;
     private double waterMilliliters;

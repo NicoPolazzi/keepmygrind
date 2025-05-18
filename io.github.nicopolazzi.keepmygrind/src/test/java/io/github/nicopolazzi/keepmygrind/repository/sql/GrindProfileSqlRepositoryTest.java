@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 
@@ -20,7 +21,7 @@ class GrindProfileSqlRepositoryTest {
 
     @BeforeAll
     static void setupSessionFactory() {
-        sessionFactory = new Configuration().addAnnotatedClass(GrindProfile.class)
+        sessionFactory = new Configuration().addAnnotatedClass(GrindProfile.class).addAnnotatedClass(Coffee.class)
                 .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1")
                 .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_CREATE_THEN_DROP)
                 .buildSessionFactory();
@@ -39,8 +40,8 @@ class GrindProfileSqlRepositoryTest {
     @Test
     void testFindAllWhenDatabaseIsEmpty() {
         sessionFactory.inTransaction(session -> {
-            GrindProfileRepository coffeeRepository = new GrindProfileSqlRepository(session);
-            assertThat(coffeeRepository.findAll()).isEmpty();
+            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
+            assertThat(grindProfileRepository.findAll()).isEmpty();
         });
     }
 

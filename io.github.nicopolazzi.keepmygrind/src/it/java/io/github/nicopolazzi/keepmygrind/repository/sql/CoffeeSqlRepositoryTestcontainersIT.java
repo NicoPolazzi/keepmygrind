@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
+import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 
 class CoffeeSqlRepositoryTestcontainersIT {
@@ -30,7 +31,7 @@ class CoffeeSqlRepositoryTestcontainersIT {
 
     @BeforeAll
     static void buildSessionFactory() {
-        sessionFactory = new Configuration().addAnnotatedClass(Coffee.class)
+        sessionFactory = new Configuration().addAnnotatedClass(Coffee.class).addAnnotatedClass(GrindProfile.class)
                 .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:tc:mysql:8.0.36:///keepmygrind")
                 .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_CREATE_THEN_DROP)
                 .buildSessionFactory();

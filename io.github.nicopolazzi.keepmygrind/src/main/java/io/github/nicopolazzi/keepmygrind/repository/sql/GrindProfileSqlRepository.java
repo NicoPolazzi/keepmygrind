@@ -18,8 +18,7 @@ public class GrindProfileSqlRepository implements GrindProfileRepository {
 
     @Override
     public List<GrindProfile> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return session.createSelectionQuery("from GrindProfile", GrindProfile.class).getResultList();
     }
 
     @Override

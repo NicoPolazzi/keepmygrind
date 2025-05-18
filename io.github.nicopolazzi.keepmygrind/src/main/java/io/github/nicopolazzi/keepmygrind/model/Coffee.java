@@ -1,11 +1,13 @@
 package io.github.nicopolazzi.keepmygrind.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.bson.codecs.pojo.annotations.BsonId;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Coffee {
@@ -16,6 +18,10 @@ public class Coffee {
     @BsonId
     @Id
     private String id;
+
+    @OneToMany(mappedBy = "coffee")
+    List<GrindProfile> grindProfiles;
+
     private String origin;
     private String process;
 
