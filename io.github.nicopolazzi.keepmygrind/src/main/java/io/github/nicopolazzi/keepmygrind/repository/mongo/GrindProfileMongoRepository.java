@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.repository.mongo;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -38,8 +39,7 @@ public class GrindProfileMongoRepository implements GrindProfileRepository {
 
     @Override
     public Optional<GrindProfile> findById(String id) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        return Optional.ofNullable(grindProfileCollection.find(eq("_id", id)).first());
     }
 
     @Override

@@ -3,8 +3,6 @@ package io.github.nicopolazzi.keepmygrind.model;
 import java.util.List;
 import java.util.Objects;
 
-import org.bson.codecs.pojo.annotations.BsonId;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -12,10 +10,6 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Coffee {
 
-    /**
-     * required for MongoDB mapping with _id
-     */
-    @BsonId
     @Id
     private String id;
 
