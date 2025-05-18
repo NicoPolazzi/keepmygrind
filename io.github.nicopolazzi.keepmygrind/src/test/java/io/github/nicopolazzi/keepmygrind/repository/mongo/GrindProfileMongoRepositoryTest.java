@@ -8,6 +8,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import java.net.InetSocketAddress;
+import java.util.Optional;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -100,4 +101,16 @@ class GrindProfileMongoRepositoryTest {
         assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_1_ID)).isEmpty();
     }
 
+    @Test
+    void testFindByIdFound() {
+        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
+
+        grindProfileCollection.insertMany(asList(profile1, profile2));
+        assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
+    }
 }
