@@ -84,4 +84,23 @@ class GrindProfileSqlRepositoryTest {
         });
     }
 
+    @Test
+    void testFindByIdFound() {
+        sessionFactory.inTransaction(session -> {
+            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
+            var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                    GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                    GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+            var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                    GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
+                    GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
+
+            session.persist(GRINDPROFILE_FIXTURE_COFFEE);
+            session.persist(profile1);
+            session.persist(profile2);
+
+            assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(profile2);
+        });
+    }
+
 }
