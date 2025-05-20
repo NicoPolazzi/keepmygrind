@@ -76,4 +76,9 @@ public class Coffee {
         return "Coffee [id=" + id + ", origin=" + origin + ", process=" + process + "]";
     }
 
+    public void addGrindProfile(GrindProfile grindProfile) {
+        grindProfiles.add(grindProfile);
+        grindProfile.setCoffee(this);
+    }
+
 }

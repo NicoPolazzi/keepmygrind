@@ -91,6 +91,19 @@ class CoffeeSqlRepositoryTest {
     }
 
     @Test
+    void testSaveShouldAlsoSaveGrindProfiles() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var profile = new GrindProfile("1", coffee, "espresso", 10, 100, 30);
+        coffee.addGrindProfile(profile);
+        coffeeRepository.save(coffee);
+        Coffee retrivedCoffee = sessionFactory.fromSession(session -> session.find(Coffee.class, COFFEE_FIXTURE_1_ID));
+        GrindProfile retrivedGrindProfile = sessionFactory
+                .fromSession(session -> session.find(GrindProfile.class, "1"));
+        assertThat(retrivedCoffee).isEqualTo(coffee);
+        assertThat(retrivedGrindProfile).isEqualTo(profile);
+    }
+
+    @Test
     void testDelete() {
         var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         sessionFactory.inTransaction(session -> session.persist(coffee));
