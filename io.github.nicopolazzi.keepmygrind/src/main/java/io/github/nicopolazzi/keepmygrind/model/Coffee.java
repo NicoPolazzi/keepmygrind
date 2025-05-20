@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -14,7 +15,7 @@ public class Coffee {
     @Id
     private String id;
 
-    @OneToMany(mappedBy = "coffee")
+    @OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GrindProfile> grindProfiles = new ArrayList<>();
 
     private String origin;
