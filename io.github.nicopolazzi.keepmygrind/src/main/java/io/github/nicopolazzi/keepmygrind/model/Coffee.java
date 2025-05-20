@@ -18,6 +18,14 @@ public class Coffee {
     @OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GrindProfile> grindProfiles = new ArrayList<>();
 
+    public List<GrindProfile> getGrindProfiles() {
+        return grindProfiles;
+    }
+
+    public void setGrindProfiles(List<GrindProfile> grindProfiles) {
+        this.grindProfiles = grindProfiles;
+    }
+
     private String origin;
     private String process;
 
