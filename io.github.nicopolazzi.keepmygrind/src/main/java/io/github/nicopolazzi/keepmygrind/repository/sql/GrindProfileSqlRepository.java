@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.hibernate.SessionFactory;
 
-import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 
@@ -30,14 +29,7 @@ public class GrindProfileSqlRepository implements GrindProfileRepository {
 
     @Override
     public void save(GrindProfile profile) {
-        sessionFactory.inTransaction(session -> {
-            Coffee managedCoffee = session.find(Coffee.class, profile.getCoffee().getId());
-            if (managedCoffee == null)
-                throw new IllegalArgumentException("Coffee must exist in DB");
-            profile.setCoffee(managedCoffee);
-            session.persist(profile);
-        });
-
+        sessionFactory.inTransaction(session -> session.persist(profile));
     }
 
     @Override
