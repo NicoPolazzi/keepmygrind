@@ -91,12 +91,39 @@ class CoffeeSqlRepositoryTest {
     }
 
     @Test
+    void testSaveShouldAlsoSaveRelatedGrindProfiles() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var profile = new GrindProfile("1", coffee, "espresso", 10, 100, 30);
+        coffee.addGrindProfile(profile);
+        coffeeRepository.save(coffee);
+        Coffee retrivedCoffee = sessionFactory.fromSession(session -> session.find(Coffee.class, COFFEE_FIXTURE_1_ID));
+        GrindProfile retrivedGrindProfile = sessionFactory
+                .fromSession(session -> session.find(GrindProfile.class, "1"));
+        assertThat(retrivedCoffee).isEqualTo(coffee);
+        assertThat(retrivedGrindProfile).isEqualTo(profile);
+    }
+
+    @Test
     void testDelete() {
         var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         sessionFactory.inTransaction(session -> session.persist(coffee));
         coffeeRepository.delete(COFFEE_FIXTURE_1_ID);
         Coffee retrivedCoffee = sessionFactory.fromSession(session -> session.find(Coffee.class, COFFEE_FIXTURE_1_ID));
         assertThat(retrivedCoffee).isNull();
+    }
+
+    @Test
+    void testDeleteShouldAlsoDeleteRelatedGrindProfiles() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var profile1 = new GrindProfile("1", coffee, "espresso", 10, 100, 30);
+        var profile2 = new GrindProfile("2", coffee, "espresso", 10, 100, 30);
+        coffee.addGrindProfile(profile1);
+        coffee.addGrindProfile(profile2);
+        sessionFactory.inTransaction(session -> session.persist(coffee));
+        coffeeRepository.delete(COFFEE_FIXTURE_1_ID);
+        List<GrindProfile> profiles = sessionFactory.fromSession(
+                session -> session.createSelectionQuery("from GrindProfile", GrindProfile.class).getResultList());
+        assertThat(profiles).isEmpty();
     }
 
 }

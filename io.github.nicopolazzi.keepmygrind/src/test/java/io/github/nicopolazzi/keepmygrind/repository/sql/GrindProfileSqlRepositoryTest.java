@@ -19,8 +19,6 @@ import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 
 class GrindProfileSqlRepositoryTest {
-    private static final Coffee GRINDPROFILE_FIXTURE_COFFEE = new Coffee("1", "test", "test");
-
     private static final String GRINDPROFILE_FIXTURE_1_ID = "1";
     private static final String GRINDPROFILE_FIXTURE_1_BREW = "V60";
     private static final int GRINDPROFILE_FIXTURE_1_BEANS_GRAMS = 18;
@@ -62,17 +60,18 @@ class GrindProfileSqlRepositoryTest {
 
     @Test
     void testFindAllWhenDatabaseIsNotEmpty() {
-        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
-        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
-                GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
+        var coffee = new Coffee("1", "test", "test");
+        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, coffee, GRINDPROFILE_FIXTURE_1_BREW,
+                GRINDPROFILE_FIXTURE_1_BEANS_GRAMS, GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS,
+                GRINDPROFILE_FIXTURE_1_CLICKS);
+        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, coffee, GRINDPROFILE_FIXTURE_2_BREW,
+                GRINDPROFILE_FIXTURE_2_BEANS_GRAMS, GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS,
+                GRINDPROFILE_FIXTURE_2_CLICKS);
+        coffee.addGrindProfile(profile1);
+        coffee.addGrindProfile(profile2);
 
         sessionFactory.inTransaction(session -> {
-            session.persist(GRINDPROFILE_FIXTURE_COFFEE);
-            session.persist(profile1);
-            session.persist(profile2);
+            session.persist(coffee);
         });
 
         List<GrindProfile> grindProfiles = grindProfileRepository.findAll();
@@ -86,30 +85,26 @@ class GrindProfileSqlRepositoryTest {
 
     @Test
     void testFindByIdFound() {
-        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
-        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
-                GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
-
-        sessionFactory.inTransaction(session -> {
-            session.persist(GRINDPROFILE_FIXTURE_COFFEE);
-            session.persist(profile1);
-            session.persist(profile2);
-        });
+        var coffee = new Coffee("1", "test", "test");
+        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, coffee, GRINDPROFILE_FIXTURE_1_BREW,
+                GRINDPROFILE_FIXTURE_1_BEANS_GRAMS, GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS,
+                GRINDPROFILE_FIXTURE_1_CLICKS);
+        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, coffee, GRINDPROFILE_FIXTURE_2_BREW,
+                GRINDPROFILE_FIXTURE_2_BEANS_GRAMS, GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS,
+                GRINDPROFILE_FIXTURE_2_CLICKS);
+        coffee.addGrindProfile(profile1);
+        coffee.addGrindProfile(profile2);
+        sessionFactory.inTransaction(session -> session.persist(coffee));
         assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
     }
 
     @Test
     void testSave() {
-        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
-        sessionFactory.inTransaction(session -> {
-            session.persist(GRINDPROFILE_FIXTURE_COFFEE);
-        });
-
+        var coffee = new Coffee("1", "test", "test");
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, coffee, GRINDPROFILE_FIXTURE_1_BREW,
+                GRINDPROFILE_FIXTURE_1_BEANS_GRAMS, GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS,
+                GRINDPROFILE_FIXTURE_1_CLICKS);
+        sessionFactory.inTransaction(session -> session.persist(coffee));
         grindProfileRepository.save(profile);
         GrindProfile retrivedGrindProfile = sessionFactory
                 .fromSession(session -> session.find(GrindProfile.class, GRINDPROFILE_FIXTURE_1_ID));
@@ -118,13 +113,12 @@ class GrindProfileSqlRepositoryTest {
 
     @Test
     void testDelete() {
-        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
-        sessionFactory.inTransaction(session -> {
-            session.persist(GRINDPROFILE_FIXTURE_COFFEE);
-            session.persist(profile);
-        });
+        var coffee = new Coffee("1", "test", "test");
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, coffee, GRINDPROFILE_FIXTURE_1_BREW,
+                GRINDPROFILE_FIXTURE_1_BEANS_GRAMS, GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS,
+                GRINDPROFILE_FIXTURE_1_CLICKS);
+        coffee.addGrindProfile(profile);
+        sessionFactory.inTransaction(session -> session.persist(coffee));
         grindProfileRepository.delete(GRINDPROFILE_FIXTURE_1_ID);
         GrindProfile retrivedProfile = sessionFactory
                 .fromSession(session -> session.find(GrindProfile.class, GRINDPROFILE_FIXTURE_1_ID));

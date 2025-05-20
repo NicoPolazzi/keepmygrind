@@ -83,7 +83,7 @@ public class GrindProfile {
 
     @Override
     public int hashCode() {
-        return Objects.hash(beanGrams, brew, clicks, coffee, id, waterMilliliters);
+        return Objects.hash(id);
     }
 
     @Override
@@ -95,10 +95,7 @@ public class GrindProfile {
         if (getClass() != obj.getClass())
             return false;
         GrindProfile other = (GrindProfile) obj;
-        return Double.doubleToLongBits(beanGrams) == Double.doubleToLongBits(other.beanGrams)
-                && Objects.equals(brew, other.brew) && clicks == other.clicks
-                && Objects.equals(coffee.getId(), other.coffee.getId()) && Objects.equals(id, other.id)
-                && Double.doubleToLongBits(waterMilliliters) == Double.doubleToLongBits(other.waterMilliliters);
+        return Objects.equals(id, other.id);
     }
 
     @Override

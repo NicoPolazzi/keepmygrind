@@ -1,20 +1,22 @@
 package io.github.nicopolazzi.keepmygrind.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
-@Entity
+@Entity(name = "Coffee")
 public class Coffee {
 
     @Id
     private String id;
 
-    @OneToMany(mappedBy = "coffee")
-    List<GrindProfile> grindProfiles;
+    @OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GrindProfile> grindProfiles = new ArrayList<>();
 
     private String origin;
     private String process;
@@ -34,6 +36,14 @@ public class Coffee {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<GrindProfile> getGrindProfiles() {
+        return grindProfiles;
+    }
+
+    public void setGrindProfiles(List<GrindProfile> grindProfiles) {
+        this.grindProfiles = grindProfiles;
     }
 
     public String getOrigin() {
@@ -73,6 +83,11 @@ public class Coffee {
     @Override
     public String toString() {
         return "Coffee [id=" + id + ", origin=" + origin + ", process=" + process + "]";
+    }
+
+    public void addGrindProfile(GrindProfile grindProfile) {
+        grindProfiles.add(grindProfile);
+        grindProfile.setCoffee(this);
     }
 
 }
