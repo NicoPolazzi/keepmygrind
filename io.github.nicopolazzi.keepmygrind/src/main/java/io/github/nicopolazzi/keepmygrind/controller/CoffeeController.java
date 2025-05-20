@@ -30,7 +30,7 @@ public class CoffeeController {
     public void deleteCoffee(Coffee coffee) {
         coffeeRepository.findById(coffee.getId()).ifPresentOrElse(existing -> {
             coffeeRepository.delete(existing.getId());
-            coffeeView.coffeeDeleted(existing);
+            coffeeView.coffeeRemoved(existing);
         }, () -> coffeeView.showNotExistingCoffeeError(coffee));
     }
 

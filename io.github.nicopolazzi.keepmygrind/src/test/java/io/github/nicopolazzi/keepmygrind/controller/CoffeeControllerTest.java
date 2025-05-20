@@ -69,7 +69,7 @@ class CoffeeControllerTest {
         coffeeController.deleteCoffee(coffee);
         InOrder inOrder = inOrder(coffeeRepository, coffeeView);
         inOrder.verify(coffeeRepository).delete(COFFEE_FIXTURE_ID);
-        inOrder.verify(coffeeView).coffeeDeleted(coffee);
+        inOrder.verify(coffeeView).coffeeRemoved(coffee);
     }
 
     @Test

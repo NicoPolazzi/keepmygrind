@@ -1,31 +1,31 @@
 package io.github.nicopolazzi.keepmygrind.model;
 
+import java.util.List;
 import java.util.Objects;
-
-import org.bson.codecs.pojo.annotations.BsonId;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Coffee {
 
-    /**
-     * required for MongoDB mapping with _id
-     */
-    @BsonId
     @Id
     private String id;
+
+    @OneToMany(mappedBy = "coffee")
+    List<GrindProfile> grindProfiles;
+
     private String origin;
-    private String processMethod;
+    private String process;
 
     public Coffee() {
     }
 
-    public Coffee(String id, String origin, String processMethod) {
+    public Coffee(String id, String origin, String process) {
         this.id = id;
         this.origin = origin;
-        this.processMethod = processMethod;
+        this.process = process;
     }
 
     public String getId() {
@@ -44,17 +44,17 @@ public class Coffee {
         this.origin = origin;
     }
 
-    public String getProcessMethod() {
-        return processMethod;
+    public String getProcess() {
+        return process;
     }
 
-    public void setProcessMethod(String processMethod) {
-        this.processMethod = processMethod;
+    public void setProcess(String process) {
+        this.process = process;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, origin, processMethod);
+        return Objects.hash(id, origin, process);
     }
 
     @Override
@@ -67,12 +67,12 @@ public class Coffee {
             return false;
         Coffee other = (Coffee) obj;
         return Objects.equals(id, other.id) && Objects.equals(origin, other.origin)
-                && Objects.equals(processMethod, other.processMethod);
+                && Objects.equals(process, other.process);
     }
 
     @Override
     public String toString() {
-        return "Coffee [id=" + id + ", origin=" + origin + ", processMethod=" + processMethod + "]";
+        return "Coffee [id=" + id + ", origin=" + origin + ", process=" + process + "]";
     }
 
 }
