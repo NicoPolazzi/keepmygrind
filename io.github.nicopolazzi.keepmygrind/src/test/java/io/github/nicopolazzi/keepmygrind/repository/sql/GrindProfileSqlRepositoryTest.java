@@ -34,6 +34,8 @@ class GrindProfileSqlRepositoryTest {
 
     private static SessionFactory sessionFactory;
 
+    private GrindProfileRepository grindProfileRepository;
+
     @BeforeAll
     static void setupSessionFactory() {
         sessionFactory = new Configuration().addAnnotatedClass(GrindProfile.class).addAnnotatedClass(Coffee.class)
@@ -50,90 +52,83 @@ class GrindProfileSqlRepositoryTest {
     @BeforeEach
     void clearDatabase() {
         sessionFactory.getSchemaManager().truncateMappedObjects();
+        grindProfileRepository = new GrindProfileSqlRepository(sessionFactory);
     }
 
     @Test
     void testFindAllWhenDatabaseIsEmpty() {
-        sessionFactory.inTransaction(session -> {
-            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
-            assertThat(grindProfileRepository.findAll()).isEmpty();
-        });
+        assertThat(grindProfileRepository.findAll()).isEmpty();
     }
 
     @Test
     void testFindAllWhenDatabaseIsNotEmpty() {
-        sessionFactory.inTransaction(session -> {
-            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
-            var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                    GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                    GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
-            var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                    GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
-                    GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
+        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
 
+        sessionFactory.inTransaction(session -> {
             session.persist(GRINDPROFILE_FIXTURE_COFFEE);
             session.persist(profile1);
             session.persist(profile2);
-
-            assertThat(grindProfileRepository.findAll()).containsExactly(profile1, profile2);
         });
+
+        List<GrindProfile> grindProfiles = grindProfileRepository.findAll();
+        assertThat(grindProfiles).containsExactly(profile1, profile2);
     }
 
     @Test
     void testFindByIdNotFound() {
-        sessionFactory.inTransaction(session -> {
-            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
-            assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_1_ID)).isEmpty();
-        });
+        assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_1_ID)).isEmpty();
     }
 
     @Test
     void testFindByIdFound() {
-        sessionFactory.inTransaction(session -> {
-            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
-            var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                    GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                    GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
-            var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                    GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
-                    GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
+        var profile1 = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
+        var profile2 = new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_2_BREW, GRINDPROFILE_FIXTURE_2_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_2_CLICKS);
 
+        sessionFactory.inTransaction(session -> {
             session.persist(GRINDPROFILE_FIXTURE_COFFEE);
             session.persist(profile1);
             session.persist(profile2);
-
-            assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
         });
+        assertThat(grindProfileRepository.findById(GRINDPROFILE_FIXTURE_2_ID)).isEqualTo(Optional.of(profile2));
     }
 
     @Test
     void testSave() {
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
         sessionFactory.inTransaction(session -> {
-            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
-            var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                    GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                    GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
             session.persist(GRINDPROFILE_FIXTURE_COFFEE);
-            grindProfileRepository.save(profile);
-            List<GrindProfile> profiles = session.createSelectionQuery("from GrindProfile", GrindProfile.class)
-                    .getResultList();
-            assertThat(profiles).containsExactly(profile);
         });
+
+        grindProfileRepository.save(profile);
+        GrindProfile retrivedGrindProfile = sessionFactory
+                .fromSession(session -> session.find(GrindProfile.class, GRINDPROFILE_FIXTURE_1_ID));
+        assertThat(retrivedGrindProfile).isEqualTo(profile);
     }
 
     @Test
     void testDelete() {
+        var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
+                GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
+                GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
         sessionFactory.inTransaction(session -> {
-            GrindProfileRepository grindProfileRepository = new GrindProfileSqlRepository(session);
-            var profile = new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, GRINDPROFILE_FIXTURE_COFFEE,
-                    GRINDPROFILE_FIXTURE_1_BREW, GRINDPROFILE_FIXTURE_1_BEANS_GRAMS,
-                    GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS, GRINDPROFILE_FIXTURE_1_CLICKS);
             session.persist(GRINDPROFILE_FIXTURE_COFFEE);
             session.persist(profile);
-            grindProfileRepository.delete(GRINDPROFILE_FIXTURE_1_ID);
-            GrindProfile retrivedProfile = session.find(GrindProfile.class, GRINDPROFILE_FIXTURE_1_ID);
-            assertThat(retrivedProfile).isNull();
         });
+        grindProfileRepository.delete(GRINDPROFILE_FIXTURE_1_ID);
+        GrindProfile retrivedProfile = sessionFactory
+                .fromSession(session -> session.find(GrindProfile.class, GRINDPROFILE_FIXTURE_1_ID));
+        assertThat(retrivedProfile).isNull();
     }
 
 }

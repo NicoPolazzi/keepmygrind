@@ -96,14 +96,14 @@ public class GrindProfile {
             return false;
         GrindProfile other = (GrindProfile) obj;
         return Double.doubleToLongBits(beanGrams) == Double.doubleToLongBits(other.beanGrams)
-                && Objects.equals(brew, other.brew) && clicks == other.clicks && Objects.equals(coffee, other.coffee)
-                && Objects.equals(id, other.id)
+                && Objects.equals(brew, other.brew) && clicks == other.clicks
+                && Objects.equals(coffee.getId(), other.coffee.getId()) && Objects.equals(id, other.id)
                 && Double.doubleToLongBits(waterMilliliters) == Double.doubleToLongBits(other.waterMilliliters);
     }
 
     @Override
     public String toString() {
-        return "GrindProfile [id=" + id + ", coffee=" + coffee + ", brew=" + brew + ", beanGrams=" + beanGrams
+        return "GrindProfile [id=" + id + ", coffeeId=" + coffee.getId() + ", brew=" + brew + ", beanGrams=" + beanGrams
                 + ", waterMilliliters=" + waterMilliliters + ", clicks=" + clicks + "]";
     }
 
