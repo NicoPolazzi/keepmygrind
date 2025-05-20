@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,14 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
-@Entity
+@Entity(name = "Coffee")
 public class Coffee {
 
     @Id
     private String id;
 
     @OneToMany(mappedBy = "coffee")
-    List<GrindProfile> grindProfiles;
+    private List<GrindProfile> grindProfiles = new ArrayList<>();
 
     private String origin;
     private String process;
@@ -54,7 +55,7 @@ public class Coffee {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, origin, process);
+        return Objects.hash(id);
     }
 
     @Override
@@ -66,8 +67,7 @@ public class Coffee {
         if (getClass() != obj.getClass())
             return false;
         Coffee other = (Coffee) obj;
-        return Objects.equals(id, other.id) && Objects.equals(origin, other.origin)
-                && Objects.equals(process, other.process);
+        return Objects.equals(id, other.id);
     }
 
     @Override
