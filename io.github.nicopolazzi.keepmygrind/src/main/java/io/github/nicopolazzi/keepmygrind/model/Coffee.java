@@ -18,14 +18,6 @@ public class Coffee {
     @OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GrindProfile> grindProfiles = new ArrayList<>();
 
-    public List<GrindProfile> getGrindProfiles() {
-        return grindProfiles;
-    }
-
-    public void setGrindProfiles(List<GrindProfile> grindProfiles) {
-        this.grindProfiles = grindProfiles;
-    }
-
     private String origin;
     private String process;
 
@@ -46,6 +38,14 @@ public class Coffee {
         this.id = id;
     }
 
+    public List<GrindProfile> getGrindProfiles() {
+        return grindProfiles;
+    }
+
+    public void setGrindProfiles(List<GrindProfile> grindProfiles) {
+        this.grindProfiles = grindProfiles;
+    }
+
     public String getOrigin() {
         return origin;
     }
@@ -64,7 +64,7 @@ public class Coffee {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, origin, process);
     }
 
     @Override
@@ -76,7 +76,8 @@ public class Coffee {
         if (getClass() != obj.getClass())
             return false;
         Coffee other = (Coffee) obj;
-        return Objects.equals(id, other.id);
+        return Objects.equals(id, other.id) && Objects.equals(origin, other.origin)
+                && Objects.equals(process, other.process);
     }
 
     @Override
