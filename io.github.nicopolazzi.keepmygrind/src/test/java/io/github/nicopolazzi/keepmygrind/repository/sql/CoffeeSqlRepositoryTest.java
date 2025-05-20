@@ -99,4 +99,22 @@ class CoffeeSqlRepositoryTest {
         assertThat(retrivedCoffee).isNull();
     }
 
+    @Test
+    void testDeleteShouldAlsoDeleteRelatedGrindProfiles() {
+        var coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
+        var profile1 = new GrindProfile("1", coffee, "espresso", 10, 100, 30);
+        var profile2 = new GrindProfile("2", coffee, "espresso", 10, 100, 30);
+
+        sessionFactory.inTransaction(session -> {
+            session.persist(coffee);
+            session.persist(profile1);
+            session.persist(profile2);
+        });
+
+        coffeeRepository.delete(COFFEE_FIXTURE_1_ID);
+        List<GrindProfile> profiles = sessionFactory.fromSession(
+                session -> session.createSelectionQuery("from GrindProfile", GrindProfile.class).getResultList());
+        assertThat(profiles).isEmpty();
+    }
+
 }
