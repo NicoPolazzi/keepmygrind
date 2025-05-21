@@ -24,7 +24,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     private static final long serialVersionUID = 1L;
 
-    private CoffeeController coffeeController;
+    private transient CoffeeController coffeeController;
 
     private JTextField txtId;
     private JTextField txtOrigin;
