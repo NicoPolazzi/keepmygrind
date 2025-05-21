@@ -3,6 +3,8 @@ package io.github.nicopolazzi.keepmygrind.view.swing;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -119,6 +121,19 @@ public class CoffeeSwingView extends JPanel {
         gbc_lblNewLabel.gridx = 0;
         gbc_lblNewLabel.gridy = 6;
         add(lblNewLabel, gbc_lblNewLabel);
+
+        KeyAdapter btnAddEnabler = new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                btnAdd.setEnabled(!txtId.getText().isEmpty() && !txtOrigin.getText().isEmpty()
+                        && !txtProcess.getText().isEmpty());
+            }
+        };
+
+        txtId.addKeyListener(btnAddEnabler);
+        txtOrigin.addKeyListener(btnAddEnabler);
+        txtProcess.addKeyListener(btnAddEnabler);
+
     }
 
 }
