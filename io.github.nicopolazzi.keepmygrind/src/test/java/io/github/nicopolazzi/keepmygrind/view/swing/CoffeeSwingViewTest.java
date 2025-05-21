@@ -42,4 +42,12 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
         window.label("errorMessageLabel").requireText(" ");
     }
+
+    @Test
+    public void testWhenIdOriginAndProcessAreNonEmptyThenAddButtonShouldBeEnabled() {
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("originTextBox").enterText("test");
+        window.textBox("processTextBox").enterText("test");
+        window.button(JButtonMatcher.withText("Add")).requireEnabled();
+    }
 }
