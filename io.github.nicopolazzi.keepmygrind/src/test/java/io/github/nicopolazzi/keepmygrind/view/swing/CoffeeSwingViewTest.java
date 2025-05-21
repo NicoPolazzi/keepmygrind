@@ -122,4 +122,13 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         GuiActionRunner.execute(() -> coffeeSwingView.showNotExistingCoffeeError(coffee));
         window.label("errorMessageLabel").requireText("Not existing coffee: " + coffee);
     }
+
+    @Test
+    public void testCoffeeAddedShouldAddTheCoffeeToTheListAndResetTheErrorLabel() {
+        var coffee = new Coffee("1", "test", "test");
+        GuiActionRunner.execute(() -> coffeeSwingView.coffeeAdded(new Coffee("1", "test", "test")));
+        String[] listContents = window.list("coffeeList").contents();
+        assertThat(listContents).containsExactly(coffee.toString());
+        window.label("errorMessageLabel").requireText(" ");
+    }
 }
