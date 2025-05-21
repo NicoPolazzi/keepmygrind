@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -14,12 +15,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import io.github.nicopolazzi.keepmygrind.model.Coffee;
+
 public class CoffeeSwingView extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JTextField txtId;
     private JTextField txtOrigin;
     private JTextField txtProcess;
+    private JList<Coffee> listCoffees;
+    private DefaultListModel<Coffee> listCoffeesModel;
+
+    DefaultListModel<Coffee> getListCoffeesModel() {
+        return listCoffeesModel;
+    }
 
     public CoffeeSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -99,10 +108,11 @@ public class CoffeeSwingView extends JPanel {
         gbc_scrollPane.gridy = 4;
         add(scrollPane, gbc_scrollPane);
 
-        JList list = new JList();
-        scrollPane.setViewportView(list);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setName("coffeeList");
+        listCoffeesModel = new DefaultListModel<>();
+        listCoffees = new JList<>();
+        scrollPane.setViewportView(listCoffees);
+        listCoffees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listCoffees.setName("coffeeList");
 
         JButton btnDeleteSelected = new JButton("Delete Selected");
         btnDeleteSelected.setEnabled(false);
