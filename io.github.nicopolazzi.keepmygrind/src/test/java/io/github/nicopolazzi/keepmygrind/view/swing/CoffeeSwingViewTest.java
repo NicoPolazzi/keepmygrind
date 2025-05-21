@@ -7,6 +7,7 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
@@ -44,10 +45,40 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
     }
 
     @Test
-    public void testWhenIdOriginAndProcessAreNonEmptyThenAddButtonShouldBeEnabled() {
+    public void testWhenCoffeeInformationAreNonEmptyThenAddButtonShouldBeEnabled() {
         window.textBox("idTextBox").enterText("1");
         window.textBox("originTextBox").enterText("test");
         window.textBox("processTextBox").enterText("test");
         window.button(JButtonMatcher.withText("Add")).requireEnabled();
+    }
+
+    @Test
+    public void testWhenSomeInformationIsBlankThenAddButtonShouldBeDisabled() {
+        JTextComponentFixture idTextBox = window.textBox("idTextBox");
+        JTextComponentFixture originTextBox = window.textBox("originTextBox");
+        JTextComponentFixture processTextBox = window.textBox("processTextBox");
+
+        idTextBox.enterText("1");
+        originTextBox.enterText("test");
+        processTextBox.enterText(" ");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+
+        idTextBox.setText("");
+        originTextBox.setText("");
+        processTextBox.setText("");
+
+        idTextBox.enterText(" ");
+        originTextBox.enterText("test");
+        processTextBox.enterText("test");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+
+        idTextBox.setText("");
+        originTextBox.setText("");
+        processTextBox.setText("");
+
+        idTextBox.enterText("1");
+        originTextBox.enterText(" ");
+        processTextBox.enterText("test");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
     }
 }
