@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -16,8 +17,9 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
+import io.github.nicopolazzi.keepmygrind.view.CoffeeView;
 
-public class CoffeeSwingView extends JPanel {
+public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     private static final long serialVersionUID = 1L;
     private JTextField txtId;
@@ -25,10 +27,6 @@ public class CoffeeSwingView extends JPanel {
     private JTextField txtProcess;
     private JList<Coffee> listCoffees;
     private DefaultListModel<Coffee> listCoffeesModel;
-
-    DefaultListModel<Coffee> getListCoffeesModel() {
-        return listCoffeesModel;
-    }
 
     public CoffeeSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -110,7 +108,6 @@ public class CoffeeSwingView extends JPanel {
 
         listCoffeesModel = new DefaultListModel<>();
         listCoffees = new JList<>(listCoffeesModel);
-
         scrollPane.setViewportView(listCoffees);
         listCoffees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listCoffees.setName("coffeeList");
@@ -145,6 +142,40 @@ public class CoffeeSwingView extends JPanel {
         txtOrigin.addKeyListener(btnAddEnabler);
         txtProcess.addKeyListener(btnAddEnabler);
         listCoffees.addListSelectionListener(e -> btnDeleteSelected.setEnabled(listCoffees.getSelectedIndex() != -1));
+    }
+
+    @Override
+    public void showAllCoffees(List<Coffee> coffees) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void coffeeAdded(Coffee coffee) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void showExistingCoffeeError(Coffee existingCoffee) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void coffeeRemoved(Coffee coffee) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void showNotExistingCoffeeError(Coffee coffee) {
+        // TODO Auto-generated method stub
+
+    }
+
+    DefaultListModel<Coffee> getListCoffeesModel() {
+        return listCoffeesModel;
     }
 
 }

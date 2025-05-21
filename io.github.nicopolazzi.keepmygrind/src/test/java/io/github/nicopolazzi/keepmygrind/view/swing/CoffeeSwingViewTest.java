@@ -1,5 +1,8 @@
 package io.github.nicopolazzi.keepmygrind.view.swing;
 
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
@@ -95,5 +98,14 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         deleteButton.requireEnabled();
         window.list("coffeeList").clearSelection();
         deleteButton.requireDisabled();
+    }
+
+    @Test
+    public void testsShowAllCoffeesShouldAddCoffeeInformationToTheList() {
+        Coffee coffee1 = new Coffee("1", "test1", "test1");
+        Coffee coffee2 = new Coffee("2", "test2", "test2");
+        GuiActionRunner.execute(() -> coffeeSwingView.showAllCoffees(asList(coffee1, coffee2)));
+        String[] listContents = window.list("coffeeList").contents();
+        assertThat(listContents).containsExactly(coffee1.toString(), coffee2.toString());
     }
 }
