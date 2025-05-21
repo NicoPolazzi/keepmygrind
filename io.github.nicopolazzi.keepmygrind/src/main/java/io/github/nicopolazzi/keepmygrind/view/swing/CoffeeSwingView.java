@@ -169,8 +169,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     @Override
     public void showNotExistingCoffeeError(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        lblErrorMessage.setText("Not existing coffee: " + coffee);
     }
 
     DefaultListModel<Coffee> getListCoffeesModel() {
