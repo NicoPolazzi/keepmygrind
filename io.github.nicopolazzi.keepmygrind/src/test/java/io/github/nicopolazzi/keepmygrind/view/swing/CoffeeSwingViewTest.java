@@ -115,4 +115,11 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         GuiActionRunner.execute(() -> coffeeSwingView.showExistingCoffeeError(coffee));
         window.label("errorMessageLabel").requireText("Already existing coffee: " + coffee);
     }
+
+    @Test
+    public void testShowNotExistingCoffeeErrorShouldShowTheMessageInTheErrorLabel() {
+        var coffee = new Coffee("1", "test", "test");
+        GuiActionRunner.execute(() -> coffeeSwingView.showNotExistingCoffeeError(coffee));
+        window.label("errorMessageLabel").requireText("Not existing coffee: " + coffee);
+    }
 }
