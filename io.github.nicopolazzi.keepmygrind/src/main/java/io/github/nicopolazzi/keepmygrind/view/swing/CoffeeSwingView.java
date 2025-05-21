@@ -150,6 +150,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         listCoffees.addListSelectionListener(e -> btnDeleteSelected.setEnabled(listCoffees.getSelectedIndex() != -1));
         btnAdd.addActionListener(e -> coffeeController
                 .newCoffee(new Coffee(txtId.getText(), txtOrigin.getText(), txtProcess.getText())));
+        btnDeleteSelected.addActionListener(e -> coffeeController.deleteCoffee(listCoffees.getSelectedValue()));
     }
 
     @Override
