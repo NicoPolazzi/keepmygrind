@@ -109,7 +109,8 @@ public class CoffeeSwingView extends JPanel {
         add(scrollPane, gbc_scrollPane);
 
         listCoffeesModel = new DefaultListModel<>();
-        listCoffees = new JList<>();
+        listCoffees = new JList<>(listCoffeesModel);
+
         scrollPane.setViewportView(listCoffees);
         listCoffees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listCoffees.setName("coffeeList");
@@ -143,7 +144,7 @@ public class CoffeeSwingView extends JPanel {
         txtId.addKeyListener(btnAddEnabler);
         txtOrigin.addKeyListener(btnAddEnabler);
         txtProcess.addKeyListener(btnAddEnabler);
-
+        listCoffees.addListSelectionListener(e -> btnDeleteSelected.setEnabled(listCoffees.getSelectedIndex() != -1));
     }
 
 }

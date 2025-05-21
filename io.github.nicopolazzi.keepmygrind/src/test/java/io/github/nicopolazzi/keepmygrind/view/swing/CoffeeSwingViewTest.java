@@ -93,7 +93,7 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         window.list("coffeeList").selectItem(0);
         JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
         deleteButton.requireEnabled();
-        window.list("studentList").clearSelection();
+        window.list("coffeeList").clearSelection();
         deleteButton.requireDisabled();
     }
 }
