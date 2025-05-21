@@ -16,12 +16,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import io.github.nicopolazzi.keepmygrind.controller.CoffeeController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.view.CoffeeView;
 
 public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     private static final long serialVersionUID = 1L;
+
+    private CoffeeController coffeeController;
+
     private JTextField txtId;
     private JTextField txtOrigin;
     private JTextField txtProcess;
@@ -170,6 +174,10 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
     @Override
     public void showNotExistingCoffeeError(Coffee coffee) {
         lblErrorMessage.setText("Not existing coffee: " + coffee);
+    }
+
+    public void setCoffeeController(CoffeeController coffeeController) {
+        this.coffeeController = coffeeController;
     }
 
     private void resetErrorLabel() {

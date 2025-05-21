@@ -15,15 +15,26 @@ import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.verify;
+
+import io.github.nicopolazzi.keepmygrind.controller.CoffeeController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 
 public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private CoffeeSwingView coffeeSwingView;
 
+    @Mock
+    private CoffeeController coffeController;
+
+    private AutoCloseable closeable;
+
     @Override
     protected void onSetUp() throws Exception {
+        closeable = MockitoAnnotations.openMocks(this);
         coffeeSwingView = GuiActionRunner.execute(CoffeeSwingView::new);
         JFrame frame = GuiActionRunner.execute(() -> {
             JFrame f = new JFrame();
@@ -35,6 +46,11 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         });
         window = new FrameFixture(robot(), frame);
         window.show();
+    }
+
+    @Override
+    protected void onTearDown() throws Exception {
+        closeable.close();
     }
 
     @Test
@@ -148,5 +164,14 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         String[] listContents = window.list("coffeeList").contents();
         assertThat(listContents).containsExactly(coffee2.toString());
         window.label("errorMessageLabel").requireText(" ");
+    }
+
+    @Test
+    public void testAddButtonShouldDelegateToCoffeeControllerNewCoffee() {
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("originTextBox").enterText("test");
+        window.textBox("processTextBox").enterText("test");
+        window.button(JButtonMatcher.withText("Add")).click();
+        verify(coffeController).newCoffee(new Coffee("1", "test", "test"));
     }
 }
