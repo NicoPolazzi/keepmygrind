@@ -152,8 +152,8 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     @Override
     public void coffeeAdded(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        listCoffeesModel.addElement(coffee);
+        lblErrorMessage.setText(" ");
     }
 
     @Override
