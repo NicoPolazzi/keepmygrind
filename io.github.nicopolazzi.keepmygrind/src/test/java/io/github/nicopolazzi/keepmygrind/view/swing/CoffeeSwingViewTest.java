@@ -35,7 +35,11 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
     @Override
     protected void onSetUp() throws Exception {
         closeable = MockitoAnnotations.openMocks(this);
-        coffeeSwingView = GuiActionRunner.execute(CoffeeSwingView::new);
+        GuiActionRunner.execute(() -> {
+            coffeeSwingView = new CoffeeSwingView();
+            coffeeSwingView.setCoffeeController(coffeController);
+            return coffeeSwingView;
+        });
         JFrame frame = GuiActionRunner.execute(() -> {
             JFrame f = new JFrame();
             f.setContentPane(coffeeSwingView);

@@ -94,6 +94,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         txtProcess.setColumns(10);
 
         JButton btnAdd = new JButton("Add");
+
         btnAdd.setEnabled(false);
         GridBagConstraints gbc_btnAdd = new GridBagConstraints();
         gbc_btnAdd.gridwidth = 2;
@@ -147,6 +148,8 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         txtOrigin.addKeyListener(btnAddEnabler);
         txtProcess.addKeyListener(btnAddEnabler);
         listCoffees.addListSelectionListener(e -> btnDeleteSelected.setEnabled(listCoffees.getSelectedIndex() != -1));
+        btnAdd.addActionListener(e -> coffeeController
+                .newCoffee(new Coffee(txtId.getText(), txtOrigin.getText(), txtProcess.getText())));
     }
 
     @Override
