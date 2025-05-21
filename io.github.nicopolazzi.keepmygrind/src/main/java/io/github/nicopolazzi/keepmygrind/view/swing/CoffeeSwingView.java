@@ -153,7 +153,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
     @Override
     public void coffeeAdded(Coffee coffee) {
         listCoffeesModel.addElement(coffee);
-        lblErrorMessage.setText(" ");
+        resetErrorLabel();
     }
 
     @Override
@@ -164,12 +164,16 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
     @Override
     public void coffeeRemoved(Coffee coffee) {
         listCoffeesModel.removeElement(coffee);
-        lblErrorMessage.setText(" ");
+        resetErrorLabel();
     }
 
     @Override
     public void showNotExistingCoffeeError(Coffee coffee) {
         lblErrorMessage.setText("Not existing coffee: " + coffee);
+    }
+
+    private void resetErrorLabel() {
+        lblErrorMessage.setText(" ");
     }
 
     DefaultListModel<Coffee> getListCoffeesModel() {
