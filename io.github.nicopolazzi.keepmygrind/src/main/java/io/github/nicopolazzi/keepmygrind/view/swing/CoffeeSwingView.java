@@ -125,8 +125,8 @@ public class CoffeeSwingView extends JPanel {
         KeyAdapter btnAddEnabler = new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                btnAdd.setEnabled(!txtId.getText().isEmpty() && !txtOrigin.getText().isEmpty()
-                        && !txtProcess.getText().isEmpty());
+                btnAdd.setEnabled(!txtId.getText().trim().isEmpty() && !txtOrigin.getText().trim().isEmpty()
+                        && !txtProcess.getText().trim().isEmpty());
             }
         };
 
