@@ -102,10 +102,17 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Test
     public void testsShowAllCoffeesShouldAddCoffeeInformationToTheList() {
-        Coffee coffee1 = new Coffee("1", "test1", "test1");
-        Coffee coffee2 = new Coffee("2", "test2", "test2");
+        var coffee1 = new Coffee("1", "test1", "test1");
+        var coffee2 = new Coffee("2", "test2", "test2");
         GuiActionRunner.execute(() -> coffeeSwingView.showAllCoffees(asList(coffee1, coffee2)));
         String[] listContents = window.list("coffeeList").contents();
         assertThat(listContents).containsExactly(coffee1.toString(), coffee2.toString());
+    }
+
+    @Test
+    public void testShowExistingCoffeeErrorShouldShowTheMessageInTheErrorLabel() {
+        var coffee = new Coffee("1", "test", "test");
+        GuiActionRunner.execute(() -> coffeeSwingView.showExistingCoffeeError(coffee));
+        window.label("errorMessageLabel").requireText("Already existing coffee: " + coffee);
     }
 }
