@@ -27,6 +27,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
     private JTextField txtProcess;
     private JList<Coffee> listCoffees;
     private DefaultListModel<Coffee> listCoffeesModel;
+    private JLabel lblErrorMessage;
 
     public CoffeeSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -121,14 +122,14 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         gbc_btnDeleteSelected.gridy = 5;
         add(btnDeleteSelected, gbc_btnDeleteSelected);
 
-        JLabel lblNewLabel = new JLabel(" ");
-        lblNewLabel.setName("errorMessageLabel");
-        GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-        gbc_lblNewLabel.gridwidth = 2;
-        gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
-        gbc_lblNewLabel.gridx = 0;
-        gbc_lblNewLabel.gridy = 6;
-        add(lblNewLabel, gbc_lblNewLabel);
+        lblErrorMessage = new JLabel(" ");
+        lblErrorMessage.setName("errorMessageLabel");
+        GridBagConstraints gbc_lblErrorMessage = new GridBagConstraints();
+        gbc_lblErrorMessage.gridwidth = 2;
+        gbc_lblErrorMessage.insets = new Insets(0, 0, 0, 5);
+        gbc_lblErrorMessage.gridx = 0;
+        gbc_lblErrorMessage.gridy = 6;
+        add(lblErrorMessage, gbc_lblErrorMessage);
 
         KeyAdapter btnAddEnabler = new KeyAdapter() {
             @Override
@@ -157,8 +158,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     @Override
     public void showExistingCoffeeError(Coffee existingCoffee) {
-        // TODO Auto-generated method stub
-
+        lblErrorMessage.setText("Already existing coffee: " + existingCoffee);
     }
 
     @Override
