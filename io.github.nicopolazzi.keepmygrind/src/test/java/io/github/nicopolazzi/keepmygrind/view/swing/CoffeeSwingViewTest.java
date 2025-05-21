@@ -28,7 +28,7 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
     private CoffeeSwingView coffeeSwingView;
 
     @Mock
-    private CoffeeController coffeController;
+    private CoffeeController coffeeController;
 
     private AutoCloseable closeable;
 
@@ -37,7 +37,7 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         closeable = MockitoAnnotations.openMocks(this);
         GuiActionRunner.execute(() -> {
             coffeeSwingView = new CoffeeSwingView();
-            coffeeSwingView.setCoffeeController(coffeController);
+            coffeeSwingView.setCoffeeController(coffeeController);
             return coffeeSwingView;
         });
         JFrame frame = GuiActionRunner.execute(() -> {
@@ -176,6 +176,21 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("originTextBox").enterText("test");
         window.textBox("processTextBox").enterText("test");
         window.button(JButtonMatcher.withText("Add")).click();
-        verify(coffeController).newCoffee(new Coffee("1", "test", "test"));
+        verify(coffeeController).newCoffee(new Coffee("1", "test", "test"));
+    }
+
+    @Test
+    public void testDeleteButtonShouldDelegateToCoffeeControllerDeleteCoffee() {
+        var coffee1 = new Coffee("1", "test1", "test1");
+        var coffee2 = new Coffee("2", "test2", "test2");
+        GuiActionRunner.execute(() -> {
+            DefaultListModel<Coffee> listCoffeesModel = coffeeSwingView.getListCoffeesModel();
+            listCoffeesModel.addElement(coffee1);
+            listCoffeesModel.addElement(coffee2);
+        });
+
+        window.list("coffeeList").selectItem(1);
+        window.button(JButtonMatcher.withText("Delete Selected")).click();
+        verify(coffeeController).deleteCoffee(coffee2);
     }
 }
