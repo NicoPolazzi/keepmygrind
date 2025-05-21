@@ -146,8 +146,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     @Override
     public void showAllCoffees(List<Coffee> coffees) {
-        // TODO Auto-generated method stub
-
+        coffees.stream().forEach(listCoffeesModel::addElement);
     }
 
     @Override
