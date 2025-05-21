@@ -23,6 +23,7 @@
     <mysql.version>9.3.0</mysql.version>
     <testcontainers.version>1.21.0</testcontainers.version>
     <logback.version>1.5.18</logback.version>
+    <assertj.swing.version>3.17.1</assertj.swing.version>
     <argLine></argLine>
     
     <sonar.host.url>http://localhost:9000</sonar.host.url>
@@ -99,8 +100,8 @@
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
+      <artifactId>assertj-swing-junit</artifactId>
+      <version>${assertj.swing.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
