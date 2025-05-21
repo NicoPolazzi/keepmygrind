@@ -163,8 +163,8 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     @Override
     public void coffeeRemoved(Coffee coffee) {
-        // TODO Auto-generated method stub
-
+        listCoffeesModel.removeElement(coffee);
+        lblErrorMessage.setText(" ");
     }
 
     @Override

@@ -143,7 +143,7 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
             listCoffeesModel.addElement(coffee2);
         });
 
-        GuiActionRunner.execute(() -> coffeeSwingView.coffeeRemoved(new Coffee("1", "test", "test")));
+        GuiActionRunner.execute(() -> coffeeSwingView.coffeeRemoved(new Coffee("1", "test1", "test1")));
 
         String[] listContents = window.list("coffeeList").contents();
         assertThat(listContents).containsExactly(coffee2.toString());
