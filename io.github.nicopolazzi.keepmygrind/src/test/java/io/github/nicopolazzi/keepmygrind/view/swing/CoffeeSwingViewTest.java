@@ -3,6 +3,7 @@ package io.github.nicopolazzi.keepmygrind.view.swing;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
@@ -129,6 +130,23 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         GuiActionRunner.execute(() -> coffeeSwingView.coffeeAdded(new Coffee("1", "test", "test")));
         String[] listContents = window.list("coffeeList").contents();
         assertThat(listContents).containsExactly(coffee.toString());
+        window.label("errorMessageLabel").requireText(" ");
+    }
+
+    @Test
+    public void testCoffeeRemovedShouldRemoveTheCoffeeFromTheListAndResetTheErrorLabel() {
+        var coffee1 = new Coffee("1", "test1", "test1");
+        var coffee2 = new Coffee("2", "test2", "test2");
+        GuiActionRunner.execute(() -> {
+            DefaultListModel<Coffee> listCoffeesModel = coffeeSwingView.getListCoffeesModel();
+            listCoffeesModel.addElement(coffee1);
+            listCoffeesModel.addElement(coffee2);
+        });
+
+        GuiActionRunner.execute(() -> coffeeSwingView.coffeeRemoved(new Coffee("1", "test", "test")));
+
+        String[] listContents = window.list("coffeeList").contents();
+        assertThat(listContents).containsExactly(coffee2.toString());
         window.label("errorMessageLabel").requireText(" ");
     }
 }
