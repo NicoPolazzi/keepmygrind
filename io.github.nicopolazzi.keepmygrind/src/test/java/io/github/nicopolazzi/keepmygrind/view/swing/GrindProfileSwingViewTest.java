@@ -60,9 +60,9 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("idTextBox").enterText("1");
         window.textBox("coffeeTextBox").enterText("test");
         window.textBox("brewTextBox").enterText("test");
-        window.textBox("gramsTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("15");
         window.textBox("waterTextBox").enterText("test");
-        window.textBox("clicksTextBox").enterText("test");
+        window.textBox("clicksTextBox").enterText("30");
         window.button(JButtonMatcher.withText("Add")).requireEnabled();
     }
 

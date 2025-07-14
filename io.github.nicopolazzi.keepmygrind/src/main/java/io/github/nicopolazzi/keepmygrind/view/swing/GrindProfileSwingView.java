@@ -3,6 +3,8 @@ package io.github.nicopolazzi.keepmygrind.view.swing;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -187,6 +189,21 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         gbc_lblErrorMessage.gridy = 9;
         add(lblErrorMessage, gbc_lblErrorMessage);
 
+        KeyAdapter btnAddEnabler = new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                btnAdd.setEnabled(!txtId.getText().isEmpty() && !txtCoffee.getText().isEmpty()
+                        && !txtBrew.getText().isEmpty() && !txtGrams.getText().isEmpty()
+                        && !txtWater.getText().isEmpty() && !txtClicks.getText().isEmpty());
+            }
+        };
+
+        txtId.addKeyListener(btnAddEnabler);
+        txtCoffee.addKeyListener(btnAddEnabler);
+        txtBrew.addKeyListener(btnAddEnabler);
+        txtGrams.addKeyListener(btnAddEnabler);
+        txtWater.addKeyListener(btnAddEnabler);
+        txtClicks.addKeyListener(btnAddEnabler);
     }
 
     @Override
