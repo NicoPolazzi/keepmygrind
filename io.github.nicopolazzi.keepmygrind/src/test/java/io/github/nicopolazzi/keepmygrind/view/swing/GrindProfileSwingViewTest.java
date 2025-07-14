@@ -55,4 +55,15 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("errorMessageLabel").requireText(" ");
     }
 
+    @Test
+    public void testWhenGrindProfileInformationAreNonEmptyThenAddButtonShouldBeEnabled() {
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("coffeeTextBox").enterText("test");
+        window.textBox("brewTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("test");
+        window.textBox("waterTextBox").enterText("test");
+        window.textBox("clicksTextBox").enterText("test");
+        window.button(JButtonMatcher.withText("Add")).requireEnabled();
+    }
+
 }
