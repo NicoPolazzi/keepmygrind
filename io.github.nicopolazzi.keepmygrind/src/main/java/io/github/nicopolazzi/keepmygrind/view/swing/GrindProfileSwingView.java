@@ -218,8 +218,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     @Override
     public void showAllGrindProfiles(List<GrindProfile> profiles) {
-        // TODO Auto-generated method stub
-
+        profiles.stream().forEach(listGrindProfileModel::addElement);
     }
 
     @Override
