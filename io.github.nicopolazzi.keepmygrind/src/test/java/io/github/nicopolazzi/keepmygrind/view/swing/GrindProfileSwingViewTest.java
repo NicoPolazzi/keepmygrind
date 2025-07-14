@@ -7,8 +7,12 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+
+import io.github.nicopolazzi.keepmygrind.model.Coffee;
+import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
@@ -64,6 +68,17 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("waterTextBox").enterText("test");
         window.textBox("clicksTextBox").enterText("30");
         window.button(JButtonMatcher.withText("Add")).requireEnabled();
+    }
+
+    @Test
+    public void testDeleteButtonShouldBeEnabledOnlyWhenAGrindProfileIsSelected() {
+        GuiActionRunner.execute(() -> grindProfileView.getListGrindProfileModel()
+                .addElement(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
+        window.list("grindProfileList").selectItem(0);
+        JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
+        deleteButton.requireEnabled();
+        window.list("grindProfileList").clearSelection();
+        deleteButton.requireDisabled();
     }
 
 }

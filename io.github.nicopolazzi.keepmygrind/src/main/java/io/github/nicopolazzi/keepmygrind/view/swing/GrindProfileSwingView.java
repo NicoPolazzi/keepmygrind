@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,9 +30,8 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     private JTextField txtWater;
     private JTextField txtClicks;
 
-    /**
-     * Create the panel.
-     */
+    private DefaultListModel<GrindProfile> listGrindProfileModel;
+
     public GrindProfileSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 79, 0, 0 };
@@ -240,6 +240,10 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     public void showNotExistingGrindProfileError(GrindProfile profile) {
         // TODO Auto-generated method stub
 
+    }
+
+    public DefaultListModel<GrindProfile> getListGrindProfileModel() {
+        return listGrindProfileModel;
     }
 
 }
