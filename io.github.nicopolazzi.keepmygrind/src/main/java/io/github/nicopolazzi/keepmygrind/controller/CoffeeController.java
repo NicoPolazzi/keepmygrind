@@ -24,7 +24,6 @@ public class CoffeeController {
                     coffeeRepository.save(coffee);
                     coffeeView.coffeeAdded(coffee);
                 });
-
     }
 
     public void deleteCoffee(Coffee coffee) {
