@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
@@ -31,6 +33,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     private JTextField txtClicks;
 
     private DefaultListModel<GrindProfile> listGrindProfileModel;
+    private JList<GrindProfile> listGrindProfiles;
 
     public GrindProfileSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -166,10 +169,11 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         gbc_scrollPane.gridy = 7;
         add(scrollPane, gbc_scrollPane);
 
-        JList list = new JList();
-        scrollPane.setViewportView(list);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setName("grindProfileList");
+        listGrindProfileModel = new DefaultListModel<>();
+        listGrindProfiles = new JList<>(listGrindProfileModel);
+        scrollPane.setViewportView(listGrindProfiles);
+        listGrindProfiles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listGrindProfiles.setName("grindProfileList");
 
         JButton btnDeleteSelected = new JButton("Delete Selected");
         btnDeleteSelected.setEnabled(false);
@@ -204,6 +208,12 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         txtGrams.addKeyListener(btnAddEnabler);
         txtWater.addKeyListener(btnAddEnabler);
         txtClicks.addKeyListener(btnAddEnabler);
+
+        listGrindProfiles.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                btnDeleteSelected.setEnabled(listGrindProfiles.getSelectedIndex() != -1);
+            }
+        });
     }
 
     @Override
