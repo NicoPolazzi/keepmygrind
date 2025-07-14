@@ -7,7 +7,7 @@
   <artifactId>keepmygrind</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>keepmygrind</name>
+  <name>KeepMyGrind</name>
   <url>https://github.com/NicoPolazzi/keepmygrind</url>
 
   <properties>
@@ -23,15 +23,15 @@
     <mysql.version>9.3.0</mysql.version>
     <testcontainers.version>1.21.0</testcontainers.version>
     <logback.version>1.5.18</logback.version>
+    <assertj.swing.version>3.17.1</assertj.swing.version>
     <argLine></argLine>
     
     <sonar.host.url>http://localhost:9000</sonar.host.url>
     
-    <sonar.issue.ignore.multicriteria>e11</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria>e11,e12,e13</sonar.issue.ignore.multicriteria>
     
     <!-- this rule is exclude becasue it produces a false positive when using JPA bi-directional entities
-         https://community.sonarsource.com/t/advanced-class-cycle-detection-for-java/127500
-    -->
+         https://community.sonarsource.com/t/advanced-class-cycle-detection-for-java/127500 -->
     <sonar.issue.ignore.multicriteria.e11.ruleKey>
       javaarchitecture:S7027
     </sonar.issue.ignore.multicriteria.e11.ruleKey>
@@ -39,6 +39,22 @@
       **/Coffee.java,
       **/GrindProfile.java
     </sonar.issue.ignore.multicriteria.e11.resourceKey>
+    
+    <!-- Disable rule for "Tests should include assertions" -->
+    <sonar.issue.ignore.multicriteria.e12.ruleKey>
+      java:S2699    
+    </sonar.issue.ignore.multicriteria.e12.ruleKey>
+        <sonar.issue.ignore.multicriteria.e12.resourceKey>
+      **/CoffeeSwingViewTest.java
+    </sonar.issue.ignore.multicriteria.e12.resourceKey>
+    
+    <!-- Disable rule for "Local variable and method parameter names should comply with a naming convention" -->
+    <sonar.issue.ignore.multicriteria.e13.ruleKey>
+      java:S117    
+    </sonar.issue.ignore.multicriteria.e13.ruleKey>
+    <sonar.issue.ignore.multicriteria.e13.resourceKey>
+      **/CoffeeSwingView.java
+    </sonar.issue.ignore.multicriteria.e13.resourceKey>
     
     <sonar.tests>
       ${project.basedir}/src/test/java,
@@ -88,6 +104,11 @@
         <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <scope>test</scope>
@@ -99,8 +120,8 @@
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
+      <artifactId>assertj-swing-junit</artifactId>
+      <version>${assertj.swing.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

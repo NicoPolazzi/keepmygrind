@@ -46,7 +46,7 @@ jobs:
             
       - name: Build and test with Maven
         run: >
-          mvn verify $ADDITIONAL_MAVEN_OPTIONS
+          xvfb-run mvn verify $ADDITIONAL_MAVEN_OPTIONS
           -Dsonar.organization=nicopolazzi-github
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.projectKey=NicoPolazzi_keepmygrind
