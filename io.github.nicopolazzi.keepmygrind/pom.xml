@@ -44,8 +44,8 @@
     <sonar.issue.ignore.multicriteria.e12.ruleKey>
       java:S2699    
     </sonar.issue.ignore.multicriteria.e12.ruleKey>
-        <sonar.issue.ignore.multicriteria.e12.resourceKey>
-      **/CoffeeSwingViewTest.java,
+    <sonar.issue.ignore.multicriteria.e12.resourceKey>
+      **/CoffeeSwingViewTest.java;
       **/GrindProfileSwingViewTest.java
     </sonar.issue.ignore.multicriteria.e12.resourceKey>
     
@@ -54,8 +54,7 @@
       java:S117    
     </sonar.issue.ignore.multicriteria.e13.ruleKey>
     <sonar.issue.ignore.multicriteria.e13.resourceKey>
-      **/CoffeeSwingView.java,
-      **/GrindProfileSwingView.java
+      **/*SwingView.java
     </sonar.issue.ignore.multicriteria.e13.resourceKey>
     
     <sonar.tests>
