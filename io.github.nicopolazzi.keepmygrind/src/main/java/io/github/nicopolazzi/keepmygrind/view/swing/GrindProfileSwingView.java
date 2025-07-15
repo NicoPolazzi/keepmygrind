@@ -199,6 +199,11 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         listGrindProfiles.setName("grindProfileList");
 
         JButton btnDeleteSelected = new JButton("Delete Selected");
+        btnDeleteSelected.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                grindProfileController.deleteGrindProfile(listGrindProfiles.getSelectedValue());
+            }
+        });
         btnDeleteSelected.setEnabled(false);
         GridBagConstraints gbc_btnDeleteSelected = new GridBagConstraints();
         gbc_btnDeleteSelected.insets = new Insets(0, 0, 5, 0);
