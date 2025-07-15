@@ -233,8 +233,8 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     @Override
     public void grindProfileRemoved(GrindProfile profile) {
-        // TODO Auto-generated method stub
-
+        listGrindProfileModel.removeElement(profile);
+        lblErrorMessage.setText(" ");
     }
 
     @Override
