@@ -92,8 +92,79 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     }
 
     @Test
+    public void testAddButtonDisabledWhenIdIsEmpty() {
+        window.textBox("idTextBox").enterText(" ");
+        addCoffeeToComboBox();
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("espresso");
+        window.textBox("gramsTextBox").enterText("15");
+        window.textBox("waterTextBox").enterText("250");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+    }
+
+    @Test
+    public void testAddButtonDisabledWhenNoCoffeeSelected() {
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("brewTextBox").enterText("espresso");
+        window.textBox("gramsTextBox").enterText("15");
+        window.textBox("waterTextBox").enterText("250");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+    }
+
+    @Test
+    public void testAddButtonDisabledWhenBrewIsEmpty() {
+        window.textBox("idTextBox").enterText("1");
+        addCoffeeToComboBox();
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText(" ");
+        window.textBox("gramsTextBox").enterText("15");
+        window.textBox("waterTextBox").enterText("250");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+    }
+
+    @Test
+    public void testAddButtonDisabledWhenGramsIsEmpty() {
+        window.textBox("idTextBox").enterText("1");
+        addCoffeeToComboBox();
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("espresso");
+        window.textBox("gramsTextBox").enterText(" ");
+        window.textBox("waterTextBox").enterText("250");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+    }
+
+    @Test
+    public void testAddButtonDisabledWhenWatersIsEmpty() {
+        window.textBox("idTextBox").enterText("1");
+        addCoffeeToComboBox();
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("espresso");
+        window.textBox("gramsTextBox").enterText("15");
+        window.textBox("waterTextBox").enterText(" ");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+    }
+
+    @Test
+    public void testAddButtonDisabledWhenClicksIsEmpty() {
+        window.textBox("idTextBox").enterText("1");
+        addCoffeeToComboBox();
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("espresso");
+        window.textBox("gramsTextBox").enterText("15");
+        window.textBox("waterTextBox").enterText("250");
+        window.textBox("clicksTextBox").enterText(" ");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+    }
+
+    @Test
     public void testDeleteButtonShouldBeEnabledOnlyWhenAGrindProfileIsSelected() {
-        addGrindProfileToList();
+        GuiActionRunner.execute(() -> grindProfileView.getListGrindProfileModel()
+                .addElement(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
         window.list("grindProfileList").selectItem(0);
         JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
         deleteButton.requireEnabled();
@@ -135,7 +206,8 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     @Test
     public void testGrindProfileAddedShouldAddTheGrindProfileToTheListAndResetTheErrorLabel() {
         var grindProfile = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
-        addGrindProfileToList();
+        GuiActionRunner.execute(() -> grindProfileView
+                .grindProfileAdded(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
         String[] listContents = window.list("grindProfileList").contents();
         assertThat(listContents).containsExactly(grindProfile.toString());
         window.label("errorMessageLabel").requireText(" ");
@@ -186,11 +258,6 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.list("grindProfileList").selectItem(1);
         window.button(JButtonMatcher.withText("Delete Selected")).click();
         verify(grindProfileController).deleteGrindProfile(grindProfile2);
-    }
-
-    private void addGrindProfileToList() {
-        GuiActionRunner.execute(() -> grindProfileView
-                .grindProfileAdded(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
     }
 
     private void addCoffeeToComboBox() {

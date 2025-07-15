@@ -206,9 +206,9 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         KeyAdapter btnAddEnabler = new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                btnAdd.setEnabled(!txtId.getText().isEmpty() && comboBoxCoffees.getSelectedItem() != null
-                        && !txtBrew.getText().isEmpty() && !txtGrams.getText().isEmpty()
-                        && !txtWater.getText().isEmpty() && !txtClicks.getText().isEmpty());
+                btnAdd.setEnabled(!txtId.getText().trim().isEmpty() && comboBoxCoffees.getSelectedItem() != null
+                        && !txtBrew.getText().trim().isEmpty() && !txtGrams.getText().trim().isEmpty()
+                        && !txtWater.getText().trim().isEmpty() && !txtClicks.getText().trim().isEmpty());
             }
         };
 

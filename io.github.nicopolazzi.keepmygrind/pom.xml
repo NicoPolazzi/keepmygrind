@@ -45,7 +45,8 @@
       java:S2699    
     </sonar.issue.ignore.multicriteria.e12.ruleKey>
         <sonar.issue.ignore.multicriteria.e12.resourceKey>
-      **/CoffeeSwingViewTest.java
+      **/CoffeeSwingViewTest.java,
+      **/GrindProfileSwingViewTest.java
     </sonar.issue.ignore.multicriteria.e12.resourceKey>
     
     <!-- Disable rule for "Local variable and method parameter names should comply with a naming convention" -->
@@ -53,7 +54,8 @@
       java:S117    
     </sonar.issue.ignore.multicriteria.e13.ruleKey>
     <sonar.issue.ignore.multicriteria.e13.resourceKey>
-      **/CoffeeSwingView.java
+      **/CoffeeSwingView.java,
+      **/GrindProfileSwingView.java
     </sonar.issue.ignore.multicriteria.e13.resourceKey>
     
     <sonar.tests>
