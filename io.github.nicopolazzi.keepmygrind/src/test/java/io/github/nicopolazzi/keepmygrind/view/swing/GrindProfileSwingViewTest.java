@@ -64,7 +64,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label(JLabelMatcher.withText("id"));
         window.textBox("idTextBox").requireEnabled();
         window.label(JLabelMatcher.withText("coffee"));
-        window.textBox("coffeeTextBox").requireEnabled();
+        window.comboBox("coffeeComboBox").requireEnabled();
         window.label(JLabelMatcher.withText("brew"));
         window.textBox("brewTextBox").requireEnabled();
         window.label(JLabelMatcher.withText("grams"));
@@ -82,7 +82,9 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     @Test
     public void testWhenGrindProfileInformationAreNonEmptyThenAddButtonShouldBeEnabled() {
         window.textBox("idTextBox").enterText("1");
-        window.textBox("coffeeTextBox").enterText("test");
+        GuiActionRunner
+                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
+        window.comboBox("coffeeComboBox").selectItem(0);
         window.textBox("brewTextBox").enterText("test");
         window.textBox("gramsTextBox").enterText("15");
         window.textBox("waterTextBox").enterText("test");
@@ -161,9 +163,11 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     }
 
     @Test
-    public void testAddButtonShouldDelegateToCoffeeControllerNewCoffee() {
+    public void testAddButtonShouldDelegateToGrindProfileControllerNewGrindProfile() {
         window.textBox("idTextBox").enterText("1");
-        window.textBox("coffeeTextBox").enterText("test");
+        GuiActionRunner
+                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
+        window.comboBox("coffeeComboBox").selectItem(0);
         window.textBox("brewTextBox").enterText("test");
         window.textBox("gramsTextBox").enterText("14.2");
         window.textBox("waterTextBox").enterText("100");
@@ -172,4 +176,5 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         verify(grindProfileController)
                 .newGrindProfile(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30));
     }
+
 }

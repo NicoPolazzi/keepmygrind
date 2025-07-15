@@ -4,12 +4,16 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -20,6 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
+import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
@@ -27,8 +32,9 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     private static final long serialVersionUID = 1L;
 
+    private transient GrindProfileController grindProfileController;
+
     private JTextField txtId;
-    private JTextField txtCoffee;
     private JTextField txtBrew;
     private JTextField txtGrams;
     private JTextField txtWater;
@@ -36,6 +42,9 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     private DefaultListModel<GrindProfile> listGrindProfileModel;
     private JList<GrindProfile> listGrindProfiles;
+
+    private DefaultComboBoxModel<Coffee> comboBoxCoffeeModel;
+    private JComboBox<Coffee> comboBoxCoffees;
 
     private JLabel lblErrorMessage;
 
@@ -74,15 +83,15 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         gbc_lblCoffee.gridy = 1;
         add(lblCoffee, gbc_lblCoffee);
 
-        txtCoffee = new JTextField();
-        txtCoffee.setName("coffeeTextBox");
-        GridBagConstraints gbc_textField = new GridBagConstraints();
-        gbc_textField.insets = new Insets(0, 0, 5, 0);
-        gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-        gbc_textField.gridx = 1;
-        gbc_textField.gridy = 1;
-        add(txtCoffee, gbc_textField);
-        txtCoffee.setColumns(10);
+        comboBoxCoffeeModel = new DefaultComboBoxModel<>();
+        comboBoxCoffees = new JComboBox<>(comboBoxCoffeeModel);
+        comboBoxCoffees.setName("coffeeComboBox");
+        GridBagConstraints gbc_comboBox = new GridBagConstraints();
+        gbc_comboBox.insets = new Insets(0, 0, 5, 0);
+        gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+        gbc_comboBox.gridx = 1;
+        gbc_comboBox.gridy = 1;
+        add(comboBoxCoffees, gbc_comboBox);
 
         JLabel lblBrew = new JLabel("brew");
         GridBagConstraints gbc_lblBrew = new GridBagConstraints();
@@ -157,6 +166,15 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         txtClicks.setColumns(10);
 
         JButton btnAdd = new JButton("Add");
+        btnAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                grindProfileController
+                        .newGrindProfile(new GrindProfile(txtId.getText(), (Coffee) comboBoxCoffees.getSelectedItem(),
+                                txtBrew.getText(), Double.parseDouble(txtGrams.getText()),
+                                Double.parseDouble(txtWater.getText()), Integer.parseInt(txtClicks.getText())));
+            }
+        });
+
         btnAdd.setEnabled(false);
         GridBagConstraints gbc_btnAdd = new GridBagConstraints();
         gbc_btnAdd.insets = new Insets(0, 0, 5, 0);
@@ -193,7 +211,6 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         lblErrorMessage.setName("errorMessageLabel");
         GridBagConstraints gbc_lblErrorMessage = new GridBagConstraints();
         gbc_lblErrorMessage.gridwidth = 2;
-        gbc_lblErrorMessage.insets = new Insets(0, 0, 0, 5);
         gbc_lblErrorMessage.gridx = 0;
         gbc_lblErrorMessage.gridy = 9;
         add(lblErrorMessage, gbc_lblErrorMessage);
@@ -201,18 +218,18 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         KeyAdapter btnAddEnabler = new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                btnAdd.setEnabled(!txtId.getText().isEmpty() && !txtCoffee.getText().isEmpty()
+                btnAdd.setEnabled(!txtId.getText().isEmpty() && comboBoxCoffees.getSelectedItem() != null
                         && !txtBrew.getText().isEmpty() && !txtGrams.getText().isEmpty()
                         && !txtWater.getText().isEmpty() && !txtClicks.getText().isEmpty());
             }
         };
 
         txtId.addKeyListener(btnAddEnabler);
-        txtCoffee.addKeyListener(btnAddEnabler);
         txtBrew.addKeyListener(btnAddEnabler);
         txtGrams.addKeyListener(btnAddEnabler);
         txtWater.addKeyListener(btnAddEnabler);
         txtClicks.addKeyListener(btnAddEnabler);
+        comboBoxCoffees.addKeyListener(btnAddEnabler);
 
         listGrindProfiles.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
@@ -261,9 +278,12 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         return listGrindProfileModel;
     }
 
-    public void setGrindProfileController(GrindProfileController grindProfileController) {
-        // TODO Auto-generated method stub
+    public DefaultComboBoxModel<Coffee> getComboBoxCoffeeModel() {
+        return comboBoxCoffeeModel;
+    }
 
+    public void setGrindProfileController(GrindProfileController grindProfileController) {
+        this.grindProfileController = grindProfileController;
     }
 
 }
