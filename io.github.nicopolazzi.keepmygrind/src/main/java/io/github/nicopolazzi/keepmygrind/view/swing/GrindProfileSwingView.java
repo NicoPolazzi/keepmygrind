@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -20,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
@@ -166,14 +162,6 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         txtClicks.setColumns(10);
 
         JButton btnAdd = new JButton("Add");
-        btnAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                grindProfileController
-                        .newGrindProfile(new GrindProfile(txtId.getText(), (Coffee) comboBoxCoffees.getSelectedItem(),
-                                txtBrew.getText(), Double.parseDouble(txtGrams.getText()),
-                                Double.parseDouble(txtWater.getText()), Integer.parseInt(txtClicks.getText())));
-            }
-        });
 
         btnAdd.setEnabled(false);
         GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -199,11 +187,6 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         listGrindProfiles.setName("grindProfileList");
 
         JButton btnDeleteSelected = new JButton("Delete Selected");
-        btnDeleteSelected.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                grindProfileController.deleteGrindProfile(listGrindProfiles.getSelectedValue());
-            }
-        });
         btnDeleteSelected.setEnabled(false);
         GridBagConstraints gbc_btnDeleteSelected = new GridBagConstraints();
         gbc_btnDeleteSelected.insets = new Insets(0, 0, 5, 0);
@@ -236,11 +219,15 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         txtClicks.addKeyListener(btnAddEnabler);
         comboBoxCoffees.addKeyListener(btnAddEnabler);
 
-        listGrindProfiles.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                btnDeleteSelected.setEnabled(listGrindProfiles.getSelectedIndex() != -1);
-            }
-        });
+        listGrindProfiles.addListSelectionListener(
+                e -> btnDeleteSelected.setEnabled(listGrindProfiles.getSelectedIndex() != -1));
+
+        btnAdd.addActionListener(e -> grindProfileController.newGrindProfile(new GrindProfile(txtId.getText(),
+                (Coffee) comboBoxCoffees.getSelectedItem(), txtBrew.getText(), Double.parseDouble(txtGrams.getText()),
+                Double.parseDouble(txtWater.getText()), Integer.parseInt(txtClicks.getText()))));
+
+        btnDeleteSelected.addActionListener(
+                e -> grindProfileController.deleteGrindProfile(listGrindProfiles.getSelectedValue()));
     }
 
     @Override

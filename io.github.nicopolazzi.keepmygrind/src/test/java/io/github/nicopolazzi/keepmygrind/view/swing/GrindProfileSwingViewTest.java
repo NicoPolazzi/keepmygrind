@@ -82,8 +82,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     @Test
     public void testWhenGrindProfileInformationAreNonEmptyThenAddButtonShouldBeEnabled() {
         window.textBox("idTextBox").enterText("1");
-        GuiActionRunner
-                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
+        addCoffeeToComboBox();
         window.comboBox("coffeeComboBox").selectItem(0);
         window.textBox("brewTextBox").enterText("test");
         window.textBox("gramsTextBox").enterText("15");
@@ -94,8 +93,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Test
     public void testDeleteButtonShouldBeEnabledOnlyWhenAGrindProfileIsSelected() {
-        GuiActionRunner.execute(() -> grindProfileView.getListGrindProfileModel()
-                .addElement(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
+        addGrindProfileToList();
         window.list("grindProfileList").selectItem(0);
         JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
         deleteButton.requireEnabled();
@@ -137,8 +135,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     @Test
     public void testGrindProfileAddedShouldAddTheGrindProfileToTheListAndResetTheErrorLabel() {
         var grindProfile = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
-        GuiActionRunner.execute(() -> grindProfileView
-                .grindProfileAdded(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
+        addGrindProfileToList();
         String[] listContents = window.list("grindProfileList").contents();
         assertThat(listContents).containsExactly(grindProfile.toString());
         window.label("errorMessageLabel").requireText(" ");
@@ -165,8 +162,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     @Test
     public void testAddButtonShouldDelegateToGrindProfileControllerNewGrindProfile() {
         window.textBox("idTextBox").enterText("1");
-        GuiActionRunner
-                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
+        addCoffeeToComboBox();
         window.comboBox("coffeeComboBox").selectItem(0);
         window.textBox("brewTextBox").enterText("test");
         window.textBox("gramsTextBox").enterText("14.2");
@@ -190,5 +186,15 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.list("grindProfileList").selectItem(1);
         window.button(JButtonMatcher.withText("Delete Selected")).click();
         verify(grindProfileController).deleteGrindProfile(grindProfile2);
+    }
+
+    private void addGrindProfileToList() {
+        GuiActionRunner.execute(() -> grindProfileView
+                .grindProfileAdded(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
+    }
+
+    private void addCoffeeToComboBox() {
+        GuiActionRunner
+                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
     }
 }
