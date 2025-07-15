@@ -106,4 +106,12 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("errorMessageLabel").requireText("Not existing grind profile: " + grindProfile1);
     }
 
+    @Test
+    public void testShowCoffeeNotFoundErrorShouldShowTheMessageInTheErrorLabel() {
+        String coffeeId = "1";
+        GuiActionRunner.execute(() -> grindProfileView.showCoffeeNotFoundError(coffeeId));
+        window.label("errorMessageLabel")
+                .requireText("Cannot create a grind profile for the coffee with id: " + coffeeId);
+
+    }
 }
