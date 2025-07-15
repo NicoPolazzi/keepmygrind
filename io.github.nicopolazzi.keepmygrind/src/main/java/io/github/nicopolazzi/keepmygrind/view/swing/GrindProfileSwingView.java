@@ -244,7 +244,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     @Override
     public void showCoffeeNotFoundError(String coffeeId) {
-        lblErrorMessage.setText("Cannot create a grind profile for the coffee with id: " + coffeeId);
+        lblErrorMessage.setText("Cannot find a grind profile for the coffee with id: " + coffeeId);
     }
 
     @Override

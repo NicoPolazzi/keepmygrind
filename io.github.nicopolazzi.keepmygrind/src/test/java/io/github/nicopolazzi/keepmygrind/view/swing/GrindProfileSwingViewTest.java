@@ -94,16 +94,16 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Test
     public void testShowExistingGrindProfileErrorShouldShowTheMessageInTheErrorLabel() {
-        var grindProfile1 = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
-        GuiActionRunner.execute(() -> grindProfileView.showExistingGrindProfileError(grindProfile1));
-        window.label("errorMessageLabel").requireText("Already existing grind profile: " + grindProfile1);
+        var grindProfile = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        GuiActionRunner.execute(() -> grindProfileView.showExistingGrindProfileError(grindProfile));
+        window.label("errorMessageLabel").requireText("Already existing grind profile: " + grindProfile);
     }
 
     @Test
     public void testShowNotExistingGrindProfileErrorShouldShowTheMessageInTheErrorLabel() {
-        var grindProfile1 = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
-        GuiActionRunner.execute(() -> grindProfileView.showNotExistingGrindProfileError(grindProfile1));
-        window.label("errorMessageLabel").requireText("Not existing grind profile: " + grindProfile1);
+        var grindProfile = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        GuiActionRunner.execute(() -> grindProfileView.showNotExistingGrindProfileError(grindProfile));
+        window.label("errorMessageLabel").requireText("Not existing grind profile: " + grindProfile);
     }
 
     @Test
@@ -111,7 +111,16 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         String coffeeId = "1";
         GuiActionRunner.execute(() -> grindProfileView.showCoffeeNotFoundError(coffeeId));
         window.label("errorMessageLabel")
-                .requireText("Cannot create a grind profile for the coffee with id: " + coffeeId);
+                .requireText("Cannot find a grind profile for the coffee with id: " + coffeeId);
+    }
 
+    @Test
+    public void testGrindProfileAddedShouldAddTheGrindProfileToTheListAndResetTheErrorLabel() {
+        var grindProfile = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        GuiActionRunner.execute(() -> grindProfileView
+                .grindProfileAdded(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
+        String[] listContents = window.list("grindProfileList").contents();
+        assertThat(listContents).containsExactly(grindProfile.toString());
+        window.label("errorMessageLabel").requireText(" ");
     }
 }
