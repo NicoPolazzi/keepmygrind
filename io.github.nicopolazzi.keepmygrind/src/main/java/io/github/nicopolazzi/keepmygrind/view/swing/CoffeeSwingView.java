@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.view.swing;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -128,6 +129,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         add(btnDeleteSelected, gbc_btnDeleteSelected);
 
         lblErrorMessage = new JLabel(" ");
+        lblErrorMessage.setForeground(Color.RED);
         lblErrorMessage.setName("errorMessageLabel");
         GridBagConstraints gbc_lblErrorMessage = new GridBagConstraints();
         gbc_lblErrorMessage.gridwidth = 2;
