@@ -14,7 +14,12 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.verify;
+
+import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
@@ -22,10 +27,17 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private GrindProfileSwingView grindProfileView;
 
+    @Mock
+    private GrindProfileController grindProfileController;
+
+    private AutoCloseable closeable;
+
     @Override
     protected void onSetUp() throws Exception {
+        closeable = MockitoAnnotations.openMocks(this);
         GuiActionRunner.execute(() -> {
             grindProfileView = new GrindProfileSwingView();
+            grindProfileView.setGrindProfileController(grindProfileController);
             return grindProfileView;
         });
 
@@ -39,6 +51,11 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
 
         window = new FrameFixture(robot(), frame);
         window.show();
+    }
+
+    @Override
+    protected void onTearDown() throws Exception {
+        closeable.close();
     }
 
     @Test
@@ -141,5 +158,18 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         String[] listContents = window.list("grindProfileList").contents();
         assertThat(listContents).containsExactly(grindProfile2.toString());
         window.label("errorMessageLabel").requireText(" ");
+    }
+
+    @Test
+    public void testAddButtonShouldDelegateToCoffeeControllerNewCoffee() {
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("coffeeTextBox").enterText("test");
+        window.textBox("brewTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("14.2");
+        window.textBox("waterTextBox").enterText("100");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add")).click();
+        verify(grindProfileController)
+                .newGrindProfile(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30));
     }
 }

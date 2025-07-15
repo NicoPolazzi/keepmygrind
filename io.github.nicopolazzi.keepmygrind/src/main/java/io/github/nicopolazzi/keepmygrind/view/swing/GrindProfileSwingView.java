@@ -19,6 +19,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
@@ -228,12 +229,16 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     @Override
     public void grindProfileAdded(GrindProfile profile) {
         listGrindProfileModel.addElement(profile);
-        lblErrorMessage.setText(" ");
+        resetErrorMessageLabel();
     }
 
     @Override
     public void grindProfileRemoved(GrindProfile profile) {
         listGrindProfileModel.removeElement(profile);
+        resetErrorMessageLabel();
+    }
+
+    private void resetErrorMessageLabel() {
         lblErrorMessage.setText(" ");
     }
 
@@ -254,6 +259,11 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     public DefaultListModel<GrindProfile> getListGrindProfileModel() {
         return listGrindProfileModel;
+    }
+
+    public void setGrindProfileController(GrindProfileController grindProfileController) {
+        // TODO Auto-generated method stub
+
     }
 
 }
