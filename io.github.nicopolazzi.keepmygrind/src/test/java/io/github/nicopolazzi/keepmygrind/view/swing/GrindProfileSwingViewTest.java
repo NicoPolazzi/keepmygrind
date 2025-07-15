@@ -177,4 +177,18 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
                 .newGrindProfile(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30));
     }
 
+    @Test
+    public void testDeleteButtonShouldDelegateToGrindProfileControllerDeleteGrindProfile() {
+        var grindProfile1 = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        var grindProfile2 = new GrindProfile("2", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        GuiActionRunner.execute(() -> {
+            DefaultListModel<GrindProfile> listCoffeesModel = grindProfileView.getListGrindProfileModel();
+            listCoffeesModel.addElement(grindProfile1);
+            listCoffeesModel.addElement(grindProfile2);
+        });
+
+        window.list("grindProfileList").selectItem(1);
+        window.button(JButtonMatcher.withText("Delete Selected")).click();
+        verify(grindProfileController).deleteGrindProfile(grindProfile2);
+    }
 }
