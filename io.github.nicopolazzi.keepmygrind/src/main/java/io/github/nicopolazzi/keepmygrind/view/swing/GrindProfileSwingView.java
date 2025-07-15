@@ -240,13 +240,11 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     @Override
     public void showExistingGrindProfileError(GrindProfile existingProfile) {
         lblErrorMessage.setText("Already existing grind profile: " + existingProfile);
-
     }
 
     @Override
     public void showCoffeeNotFoundError(String coffeeId) {
-        // TODO Auto-generated method stub
-
+        lblErrorMessage.setText("Cannot create a grind profile for the coffee with id: " + coffeeId);
     }
 
     @Override
