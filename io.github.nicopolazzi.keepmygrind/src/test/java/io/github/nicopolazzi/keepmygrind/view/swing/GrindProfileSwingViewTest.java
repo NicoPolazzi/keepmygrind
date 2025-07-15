@@ -3,6 +3,7 @@ package io.github.nicopolazzi.keepmygrind.view.swing;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
@@ -121,6 +122,24 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
                 .grindProfileAdded(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
         String[] listContents = window.list("grindProfileList").contents();
         assertThat(listContents).containsExactly(grindProfile.toString());
+        window.label("errorMessageLabel").requireText(" ");
+    }
+
+    @Test
+    public void testGrindProfileRemovedShouldRemoveTheGrindProfileFromTheListAndResetTheErrorLabel() {
+        var grindProfile1 = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        var grindProfile2 = new GrindProfile("2", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        GuiActionRunner.execute(() -> {
+            DefaultListModel<GrindProfile> listCoffeesModel = grindProfileView.getListGrindProfileModel();
+            listCoffeesModel.addElement(grindProfile1);
+            listCoffeesModel.addElement(grindProfile2);
+        });
+
+        GuiActionRunner.execute(() -> grindProfileView
+                .grindProfileRemoved(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
+
+        String[] listContents = window.list("grindProfileList").contents();
+        assertThat(listContents).containsExactly(grindProfile2.toString());
         window.label("errorMessageLabel").requireText(" ");
     }
 }
