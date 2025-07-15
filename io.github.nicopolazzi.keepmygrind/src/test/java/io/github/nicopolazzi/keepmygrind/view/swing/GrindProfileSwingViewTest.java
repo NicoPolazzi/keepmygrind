@@ -75,7 +75,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("clicksTextBox").requireEnabled();
         window.button(JButtonMatcher.withText("Add")).requireDisabled();
         window.list("grindProfileList");
-        window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
+        window.button(JButtonMatcher.withText("Delete Selected Profile")).requireDisabled();
         window.label("errorMessageLabel").requireText(" ");
     }
 
@@ -166,7 +166,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         GuiActionRunner.execute(() -> grindProfileView.getListGrindProfileModel()
                 .addElement(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30)));
         window.list("grindProfileList").selectItem(0);
-        JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
+        JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected Profile"));
         deleteButton.requireEnabled();
         window.list("grindProfileList").clearSelection();
         deleteButton.requireDisabled();
@@ -256,7 +256,7 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         });
 
         window.list("grindProfileList").selectItem(1);
-        window.button(JButtonMatcher.withText("Delete Selected")).click();
+        window.button(JButtonMatcher.withText("Delete Selected Profile")).click();
         verify(grindProfileController).deleteGrindProfile(grindProfile2);
     }
 

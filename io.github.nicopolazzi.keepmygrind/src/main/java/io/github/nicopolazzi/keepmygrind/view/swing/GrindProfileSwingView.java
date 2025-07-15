@@ -38,8 +38,8 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     private JButton btnAdd;
     private JList<GrindProfile> listGrindProfiles;
     private JScrollPane scrollPane;
-    private JButton btnDeleteSelected;
-    private JLabel lblErrorMessage;
+    private JButton btnDelete;
+    private JLabel lblErrorMessageProfile;
 
     private DefaultListModel<GrindProfile> listGrindProfileModel;
     private DefaultComboBoxModel<Coffee> comboBoxCoffeeModel;
@@ -214,29 +214,29 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         listGrindProfiles = new JList<>(listGrindProfileModel);
         scrollPane.setViewportView(listGrindProfiles);
         listGrindProfiles.addListSelectionListener(
-                e -> btnDeleteSelected.setEnabled(listGrindProfiles.getSelectedIndex() != -1));
+                e -> btnDelete.setEnabled(listGrindProfiles.getSelectedIndex() != -1));
         listGrindProfiles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listGrindProfiles.setName("grindProfileList");
 
-        btnDeleteSelected = new JButton("Delete Selected");
-        btnDeleteSelected.setEnabled(false);
-        btnDeleteSelected.addActionListener(
+        btnDelete = new JButton("Delete Selected Profile");
+        btnDelete.setEnabled(false);
+        btnDelete.addActionListener(
                 e -> grindProfileController.deleteGrindProfile(listGrindProfiles.getSelectedValue()));
         GridBagConstraints gbc_btnDeleteSelected = new GridBagConstraints();
         gbc_btnDeleteSelected.insets = new Insets(0, 0, 5, 0);
         gbc_btnDeleteSelected.gridwidth = 2;
         gbc_btnDeleteSelected.gridx = 0;
         gbc_btnDeleteSelected.gridy = 8;
-        add(btnDeleteSelected, gbc_btnDeleteSelected);
+        add(btnDelete, gbc_btnDeleteSelected);
 
-        lblErrorMessage = new JLabel(" ");
-        lblErrorMessage.setForeground(Color.RED);
-        lblErrorMessage.setName("errorMessageLabel");
+        lblErrorMessageProfile = new JLabel(" ");
+        lblErrorMessageProfile.setForeground(Color.RED);
+        lblErrorMessageProfile.setName("errorMessageLabel");
         GridBagConstraints gbc_lblErrorMessage = new GridBagConstraints();
         gbc_lblErrorMessage.gridwidth = 2;
         gbc_lblErrorMessage.gridx = 0;
         gbc_lblErrorMessage.gridy = 9;
-        add(lblErrorMessage, gbc_lblErrorMessage);
+        add(lblErrorMessageProfile, gbc_lblErrorMessage);
     }
 
     @Override
@@ -257,21 +257,21 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     }
 
     private void resetErrorMessageLabel() {
-        lblErrorMessage.setText(" ");
+        lblErrorMessageProfile.setText(" ");
     }
 
     @Override
     public void showExistingGrindProfileError(GrindProfile existingProfile) {
-        lblErrorMessage.setText("Already existing grind profile: " + existingProfile);
+        lblErrorMessageProfile.setText("Already existing grind profile: " + existingProfile);
     }
 
     @Override
     public void showCoffeeNotFoundError(String coffeeId) {
-        lblErrorMessage.setText("Cannot find a grind profile for the coffee with id: " + coffeeId);
+        lblErrorMessageProfile.setText("Cannot find a grind profile for the coffee with id: " + coffeeId);
     }
 
     @Override
     public void showNotExistingGrindProfileError(GrindProfile profile) {
-        lblErrorMessage.setText("Not existing grind profile: " + profile);
+        lblErrorMessageProfile.setText("Not existing grind profile: " + profile);
     }
 }
