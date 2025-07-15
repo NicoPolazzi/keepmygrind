@@ -36,6 +36,8 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     private DefaultListModel<GrindProfile> listGrindProfileModel;
     private JList<GrindProfile> listGrindProfiles;
 
+    private JLabel lblErrorMessage;
+
     public GrindProfileSwingView() {
         setPreferredSize(new Dimension(700, 500));
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -186,7 +188,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         gbc_btnDeleteSelected.gridy = 8;
         add(btnDeleteSelected, gbc_btnDeleteSelected);
 
-        JLabel lblErrorMessage = new JLabel(" ");
+        lblErrorMessage = new JLabel(" ");
         lblErrorMessage.setName("errorMessageLabel");
         GridBagConstraints gbc_lblErrorMessage = new GridBagConstraints();
         gbc_lblErrorMessage.gridwidth = 2;
@@ -237,7 +239,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     @Override
     public void showExistingGrindProfileError(GrindProfile existingProfile) {
-        // TODO Auto-generated method stub
+        lblErrorMessage.setText("Already existing grind profile: " + existingProfile);
 
     }
 
