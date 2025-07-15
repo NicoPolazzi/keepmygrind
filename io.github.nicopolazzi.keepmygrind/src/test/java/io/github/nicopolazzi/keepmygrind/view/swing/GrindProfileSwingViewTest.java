@@ -32,7 +32,6 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
             JFrame f = new JFrame();
             f.setContentPane(grindProfileView);
             f.pack();
-            f.setSize(600, 500);
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             return f;
         });
@@ -91,6 +90,13 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         GuiActionRunner.execute(() -> grindProfileView.showAllGrindProfiles(asList(grindProfile1, grindProfile2)));
         String[] listContents = window.list("grindProfileList").contents();
         assertThat(listContents).containsExactly(grindProfile1.toString(), grindProfile2.toString());
+    }
+
+    @Test
+    public void testShowExistingGrindProfileErrorShouldShowTheMessageInTheErrorLabel() {
+        var grindProfile1 = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        GuiActionRunner.execute(() -> grindProfileView.showExistingGrindProfileError(grindProfile1));
+        window.label("errorMessageLabel").requireText("Already existing grind profile: " + grindProfile1);
     }
 
 }

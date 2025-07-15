@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind.view.swing;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -36,6 +37,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     private JList<GrindProfile> listGrindProfiles;
 
     public GrindProfileSwingView() {
+        setPreferredSize(new Dimension(700, 500));
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 79, 0, 0 };
         gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
