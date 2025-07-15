@@ -251,8 +251,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
 
     @Override
     public void showNotExistingGrindProfileError(GrindProfile profile) {
-        // TODO Auto-generated method stub
-
+        lblErrorMessage.setText("Not existing grind profile: " + profile);
     }
 
     public DefaultListModel<GrindProfile> getListGrindProfileModel() {
