@@ -2,8 +2,6 @@ package io.github.nicopolazzi.keepmygrind.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.InetSocketAddress;
-
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
@@ -12,31 +10,28 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.schema.Action;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
-
-import de.bwaldvogel.mongo.MongoServer;
-import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
-import io.github.nicopolazzi.keepmygrind.repository.mongo.CoffeeMongoRepository;
-import io.github.nicopolazzi.keepmygrind.repository.mongo.GrindProfileMongoRepository;
+import io.github.nicopolazzi.keepmygrind.repository.sql.CoffeeSqlRepository;
+import io.github.nicopolazzi.keepmygrind.repository.sql.GrindProfileSqlRepository;
 
 @RunWith(GUITestRunner.class)
-public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
+public class GrindProfileSwingViewSqlIT extends AssertJSwingJUnitTestCase {
 
-    private static MongoServer server;
-    private static InetSocketAddress serverAddress;
+    private static SessionFactory sessionFactory;
 
-    private MongoClient client;
     private FrameFixture window;
 
     private GrindProfileSwingView grindProfileView;
@@ -45,23 +40,24 @@ public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
     private CoffeeRepository coffeeRepository;
 
     @BeforeClass
-    public static void setUpServer() {
-        server = new MongoServer(new MemoryBackend());
-        serverAddress = server.bind();
+    public static void setUpSessionFactory() {
+        sessionFactory = new Configuration().addAnnotatedClass(Coffee.class).addAnnotatedClass(GrindProfile.class)
+                .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1")
+                .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_CREATE_THEN_DROP)
+                .buildSessionFactory();
     }
 
     @AfterClass
-    public static void shutdownServer() {
-        server.shutdown();
+    public static void tearDownSessionFactory() {
+        sessionFactory.close();
     }
 
     @Override
     protected void onSetUp() throws Exception {
-        client = new MongoClient(new ServerAddress(serverAddress));
-        grindProfileRepository = new GrindProfileMongoRepository(client);
-        coffeeRepository = new CoffeeMongoRepository(client);
+        coffeeRepository = new CoffeeSqlRepository(sessionFactory);
+        grindProfileRepository = new GrindProfileSqlRepository(sessionFactory);
         grindProfileRepository.findAll().forEach(grindProfile -> grindProfileRepository.delete(grindProfile.getId()));
-        coffeeRepository.delete("1");
+        coffeeRepository.findAll().forEach(coffee -> coffeeRepository.delete(coffee.getId()));
 
         JFrame frame = GuiActionRunner.execute(() -> {
             JFrame f = new JFrame();
@@ -80,17 +76,14 @@ public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
         window.show();
     }
 
-    @Override
-    protected void onTearDown() throws Exception {
-        client.close();
-    }
-
     @Test
     @GUITest
     public void testAllGrindProfiles() {
-        var grindProfile1 = new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
-        var grindProfile2 = new GrindProfile("2", new Coffee("1", "test", "test"), "test", 14.2, 100, 30);
+        var coffee = new Coffee("1", "test", "test");
+        var grindProfile1 = new GrindProfile("1", coffee, "test", 14.2, 100, 30);
+        var grindProfile2 = new GrindProfile("2", coffee, "test", 14.2, 100, 30);
 
+        coffeeRepository.save(coffee);
         grindProfileRepository.save(grindProfile1);
         grindProfileRepository.save(grindProfile2);
         GuiActionRunner.execute(() -> grindProfileController.allGrindProfiles());
@@ -138,8 +131,6 @@ public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
     @GUITest
     public void testAddButtonErrorWhenGrindProfileIsAlreadyPresent() {
         var coffee = new Coffee("1", "test", "test");
-        grindProfileRepository.save(new GrindProfile("1", coffee, "test", 14.2, 100, 30));
-
         window.textBox("idTextBox").enterText("1");
         GuiActionRunner.execute(() -> {
             grindProfileView.getComboBoxCoffeeModel().addElement(coffee);
@@ -150,6 +141,7 @@ public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
         window.textBox("gramsTextBox").enterText("15");
         window.textBox("waterTextBox").enterText("150");
         window.textBox("clicksTextBox").enterText("30");
+        grindProfileRepository.save(new GrindProfile("1", coffee, "test", 14.2, 100, 30));
         window.button(JButtonMatcher.withText("Add")).click();
 
         assertThat(window.list().contents()).isEmpty();
@@ -183,4 +175,5 @@ public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
         window.label("errorMessageLabel").requireText(
                 "Not existing grind profile: GrindProfile [id=1, coffeeId=1, brew=test, beanGrams=14.2, waterMilliliters=100.0, clicks=30]");
     }
+
 }
