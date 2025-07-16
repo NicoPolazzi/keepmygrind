@@ -50,10 +50,12 @@ class CoffeeControllerTest {
     void testNewCoffeeWhenCoffeeDoesntAlreadyExist() {
         var coffee = new Coffee(COFFEE_FIXTURE_ID, COFFEE_FIXTURE_ORIGIN, COFFEE_FIXTURE_PROCESS);
         when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.empty());
+        when(coffeeRepository.findAll()).thenReturn(asList(coffee));
         coffeeController.newCoffee(coffee);
-        InOrder inOrder = inOrder(coffeeRepository, coffeeView);
+        InOrder inOrder = inOrder(coffeeRepository, coffeeView, grindProfileView);
         inOrder.verify(coffeeRepository).save(coffee);
         inOrder.verify(coffeeView).coffeeAdded(coffee);
+        inOrder.verify(grindProfileView).refreshCoffees(asList(coffee));
     }
 
     @Test
