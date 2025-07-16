@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 import io.github.nicopolazzi.keepmygrind.view.CoffeeView;
+import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
 @ExtendWith(MockitoExtension.class)
 class CoffeeControllerTest {
@@ -30,6 +31,9 @@ class CoffeeControllerTest {
 
     @Mock
     private CoffeeView coffeeView;
+
+    @Mock
+    private GrindProfileView grindProfileView;
 
     @InjectMocks
     private CoffeeController coffeeController;

@@ -213,8 +213,8 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         listGrindProfileModel = new DefaultListModel<>();
         listGrindProfiles = new JList<>(listGrindProfileModel);
         scrollPane.setViewportView(listGrindProfiles);
-        listGrindProfiles.addListSelectionListener(
-                e -> btnDelete.setEnabled(listGrindProfiles.getSelectedIndex() != -1));
+        listGrindProfiles
+                .addListSelectionListener(e -> btnDelete.setEnabled(listGrindProfiles.getSelectedIndex() != -1));
         listGrindProfiles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listGrindProfiles.setName("grindProfileList");
 
@@ -273,5 +273,13 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     @Override
     public void showNotExistingGrindProfileError(GrindProfile profile) {
         lblErrorMessageProfile.setText("Not existing grind profile: " + profile);
+    }
+
+    @Override
+    public void refreshCoffees(List<Coffee> coffees) {
+        comboBoxCoffeeModel.removeAllElements();
+        for (Coffee coffee : coffees) {
+            comboBoxCoffeeModel.addElement(coffee);
+        }
     }
 }

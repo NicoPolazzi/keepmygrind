@@ -57,7 +57,8 @@ public class CoffeeSwingViewSqlIT extends AssertJSwingJUnitTestCase {
         JFrame frame = GuiActionRunner.execute(() -> {
             JFrame f = new JFrame();
             coffeeSwingView = new CoffeeSwingView();
-            coffeeController = new CoffeeController(coffeeRepository, coffeeSwingView);
+            GrindProfileSwingView grindProfileSwingView = new GrindProfileSwingView();
+            coffeeController = new CoffeeController(coffeeRepository, coffeeSwingView, grindProfileSwingView);
             coffeeSwingView.setCoffeeController(coffeeController);
             f.setContentPane(coffeeSwingView);
             f.pack();
