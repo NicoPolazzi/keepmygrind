@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -86,6 +87,29 @@ public class CoffeeSwingViewMongoIT extends AssertJSwingJUnitTestCase {
         coffeeRepository.save(coffee2);
         GuiActionRunner.execute(() -> coffeeController.allCoffees());
         assertThat(window.list().contents()).containsExactly(coffee1.toString(), coffee2.toString());
+    }
+
+    @Test
+    @GUITest
+    public void testAddButtonSuccess() {
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("originTextBox").enterText("test");
+        window.textBox("processTextBox").enterText("test");
+        window.button(JButtonMatcher.withText("Add")).click();
+        assertThat(window.list().contents()).containsExactly("Coffee [id=1, origin=test, process=test]");
+    }
+
+    @Test
+    @GUITest
+    public void testAddButtonError() {
+        coffeeRepository.save(new Coffee("1", "existing", "existing"));
+        window.textBox("idTextBox").enterText("1");
+        window.textBox("originTextBox").enterText("test2");
+        window.textBox("processTextBox").enterText("test2");
+        window.button(JButtonMatcher.withText("Add")).click();
+        assertThat(window.list().contents()).isEmpty();
+        window.label("errorMessageLabel")
+                .requireText("Already existing coffee: Coffee [id=1, origin=existing, process=existing]");
     }
 
 }
