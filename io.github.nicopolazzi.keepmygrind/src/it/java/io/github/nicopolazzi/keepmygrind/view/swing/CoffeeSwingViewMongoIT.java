@@ -112,4 +112,24 @@ public class CoffeeSwingViewMongoIT extends AssertJSwingJUnitTestCase {
                 .requireText("Already existing coffee: Coffee [id=1, origin=existing, process=existing]");
     }
 
+    @Test
+    @GUITest
+    public void testDeleteButtonSuccess() {
+        GuiActionRunner.execute(() -> coffeeController.newCoffee(new Coffee("1", "existing", "existing")));
+        window.list().selectItem(0);
+        window.button(JButtonMatcher.withText("Delete Selected")).click();
+        assertThat(window.list().contents()).isEmpty();
+    }
+
+    @Test
+    @GUITest
+    public void testDeleteButtonError() {
+        // Manually adding a coffee to the view without interacting with the DB
+        var coffee = new Coffee("1", "test", "test");
+        GuiActionRunner.execute(() -> coffeeSwingView.getListCoffeesModel().addElement(coffee));
+        window.list().selectItem(0);
+        window.button(JButtonMatcher.withText("Delete Selected")).click();
+        assertThat(window.list().contents()).containsExactly(coffee.toString());
+        window.label("errorMessageLabel").requireText("Not existing coffee: Coffee [id=1, origin=test, process=test]");
+    }
 }

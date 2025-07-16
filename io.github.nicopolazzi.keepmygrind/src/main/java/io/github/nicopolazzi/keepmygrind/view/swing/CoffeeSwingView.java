@@ -34,6 +34,14 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
     private DefaultListModel<Coffee> listCoffeesModel;
     private JLabel lblErrorMessage;
 
+    public void setCoffeeController(CoffeeController coffeeController) {
+        this.coffeeController = coffeeController;
+    }
+
+    DefaultListModel<Coffee> getListCoffeesModel() {
+        return listCoffeesModel;
+    }
+
     public CoffeeSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 46, 645, 0 };
@@ -182,16 +190,8 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         lblErrorMessage.setText("Not existing coffee: " + coffee);
     }
 
-    public void setCoffeeController(CoffeeController coffeeController) {
-        this.coffeeController = coffeeController;
-    }
-
     private void resetErrorLabel() {
         lblErrorMessage.setText(" ");
-    }
-
-    DefaultListModel<Coffee> getListCoffeesModel() {
-        return listCoffeesModel;
     }
 
 }
