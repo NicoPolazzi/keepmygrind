@@ -48,6 +48,12 @@ public class KeepMyGrindSwingView extends JFrame {
         contentPane.add(btnCoffee, gbc_btnCoffee);
 
         JButton btnGrindProfile = new JButton("Grind Profile");
+        btnGrindProfile.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) (layeredPane.getLayout());
+                cl.show(layeredPane, "grindProfile");
+            }
+        });
         GridBagConstraints gbc_btnGrindProfile = new GridBagConstraints();
         gbc_btnGrindProfile.insets = new Insets(0, 0, 5, 0);
         gbc_btnGrindProfile.gridx = 1;
