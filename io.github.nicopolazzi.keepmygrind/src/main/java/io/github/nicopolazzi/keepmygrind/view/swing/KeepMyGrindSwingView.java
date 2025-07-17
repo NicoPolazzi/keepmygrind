@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +17,7 @@ public class KeepMyGrindSwingView extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private JLayeredPane layeredPane;
 
     public KeepMyGrindSwingView() {
         setTitle("KeepMyGrind");
@@ -32,6 +35,12 @@ public class KeepMyGrindSwingView extends JFrame {
         contentPane.setLayout(gbl_contentPane);
 
         JButton btnCoffee = new JButton("Coffee");
+        btnCoffee.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) (layeredPane.getLayout());
+                cl.show(layeredPane, "coffee");
+            }
+        });
         GridBagConstraints gbc_btnCoffee = new GridBagConstraints();
         gbc_btnCoffee.insets = new Insets(0, 0, 5, 5);
         gbc_btnCoffee.gridx = 0;
@@ -45,7 +54,7 @@ public class KeepMyGrindSwingView extends JFrame {
         gbc_btnGrindProfile.gridy = 0;
         contentPane.add(btnGrindProfile, gbc_btnGrindProfile);
 
-        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane = new JLayeredPane();
         GridBagConstraints gbc_layeredPane = new GridBagConstraints();
         gbc_layeredPane.gridwidth = 2;
         gbc_layeredPane.fill = GridBagConstraints.BOTH;

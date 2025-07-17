@@ -32,15 +32,17 @@ public class KeepMyGrindSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Test
     public void testCoffeeButtonShowsCoffeePanel() {
+        // andShowing() is needed because both Coffee and GrindProfile have such graphic
+        // components
         window.button(JButtonMatcher.withText("Coffee")).click();
 
-        window.label(JLabelMatcher.withText("id"));
+        window.label(JLabelMatcher.withText("id").andShowing());
         window.textBox("idTextBox").requireEnabled();
         window.label(JLabelMatcher.withText("origin"));
         window.textBox("originTextBox").requireEnabled();
         window.label(JLabelMatcher.withText("process"));
         window.textBox("processTextBox").requireEnabled();
-        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+        window.button(JButtonMatcher.withText("Add").andShowing()).requireDisabled();
         window.list("coffeeList");
         window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
         window.label("errorMessageLabel").requireText(" ");
