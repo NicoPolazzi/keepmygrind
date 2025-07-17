@@ -48,4 +48,26 @@ public class KeepMyGrindSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("errorMessageLabel").requireText(" ");
     }
 
+    @Test
+    public void testGrindProfileButtonShowsGrindProfilePanel() {
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+
+        window.label(JLabelMatcher.withText("id").andShowing());
+        window.textBox("idTextBox").requireEnabled();
+        window.label(JLabelMatcher.withText("coffee"));
+        window.comboBox("coffeeComboBox").requireEnabled();
+        window.label(JLabelMatcher.withText("brew"));
+        window.textBox("brewTextBox").requireEnabled();
+        window.label(JLabelMatcher.withText("grams"));
+        window.textBox("gramsTextBox").requireEnabled();
+        window.label(JLabelMatcher.withText("water"));
+        window.textBox("waterTextBox").requireEnabled();
+        window.label(JLabelMatcher.withText("clicks"));
+        window.textBox("clicksTextBox").requireEnabled();
+        window.button(JButtonMatcher.withText("Add").andShowing()).requireDisabled();
+        window.list("grindProfileList");
+        window.button(JButtonMatcher.withText("Delete Selected Profile")).requireDisabled();
+        window.label("errorMessageLabel").requireText(" ");
+    }
+
 }
