@@ -4,24 +4,27 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 public class KeepMyGrindSwingView extends JFrame {
 
+    private static final String GRIND_PROFILE_PANEL_NAME = "grindProfile";
+    private static final String COFFEE_PANEL_NAME = "coffee";
+
     private static final long serialVersionUID = 1L;
+
     private JPanel contentPane;
     private JLayeredPane layeredPane;
 
     public KeepMyGrindSwingView() {
         setTitle("KeepMyGrind");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 758, 551);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -35,12 +38,7 @@ public class KeepMyGrindSwingView extends JFrame {
         contentPane.setLayout(gbl_contentPane);
 
         JButton btnCoffee = new JButton("Coffee");
-        btnCoffee.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) (layeredPane.getLayout());
-                cl.show(layeredPane, "coffee");
-            }
-        });
+        btnCoffee.addActionListener(e -> showPanel(COFFEE_PANEL_NAME));
         GridBagConstraints gbc_btnCoffee = new GridBagConstraints();
         gbc_btnCoffee.insets = new Insets(0, 0, 5, 5);
         gbc_btnCoffee.gridx = 0;
@@ -48,12 +46,7 @@ public class KeepMyGrindSwingView extends JFrame {
         contentPane.add(btnCoffee, gbc_btnCoffee);
 
         JButton btnGrindProfile = new JButton("Grind Profile");
-        btnGrindProfile.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) (layeredPane.getLayout());
-                cl.show(layeredPane, "grindProfile");
-            }
-        });
+        btnGrindProfile.addActionListener(e -> showPanel(GRIND_PROFILE_PANEL_NAME));
         GridBagConstraints gbc_btnGrindProfile = new GridBagConstraints();
         gbc_btnGrindProfile.insets = new Insets(0, 0, 5, 0);
         gbc_btnGrindProfile.gridx = 1;
@@ -73,11 +66,16 @@ public class KeepMyGrindSwingView extends JFrame {
         layeredPane.add(blankPanel, "blank");
 
         JPanel coffeePanel = new CoffeeSwingView();
-        layeredPane.add(coffeePanel, "coffee");
+        layeredPane.add(coffeePanel, COFFEE_PANEL_NAME);
 
         JPanel grindProfilePanel = new GrindProfileSwingView();
-        layeredPane.add(grindProfilePanel, "grindProfile");
+        layeredPane.add(grindProfilePanel, GRIND_PROFILE_PANEL_NAME);
 
+    }
+
+    private void showPanel(String name) {
+        CardLayout cardLayout = (CardLayout) (layeredPane.getLayout());
+        cardLayout.show(layeredPane, name);
     }
 
 }
