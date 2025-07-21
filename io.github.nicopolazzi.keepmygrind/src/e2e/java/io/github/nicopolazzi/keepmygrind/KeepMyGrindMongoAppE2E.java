@@ -1,5 +1,6 @@
 package io.github.nicopolazzi.keepmygrind;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -72,12 +73,12 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
         mongoClient.getDatabase(DB_NAME).drop();
 
         coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
-        addCoffeeToDatabase(coffee);
-        addCoffeeToDatabase(new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS));
-        addGrindProfileToDatabase(new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, coffee, GRINDPROFILE_FIXTURE_1_BREW,
+        addTestCoffeeToDatabase(coffee);
+        addTestCoffeeToDatabase(new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS));
+        addTestGrindProfileToDatabase(new GrindProfile(GRINDPROFILE_FIXTURE_1_ID, coffee, GRINDPROFILE_FIXTURE_1_BREW,
                 GRINDPROFILE_FIXTURE_1_BEANS_GRAMS, GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS,
                 GRINDPROFILE_FIXTURE_1_CLICKS));
-        addGrindProfileToDatabase(new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, coffee, GRINDPROFILE_FIXTURE_2_BREW,
+        addTestGrindProfileToDatabase(new GrindProfile(GRINDPROFILE_FIXTURE_2_ID, coffee, GRINDPROFILE_FIXTURE_2_BREW,
                 GRINDPROFILE_FIXTURE_2_BEANS_GRAMS, GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS,
                 GRINDPROFILE_FIXTURE_2_CLICKS));
 
@@ -97,12 +98,12 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
         mongoClient.close();
     }
 
-    private void addCoffeeToDatabase(Coffee coffee) {
+    private void addTestCoffeeToDatabase(Coffee coffee) {
         mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
                 .getCollection(COFFEE_COLLECTION_NAME, Coffee.class).insertOne(coffee);
     }
 
-    private void addGrindProfileToDatabase(GrindProfile grindProfile) {
+    private void addTestGrindProfileToDatabase(GrindProfile grindProfile) {
         mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
                 .getCollection(GRINDPROFILE_COLLECTION_NAME, GrindProfile.class).insertOne(grindProfile);
     }
@@ -132,4 +133,80 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
                         String.valueOf(GRINDPROFILE_FIXTURE_2_CLICKS)));
     }
 
+    @Test
+    @GUITest
+    public void testCoffeeAddButtonSuccess() {
+        window.button(JButtonMatcher.withText("Coffee")).click();
+        window.textBox("idTextBox").enterText("10");
+        window.textBox("originTextBox").enterText("new origin");
+        window.textBox("processTextBox").enterText("new process");
+        window.button(JButtonMatcher.withText("Add").andShowing()).click();
+        assertThat(window.list().contents()).anySatisfy(e -> assertThat(e).contains("10", "new origin", "new process"));
+    }
+
+    @Test
+    @GUITest
+    public void testCoffeeAddButtonError() {
+        window.button(JButtonMatcher.withText("Coffee")).click();
+        window.textBox("idTextBox").enterText(COFFEE_FIXTURE_1_ID);
+        window.textBox("originTextBox").enterText("new one");
+        window.textBox("processTextBox").enterText(COFFEE_FIXTURE_1_PROCESS);
+        window.button(JButtonMatcher.withText("Add").andShowing()).click();
+        assertThat(window.label("errorMessageLabel").text()).contains(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN,
+                COFFEE_FIXTURE_1_PROCESS);
+    }
+
+    @Test
+    @GUITest
+    public void testGrindProfileAddButtonSuccess() {
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.textBox("idTextBox").enterText("10");
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("14.2");
+        window.textBox("waterTextBox").enterText("100");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add").andShowing()).click();
+        assertThat(window.list().contents())
+                .anySatisfy(e -> assertThat(e).contains("10", COFFEE_FIXTURE_1_ID, "test", "14.2", "100", "30"));
+    }
+
+    @Test
+    @GUITest
+    public void testGrindProfileAddButtonErrorWhenGrindProfileAlreadyExists() {
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.textBox("idTextBox").enterText(GRINDPROFILE_FIXTURE_1_ID);
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("14.2");
+        window.textBox("waterTextBox").enterText("100");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add").andShowing()).click();
+        assertThat(window.label("errorMessageLabel").text()).contains(GRINDPROFILE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ID,
+                GRINDPROFILE_FIXTURE_1_BREW, String.valueOf(GRINDPROFILE_FIXTURE_1_BEANS_GRAMS),
+                String.valueOf(GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS),
+                String.valueOf(GRINDPROFILE_FIXTURE_1_CLICKS));
+    }
+
+    @Test
+    @GUITest
+    public void testGrindProfileAddButtonErrorWhenCoffeeNotFound() {
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.textBox("idTextBox").enterText("10");
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("14.2");
+        window.textBox("waterTextBox").enterText("100");
+        window.textBox("clicksTextBox").enterText("30");
+
+        removeTestCoffeeFromDatabase(COFFEE_FIXTURE_1_ID);
+
+        window.button(JButtonMatcher.withText("Add").andShowing()).click();
+        assertThat(window.label("errorMessageLabel").text()).contains(COFFEE_FIXTURE_1_ID);
+    }
+
+    private void removeTestCoffeeFromDatabase(String coffeeId) {
+        mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
+                .getCollection(COFFEE_COLLECTION_NAME, Coffee.class).deleteOne(eq("_id", coffeeId));
+    }
 }

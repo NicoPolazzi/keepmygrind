@@ -119,8 +119,6 @@ public class GrindProfileSwingViewMongoIT extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testAddButtonErrorWhenCoffeeNotFound() {
-        // Here the coffee isn't present in the repository when we try to add the grind
-        // profile
         window.textBox("idTextBox").enterText("1");
         GuiActionRunner
                 .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
