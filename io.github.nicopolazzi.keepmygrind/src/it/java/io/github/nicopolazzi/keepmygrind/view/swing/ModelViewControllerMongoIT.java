@@ -18,6 +18,7 @@ import com.mongodb.ServerAddress;
 import io.github.nicopolazzi.keepmygrind.controller.CoffeeController;
 import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
+import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 import io.github.nicopolazzi.keepmygrind.repository.mongo.CoffeeMongoRepository;
@@ -83,6 +84,35 @@ public class ModelViewControllerMongoIT extends AssertJSwingJUnitTestCase {
         window.list().selectItem(0);
         window.button(JButtonMatcher.withText("Delete Selected")).click();
         assertThat(coffeeRepository.findById("99")).isNotPresent();
+    }
+
+    @Test
+    public void testAddGrindProfile() {
+        GuiActionRunner.execute(() -> coffeeController.newCoffee(new Coffee("1", "test", "test")));
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.textBox("idTextBox").enterText("1");
+        window.comboBox("coffeeComboBox").selectItem(0);
+        window.textBox("brewTextBox").enterText("test");
+        window.textBox("gramsTextBox").enterText("14.2");
+        window.textBox("waterTextBox").enterText("100");
+        window.textBox("clicksTextBox").enterText("30");
+        window.button(JButtonMatcher.withText("Add").andShowing()).click();
+        assertThat(grindProfileRepository.findById("1"))
+                .contains(new GrindProfile("1", new Coffee("1", "test", "test"), "test", 14.2, 100, 30));
+    }
+
+    @Test
+    public void testDeleteGrindProfile() {
+        GuiActionRunner.execute(() -> {
+            coffeeController.newCoffee(new Coffee("1", "test", "test"));
+            grindProfileRepository.save(new GrindProfile("99", new Coffee("1", "test", "test"), "test", 14.2, 100, 30));
+            grindProfileController.allGrindProfiles();
+        });
+
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.list("grindProfileList").selectItem(0);
+        window.button(JButtonMatcher.withText("Delete Selected Profile")).click();
+        assertThat(grindProfileRepository.findById("99")).isNotPresent();
     }
 
 }
