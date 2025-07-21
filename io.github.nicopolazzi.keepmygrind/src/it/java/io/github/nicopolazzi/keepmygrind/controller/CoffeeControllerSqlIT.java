@@ -21,6 +21,7 @@ import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 import io.github.nicopolazzi.keepmygrind.repository.sql.CoffeeSqlRepository;
 import io.github.nicopolazzi.keepmygrind.view.CoffeeView;
+import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
 @ExtendWith(MockitoExtension.class)
 class CoffeeControllerSqlIT {
@@ -32,6 +33,10 @@ class CoffeeControllerSqlIT {
 
     @Mock
     private CoffeeView coffeeView;
+
+    @Mock
+    private GrindProfileView grindProfileView;
+
     private CoffeeRepository coffeeRepository;
     private CoffeeController coffeeController;
 
@@ -52,7 +57,7 @@ class CoffeeControllerSqlIT {
     void setup() {
         coffeeRepository = new CoffeeSqlRepository(sessionFactory);
         coffeeRepository.findAll().forEach(coffee -> coffeeRepository.delete(coffee.getId()));
-        coffeeController = new CoffeeController(coffeeRepository, coffeeView);
+        coffeeController = new CoffeeController(coffeeRepository, coffeeView, grindProfileView);
     }
 
     @Test

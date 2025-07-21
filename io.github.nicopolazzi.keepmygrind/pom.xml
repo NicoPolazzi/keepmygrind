@@ -21,7 +21,7 @@
     <hibernate.version>6.6.13.Final</hibernate.version>
     <h2.version>2.3.232</h2.version>
     <mysql.version>9.3.0</mysql.version>
-    <testcontainers.version>1.21.0</testcontainers.version>
+    <testcontainers.version>1.21.3</testcontainers.version>
     <logback.version>1.5.18</logback.version>
     <assertj.swing.version>3.17.1</assertj.swing.version>
     <argLine></argLine>

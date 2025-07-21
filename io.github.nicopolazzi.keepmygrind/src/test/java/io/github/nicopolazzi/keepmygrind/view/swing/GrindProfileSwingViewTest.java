@@ -12,8 +12,10 @@ import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -23,6 +25,7 @@ import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
+@RunWith(GUITestRunner.class)
 public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private GrindProfileSwingView grindProfileView;
@@ -35,14 +38,11 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
     @Override
     protected void onSetUp() throws Exception {
         closeable = MockitoAnnotations.openMocks(this);
-        GuiActionRunner.execute(() -> {
-            grindProfileView = new GrindProfileSwingView();
-            grindProfileView.setGrindProfileController(grindProfileController);
-            return grindProfileView;
-        });
 
         JFrame frame = GuiActionRunner.execute(() -> {
             JFrame f = new JFrame();
+            grindProfileView = new GrindProfileSwingView();
+            grindProfileView.setGrindProfileController(grindProfileController);
             f.setContentPane(grindProfileView);
             f.pack();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

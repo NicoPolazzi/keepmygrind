@@ -13,8 +13,10 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -23,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import io.github.nicopolazzi.keepmygrind.controller.CoffeeController;
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 
+@RunWith(GUITestRunner.class)
 public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private CoffeeSwingView coffeeSwingView;

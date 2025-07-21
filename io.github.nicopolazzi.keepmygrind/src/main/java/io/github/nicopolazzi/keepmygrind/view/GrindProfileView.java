@@ -2,6 +2,7 @@ package io.github.nicopolazzi.keepmygrind.view;
 
 import java.util.List;
 
+import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 public interface GrindProfileView {
@@ -17,5 +18,7 @@ public interface GrindProfileView {
     void showCoffeeNotFoundError(String coffeeId);
 
     void showNotExistingGrindProfileError(GrindProfile profile);
+
+    void refreshCoffees(List<Coffee> coffees);
 
 }
