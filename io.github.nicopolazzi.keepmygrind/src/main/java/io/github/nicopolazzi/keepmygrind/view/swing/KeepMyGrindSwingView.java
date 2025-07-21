@@ -19,7 +19,6 @@ public class KeepMyGrindSwingView extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private JPanel contentPane;
     private JLayeredPane layeredPane;
     private CoffeeSwingView coffeePanel;
     private GrindProfileSwingView grindProfilePanel;
@@ -31,6 +30,7 @@ public class KeepMyGrindSwingView extends JFrame {
     }
 
     private void initializeComponents() {
+        JPanel contentPane;
         setTitle("KeepMyGrind");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 758, 551);
