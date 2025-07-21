@@ -69,7 +69,8 @@
     </sonar.junit.reportPaths>
     
     <sonar.coverage.exclusions>
-      **/model/*.*
+      **/model/*.*,
+      **/KeepMyGrindSwingApp.*
     </sonar.coverage.exclusions>
   </properties>
 
