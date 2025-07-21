@@ -16,7 +16,8 @@ public class KeepMyGrindSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp() throws Exception {
-        window = new FrameFixture(robot(), GuiActionRunner.execute(KeepMyGrindSwingView::new));
+        window = new FrameFixture(robot(), GuiActionRunner
+                .execute(() -> new KeepMyGrindSwingView(new CoffeeSwingView(), new GrindProfileSwingView())));
         window.show();
     }
 

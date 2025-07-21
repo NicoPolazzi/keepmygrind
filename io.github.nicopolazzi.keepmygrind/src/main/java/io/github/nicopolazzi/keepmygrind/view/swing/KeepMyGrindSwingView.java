@@ -21,8 +21,16 @@ public class KeepMyGrindSwingView extends JFrame {
 
     private JPanel contentPane;
     private JLayeredPane layeredPane;
+    private CoffeeSwingView coffeePanel;
+    private GrindProfileSwingView grindProfilePanel;
 
-    public KeepMyGrindSwingView() {
+    public KeepMyGrindSwingView(CoffeeSwingView coffeePanel, GrindProfileSwingView grindProfilePanel) {
+        this.coffeePanel = coffeePanel;
+        this.grindProfilePanel = grindProfilePanel;
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
         setTitle("KeepMyGrind");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 758, 551);
@@ -64,11 +72,7 @@ public class KeepMyGrindSwingView extends JFrame {
 
         JPanel blankPanel = new JPanel();
         layeredPane.add(blankPanel, "blank");
-
-        JPanel coffeePanel = new CoffeeSwingView();
         layeredPane.add(coffeePanel, COFFEE_PANEL_NAME);
-
-        JPanel grindProfilePanel = new GrindProfileSwingView();
         layeredPane.add(grindProfilePanel, GRIND_PROFILE_PANEL_NAME);
 
     }
