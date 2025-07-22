@@ -1,10 +1,7 @@
 package io.github.nicopolazzi.keepmygrind.view.swing;
 
-import static com.mongodb.client.model.Filters.eq;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
-import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import java.util.regex.Pattern;
 
@@ -17,26 +14,22 @@ import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.schema.Action;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testcontainers.containers.MongoDBContainer;
-
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerAddress;
+import org.testcontainers.containers.MySQLContainer;
 
 import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 @RunWith(GUITestRunner.class)
-public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
-
-    private static final String DB_NAME = "keepmygrind";
-    private static final String COFFEE_COLLECTION_NAME = "coffee";
-    private static final String GRINDPROFILE_COLLECTION_NAME = "grindprofile";
+public class KeepMyGrindSqlAppE2E extends AssertJSwingJUnitTestCase {
 
     private static final String COFFEE_FIXTURE_1_ID = "1";
     private static final String COFFEE_FIXTURE_1_ORIGIN = "origin1";
@@ -56,24 +49,36 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
     private static final double GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS = 100;
     private static final int GRINDPROFILE_FIXTURE_2_CLICKS = 20;
 
-    @ClassRule
-    public static final MongoDBContainer mongo = new MongoDBContainer("mongo:5");
-
-    private MongoClient mongoClient;
-    private CodecRegistry pojoCodecRegistry;
-
+    private static SessionFactory sessionFactory;
     private FrameFixture window;
     private Coffee coffee;
 
+    @ClassRule
+    public static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8");
+    static {
+        mysql.withDatabaseName("keepmygrind").withUsername("root").withPassword("").withEnv("MYSQL_ROOT_HOST", "%");
+    }
+
+    @BeforeClass
+    public static void setupSessionFactory() {
+        sessionFactory = new Configuration().addAnnotatedClass(GrindProfile.class).addAnnotatedClass(Coffee.class)
+                .setProperty(AvailableSettings.JAKARTA_JDBC_URL, mysql.getJdbcUrl())
+                .setProperty(AvailableSettings.JAKARTA_JDBC_USER, mysql.getUsername())
+                .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, mysql.getPassword())
+                .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_CREATE_THEN_DROP)
+                .buildSessionFactory();
+    }
+
+    @AfterClass
+    public static void tearDownSessionFactory() {
+        sessionFactory.close();
+    }
+
     @Override
     protected void onSetUp() throws Exception {
-        String containerIpAddress = mongo.getHost();
-        Integer mappedPort = mongo.getFirstMappedPort();
-        mongoClient = new MongoClient(new ServerAddress(mongo.getHost(), mongo.getFirstMappedPort()));
-        pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        mongoClient.getDatabase(DB_NAME).drop();
-
+        String host = mysql.getHost();
+        Integer port = mysql.getFirstMappedPort();
+        sessionFactory.getSchemaManager().truncateMappedObjects();
         coffee = new Coffee(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN, COFFEE_FIXTURE_1_PROCESS);
         addTestCoffeeToDatabase(coffee);
         addTestCoffeeToDatabase(new Coffee(COFFEE_FIXTURE_2_ID, COFFEE_FIXTURE_2_ORIGIN, COFFEE_FIXTURE_2_PROCESS));
@@ -85,8 +90,7 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
                 GRINDPROFILE_FIXTURE_2_CLICKS));
 
         application("io.github.nicopolazzi.keepmygrind.app.swing.KeepMyGrindSwingApp")
-                .withArgs("--database=mongo" + "--host=" + containerIpAddress, "--port=" + mappedPort.toString())
-                .start();
+                .withArgs("--database=mysql", "--host=" + host, "--port=" + port.toString()).start();
 
         window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
             @Override
@@ -96,19 +100,12 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
         }).using(robot());
     }
 
-    @Override
-    protected void onTearDown() throws Exception {
-        mongoClient.close();
-    }
-
     private void addTestCoffeeToDatabase(Coffee coffee) {
-        mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
-                .getCollection(COFFEE_COLLECTION_NAME, Coffee.class).insertOne(coffee);
+        sessionFactory.inTransaction(session -> session.persist(coffee));
     }
 
     private void addTestGrindProfileToDatabase(GrindProfile grindProfile) {
-        mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
-                .getCollection(GRINDPROFILE_COLLECTION_NAME, GrindProfile.class).insertOne(grindProfile);
+        sessionFactory.inTransaction(session -> session.persist(grindProfile));
     }
 
     @Test
@@ -209,8 +206,7 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
     }
 
     private void removeTestCoffeeFromDatabase(String coffeeId) {
-        mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
-                .getCollection(COFFEE_COLLECTION_NAME, Coffee.class).deleteOne(eq("_id", coffeeId));
+        sessionFactory.inTransaction(session -> session.remove(session.find(Coffee.class, coffeeId)));
     }
 
     @Test
@@ -269,7 +265,7 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
     }
 
     private void removeTestGrindProfileFromDatabase(String grindProfileId) {
-        mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
-                .getCollection(GRINDPROFILE_COLLECTION_NAME, GrindProfile.class).deleteOne(eq("_id", grindProfileId));
+        sessionFactory.inTransaction(session -> session.remove(session.find(GrindProfile.class, grindProfileId)));
     }
+
 }
