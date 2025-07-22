@@ -8,8 +8,10 @@ import com.mongodb.ServerAddress;
 
 import io.github.nicopolazzi.keepmygrind.controller.CoffeeController;
 import io.github.nicopolazzi.keepmygrind.controller.GrindProfileController;
-import io.github.nicopolazzi.keepmygrind.repository.mongo.CoffeeMongoRepository;
-import io.github.nicopolazzi.keepmygrind.repository.mongo.GrindProfileMongoRepository;
+import io.github.nicopolazzi.keepmygrind.factory.MongoRepositoryFactory;
+import io.github.nicopolazzi.keepmygrind.factory.RepositoryFactory;
+import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
+import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 import io.github.nicopolazzi.keepmygrind.view.swing.CoffeeSwingView;
 import io.github.nicopolazzi.keepmygrind.view.swing.GrindProfileSwingView;
 import io.github.nicopolazzi.keepmygrind.view.swing.KeepMyGrindSwingView;
@@ -19,11 +21,14 @@ import picocli.CommandLine.Option;
 @Command(mixinStandardHelpOptions = true)
 public class KeepMyGrindSwingApp implements Callable<Void> {
 
-    @Option(names = { "--mongo-host" }, description = "MongoDB host address")
-    private String mongoHost = "localhost";
+    @Option(names = { "--database" }, description = "Database name")
+    private String databaseName = "mongo";
 
-    @Option(names = { "--mongo-port" }, description = "MongoDB host port")
-    private int mongoPort = 27017;
+    @Option(names = { "--host" }, description = "Database host address")
+    private String host = "localhost";
+
+    @Option(names = { "--port" }, description = "Database host port")
+    private int port = 27017;
 
     public static void main(String[] args) {
         new picocli.CommandLine(new KeepMyGrindSwingApp()).execute(args);
@@ -33,9 +38,12 @@ public class KeepMyGrindSwingApp implements Callable<Void> {
     public Void call() throws Exception {
         EventQueue.invokeLater(() -> {
             try {
-                MongoClient mongoClient = new MongoClient(new ServerAddress(mongoHost, mongoPort));
-                CoffeeMongoRepository coffeeRepository = new CoffeeMongoRepository(mongoClient);
-                GrindProfileMongoRepository grindProfileRepository = new GrindProfileMongoRepository(mongoClient);
+                MongoClient mongoClient = new MongoClient(new ServerAddress(host, port));
+
+                // This is the core part of the Factory pattern
+                RepositoryFactory repositoryFactory = new MongoRepositoryFactory(mongoClient);
+                CoffeeRepository coffeeRepository = repositoryFactory.makeCoffeeRepository();
+                GrindProfileRepository grindProfileRepository = repositoryFactory.makeGrindProfileRepository();
 
                 CoffeeSwingView coffeeView = new CoffeeSwingView();
                 GrindProfileSwingView grindProfileView = new GrindProfileSwingView();

@@ -1,4 +1,4 @@
-package io.github.nicopolazzi.keepmygrind;
+package io.github.nicopolazzi.keepmygrind.view.swing;
 
 import static com.mongodb.client.model.Filters.eq;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -84,7 +84,8 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
                 GRINDPROFILE_FIXTURE_2_CLICKS));
 
         application("io.github.nicopolazzi.keepmygrind.app.swing.KeepMyGrindSwingApp")
-                .withArgs("--mongo-host=" + containerIpAddress, "--mongo-port=" + mappedPort.toString()).start();
+                .withArgs("--database=mongo" + "--host=" + containerIpAddress, "--port=" + mappedPort.toString())
+                .start();
 
         window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
             @Override
