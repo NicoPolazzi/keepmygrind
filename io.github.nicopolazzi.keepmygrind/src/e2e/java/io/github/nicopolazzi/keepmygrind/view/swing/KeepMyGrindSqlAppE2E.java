@@ -29,7 +29,7 @@ import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 @RunWith(GUITestRunner.class)
-public class KeepMyGrindSqlAppE2E extends AssertJSwingJUnitTestCase {
+public class KeepMyGrindSqlAppE2E extends AssertJSwingJUnitTestCase { // NOSONAR I want the name this way
 
     private static final String COFFEE_FIXTURE_1_ID = "1";
     private static final String COFFEE_FIXTURE_1_ORIGIN = "origin1";

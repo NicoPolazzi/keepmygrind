@@ -32,7 +32,7 @@ import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 @RunWith(GUITestRunner.class)
-public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
+public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase { // NOSONAR I want the name this way
 
     private static final String DB_NAME = "keepmygrind";
     private static final String COFFEE_COLLECTION_NAME = "coffee";

@@ -2,6 +2,8 @@ package io.github.nicopolazzi.keepmygrind.app.swing;
 
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -47,9 +49,7 @@ public class KeepMyGrindSwingApp implements Callable<Void> {
     public Void call() throws Exception {
         EventQueue.invokeLater(() -> {
             try {
-                RepositoryFactory factory;
-                CoffeeRepository coffeeRepository;
-                GrindProfileRepository grindProfileRepository;
+                RepositoryFactory repositoryFactory;
 
                 if (databaseName.equals("mysql")) {
                     SessionFactory sessionFactory = new Configuration().addAnnotatedClass(GrindProfile.class)
@@ -60,15 +60,14 @@ public class KeepMyGrindSwingApp implements Callable<Void> {
                             .setProperty(JdbcSettings.JAKARTA_JDBC_PASSWORD, "")
                             .setProperty(SchemaToolingSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_UPDATE)
                             .buildSessionFactory();
-                    factory = new SqlRepositoryFactory(sessionFactory);
-                    coffeeRepository = factory.makeCoffeeRepository();
-                    grindProfileRepository = factory.makeGrindProfileRepository();
+                    repositoryFactory = new SqlRepositoryFactory(sessionFactory);
                 } else {
                     MongoClient mongoClient = new MongoClient(new ServerAddress(host, port));
-                    factory = new MongoRepositoryFactory(mongoClient);
-                    coffeeRepository = factory.makeCoffeeRepository();
-                    grindProfileRepository = factory.makeGrindProfileRepository();
+                    repositoryFactory = new MongoRepositoryFactory(mongoClient);
                 }
+
+                CoffeeRepository coffeeRepository = repositoryFactory.makeCoffeeRepository();
+                GrindProfileRepository grindProfileRepository = repositoryFactory.makeGrindProfileRepository();
 
                 CoffeeSwingView coffeeView = new CoffeeSwingView();
                 GrindProfileSwingView grindProfileView = new GrindProfileSwingView();
@@ -86,7 +85,7 @@ public class KeepMyGrindSwingApp implements Callable<Void> {
                 grindProfileController.allGrindProfiles();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Exception", e);
             }
         });
 
