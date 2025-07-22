@@ -6,6 +6,8 @@ import static org.assertj.swing.launcher.ApplicationLauncher.application;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
+import java.util.regex.Pattern;
+
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
@@ -31,7 +33,6 @@ import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 @RunWith(GUITestRunner.class)
 public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
-
     private static final String DB_NAME = "keepmygrind";
     private static final String COFFEE_COLLECTION_NAME = "coffee";
     private static final String GRINDPROFILE_COLLECTION_NAME = "grindprofile";
@@ -208,5 +209,65 @@ public class KeepMyGrindMongoAppE2E extends AssertJSwingJUnitTestCase {
     private void removeTestCoffeeFromDatabase(String coffeeId) {
         mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
                 .getCollection(COFFEE_COLLECTION_NAME, Coffee.class).deleteOne(eq("_id", coffeeId));
+    }
+
+    @Test
+    @GUITest
+    public void testCoffeeDeleteButtonSuccess() {
+        window.button(JButtonMatcher.withText("Coffee")).click();
+        window.list("coffeeList")
+                .selectItem(Pattern.compile(".*" + COFFEE_FIXTURE_1_ORIGIN + ".*" + COFFEE_FIXTURE_1_PROCESS + ".*"));
+        window.button(JButtonMatcher.withText("Delete Selected")).click();
+        assertThat(window.list().contents())
+                .noneMatch(e -> e.contains(COFFEE_FIXTURE_1_ORIGIN) && e.contains(COFFEE_FIXTURE_1_PROCESS));
+    }
+
+    @Test
+    @GUITest
+    public void testCoffeeDeleteButtonError() {
+        window.button(JButtonMatcher.withText("Coffee")).click();
+        window.list("coffeeList")
+                .selectItem(Pattern.compile(".*" + COFFEE_FIXTURE_1_ORIGIN + ".*" + COFFEE_FIXTURE_1_PROCESS + ".*"));
+        removeTestCoffeeFromDatabase(COFFEE_FIXTURE_1_ID);
+        window.button(JButtonMatcher.withText("Delete Selected")).click();
+
+        assertThat(window.label("errorMessageLabel").text()).contains(COFFEE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ORIGIN,
+                COFFEE_FIXTURE_1_PROCESS);
+    }
+
+    @Test
+    @GUITest
+    public void testGrindProfileDeleteButtonSuccess() {
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.list("grindProfileList")
+                .selectItem(Pattern.compile(".*" + COFFEE_FIXTURE_1_ID + ".*" + GRINDPROFILE_FIXTURE_1_BREW + ".*"
+                        + GRINDPROFILE_FIXTURE_1_BEANS_GRAMS + ".*" + GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS + ".*"
+                        + GRINDPROFILE_FIXTURE_1_CLICKS + ".*"));
+        window.button(JButtonMatcher.withText("Delete Selected Profile")).click();
+        assertThat(window.list().contents()).noneMatch(e -> e.contains(GRINDPROFILE_FIXTURE_1_BREW)
+                && e.contains(String.valueOf(GRINDPROFILE_FIXTURE_1_BEANS_GRAMS))
+                && e.contains(String.valueOf(GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS))
+                && e.contains(String.valueOf(GRINDPROFILE_FIXTURE_1_CLICKS)));
+    }
+
+    @Test
+    @GUITest
+    public void testGrindProfileDeleteButtonError() {
+        window.button(JButtonMatcher.withText("Grind Profile")).click();
+        window.list("grindProfileList")
+                .selectItem(Pattern.compile(".*" + COFFEE_FIXTURE_1_ID + ".*" + GRINDPROFILE_FIXTURE_1_BREW + ".*"
+                        + GRINDPROFILE_FIXTURE_1_BEANS_GRAMS + ".*" + GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS + ".*"
+                        + GRINDPROFILE_FIXTURE_1_CLICKS + ".*"));
+        removeTestGrindProfileFromDatabase(GRINDPROFILE_FIXTURE_1_ID);
+        window.button(JButtonMatcher.withText("Delete Selected Profile")).click();
+        assertThat(window.label("errorMessageLabel").text()).contains(GRINDPROFILE_FIXTURE_1_ID, COFFEE_FIXTURE_1_ID,
+                GRINDPROFILE_FIXTURE_1_BREW, String.valueOf(GRINDPROFILE_FIXTURE_1_BEANS_GRAMS),
+                String.valueOf(GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS),
+                String.valueOf(GRINDPROFILE_FIXTURE_1_CLICKS));
+    }
+
+    private void removeTestGrindProfileFromDatabase(String grindProfileId) {
+        mongoClient.getDatabase(DB_NAME).withCodecRegistry(pojoCodecRegistry)
+                .getCollection(GRINDPROFILE_COLLECTION_NAME, GrindProfile.class).deleteOne(eq("_id", grindProfileId));
     }
 }

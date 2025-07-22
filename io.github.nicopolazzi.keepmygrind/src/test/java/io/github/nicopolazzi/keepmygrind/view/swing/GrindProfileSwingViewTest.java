@@ -91,6 +91,11 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         window.button(JButtonMatcher.withText("Add")).requireEnabled();
     }
 
+    private void addCoffeeToComboBox() {
+        GuiActionRunner
+                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
+    }
+
     @Test
     public void testAddButtonDisabledWhenIdIsEmpty() {
         window.textBox("idTextBox").enterText(" ");
@@ -260,8 +265,4 @@ public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
         verify(grindProfileController).deleteGrindProfile(grindProfile2);
     }
 
-    private void addCoffeeToComboBox() {
-        GuiActionRunner
-                .execute(() -> grindProfileView.getComboBoxCoffeeModel().addElement(new Coffee("1", "test", "test")));
-    }
 }
