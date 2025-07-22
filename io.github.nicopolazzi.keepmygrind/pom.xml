@@ -300,6 +300,7 @@
           <configuration>
             <excludes>
               <exclude>**/model/*.*</exclude>
+              <exclude>**/KeepMyGrindSwingApp.*</exclude>
             </excludes>
           </configuration>
           <executions>
