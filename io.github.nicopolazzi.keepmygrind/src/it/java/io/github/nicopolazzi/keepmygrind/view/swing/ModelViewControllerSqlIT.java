@@ -39,7 +39,7 @@ public class ModelViewControllerSqlIT extends AssertJSwingJUnitTestCase {
     @BeforeClass
     public static void setupSessionFactory() {
         sessionFactory = new Configuration().addAnnotatedClass(GrindProfile.class).addAnnotatedClass(Coffee.class)
-                .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:tc:mysql:8.0.36:///keepmygrind")
+                .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:tc:mysql:8:///keepmygrind")
                 .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION, Action.ACTION_CREATE_THEN_DROP)
                 .buildSessionFactory();
     }

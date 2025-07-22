@@ -5,6 +5,7 @@ import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.Optional;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -43,7 +44,9 @@ class CoffeeControllerTest {
         List<Coffee> coffees = asList(new Coffee());
         when(coffeeRepository.findAll()).thenReturn(coffees);
         coffeeController.allCoffees();
-        verify(coffeeView).showAllCoffees(coffees);
+        InOrder inOrder = inOrder(coffeeView, grindProfileView);
+        inOrder.verify(coffeeView).showAllCoffees(coffees);
+        inOrder.verify(grindProfileView).refreshCoffees(coffees);
     }
 
     @Test
@@ -72,10 +75,12 @@ class CoffeeControllerTest {
     void testDeleteCoffeeWhenCoffeeAlreadyExists() {
         var coffee = new Coffee(COFFEE_FIXTURE_ID, COFFEE_FIXTURE_ORIGIN, COFFEE_FIXTURE_PROCESS);
         when(coffeeRepository.findById(COFFEE_FIXTURE_ID)).thenReturn(Optional.of(coffee));
+        when(coffeeRepository.findAll()).thenReturn(Lists.emptyList());
         coffeeController.deleteCoffee(coffee);
-        InOrder inOrder = inOrder(coffeeRepository, coffeeView);
+        InOrder inOrder = inOrder(coffeeRepository, coffeeView, grindProfileView);
         inOrder.verify(coffeeRepository).delete(COFFEE_FIXTURE_ID);
         inOrder.verify(coffeeView).coffeeRemoved(coffee);
+        inOrder.verify(grindProfileView).refreshCoffees(Lists.emptyList());
     }
 
     @Test

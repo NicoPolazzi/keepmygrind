@@ -60,7 +60,8 @@
     
     <sonar.tests>
       ${project.basedir}/src/test/java,
-      ${project.basedir}/src/it/java
+      ${project.basedir}/src/it/java,
+      ${project.basedir}/src/e2e/java
     </sonar.tests>
     
     <sonar.junit.reportPaths>
@@ -69,7 +70,8 @@
     </sonar.junit.reportPaths>
     
     <sonar.coverage.exclusions>
-      **/model/*.*
+      **/model/*.*,
+      **/KeepMyGrindSwingApp.*
     </sonar.coverage.exclusions>
   </properties>
 
@@ -173,6 +175,11 @@
       <artifactId>mysql-connector-j</artifactId>
       <version>${mysql.version}</version>
     </dependency>
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>4.7.6</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -192,6 +199,7 @@
               <configuration>
                 <sources>
                   <source>src/it/java</source>
+                  <source>src/e2e/java</source>
                 </sources>
               </configuration>
             </execution>
@@ -217,10 +225,26 @@
           <version>3.5.2</version>
           <executions>
             <execution>
+              <id>default-it</id>
               <goals>
                 <goal>integration-test</goal>
                 <goal>verify</goal>
               </goals>
+            </execution>
+            <execution>
+              <id>e2e-tests</id>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+              <configuration>
+                <excludes>
+                  <exclude>**/*IT.java</exclude>
+                </excludes>
+                <includes>
+                  <include>**/*E2E.java</include>
+                </includes>
+              </configuration>
             </execution>
           </executions>
         </plugin>
@@ -277,6 +301,7 @@
           <configuration>
             <excludes>
               <exclude>**/model/*.*</exclude>
+              <exclude>**/KeepMyGrindSwingApp.*</exclude>
             </excludes>
           </configuration>
           <executions>

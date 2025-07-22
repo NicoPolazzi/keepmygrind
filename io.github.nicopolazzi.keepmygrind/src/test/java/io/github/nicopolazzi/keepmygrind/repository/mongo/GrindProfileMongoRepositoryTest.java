@@ -35,13 +35,13 @@ class GrindProfileMongoRepositoryTest {
 
     private static final String GRINDPROFILE_FIXTURE_1_ID = "1";
     private static final String GRINDPROFILE_FIXTURE_1_BREW = "V60";
-    private static final int GRINDPROFILE_FIXTURE_1_BEANS_GRAMS = 18;
-    private static final int GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS = 250;
+    private static final double GRINDPROFILE_FIXTURE_1_BEANS_GRAMS = 18;
+    private static final double GRINDPROFILE_FIXTURE_1_WATER_MILLILITERS = 250;
     private static final int GRINDPROFILE_FIXTURE_1_CLICKS = 60;
     private static final String GRINDPROFILE_FIXTURE_2_ID = "2";
     private static final String GRINDPROFILE_FIXTURE_2_BREW = "espresso";
-    private static final int GRINDPROFILE_FIXTURE_2_BEANS_GRAMS = 9;
-    private static final int GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS = 50;
+    private static final double GRINDPROFILE_FIXTURE_2_BEANS_GRAMS = 9;
+    private static final double GRINDPROFILE_FIXTURE_2_WATER_MILLILITERS = 50;
     private static final int GRINDPROFILE_FIXTURE_2_CLICKS = 20;
 
     private static MongoServer server;

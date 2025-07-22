@@ -20,6 +20,7 @@ public class CoffeeController {
 
     public void allCoffees() {
         coffeeView.showAllCoffees(coffeeRepository.findAll());
+        grindProfileView.refreshCoffees(coffeeRepository.findAll());
     }
 
     public void newCoffee(Coffee coffee) {
@@ -35,6 +36,7 @@ public class CoffeeController {
         coffeeRepository.findById(coffee.getId()).ifPresentOrElse(existing -> {
             coffeeRepository.delete(existing.getId());
             coffeeView.coffeeRemoved(existing);
+            grindProfileView.refreshCoffees(coffeeRepository.findAll());
         }, () -> coffeeView.showNotExistingCoffeeError(coffee));
     }
 
