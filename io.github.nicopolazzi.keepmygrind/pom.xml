@@ -16,7 +16,7 @@
     <mockito.version>4.11.0</mockito.version>
     <mongo.version>3.12.14</mongo.version>
     <mongo.server.version>1.47.0</mongo.server.version>
-    <hibernate.version>7.0.6.Final</hibernate.version>
+    <hibernate.version>6.6.22.Final</hibernate.version>
     <h2.version>2.3.232</h2.version>
     <mysql.version>9.3.0</mysql.version>
     <testcontainers.version>1.21.3</testcontainers.version>
@@ -302,9 +302,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>3.5.2</version>
-        <configuration>
-          <argLine>--add-opens=java.base/java.util=ALL-UNNAMED</argLine>
-        </configuration>
         <executions>
           <execution>
             <id>default-it</id>
