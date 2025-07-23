@@ -6,6 +6,7 @@ import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
 public class GrindProfileController {
+
     private GrindProfileRepository grindProfileRepository;
     private GrindProfileView grindProfileView;
     private CoffeeRepository coffeeRepository;

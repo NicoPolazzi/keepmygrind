@@ -19,6 +19,7 @@ import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 
 public class GrindProfileMongoRepository implements GrindProfileRepository {
+
     public static final String KEEPMYGRIND_DB_NAME = "keepmygrind";
     public static final String GRINDPROFILE_COLLECTION_NAME = "grindprofile";
 

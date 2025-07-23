@@ -59,7 +59,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     }
 
     public GrindProfileSwingView() {
-        setPreferredSize(new Dimension(700, 500));
+        setPreferredSize(new Dimension(709, 503));
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 79, 0, 0 };
         gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

@@ -25,6 +25,7 @@ import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 
 @ExtendWith(MockitoExtension.class)
 class CoffeeControllerSqlIT {
+
     private static final String COFFEE_FIXTURE_ID = "1";
     private static final String COFFEE_FIXTURE_ORIGIN = "origin";
     private static final String COFFEE_FIXTURE_PROCESS = "process";

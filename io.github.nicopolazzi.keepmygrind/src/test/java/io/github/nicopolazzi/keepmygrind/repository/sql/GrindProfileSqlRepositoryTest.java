@@ -19,6 +19,7 @@ import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 import io.github.nicopolazzi.keepmygrind.repository.GrindProfileRepository;
 
 class GrindProfileSqlRepositoryTest {
+
     private static final String GRINDPROFILE_FIXTURE_1_ID = "1";
     private static final String GRINDPROFILE_FIXTURE_1_BREW = "V60";
     private static final int GRINDPROFILE_FIXTURE_1_BEANS_GRAMS = 18;

@@ -44,10 +44,10 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
     public CoffeeSwingView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.columnWidths = new int[] { 46, 645, 0 };
-        gridBagLayout.rowHeights = new int[] { 21, 21, 21, 27, 354, 0, 0, 0 };
-        gridBagLayout.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
-        gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+        gridBagLayout.columnWidths = new int[] { 79, 599, 0 };
+        gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 252, 0, 0, 0 };
+        gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+        gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
         setLayout(gridBagLayout);
 
         JLabel lblId = new JLabel("id");
@@ -70,6 +70,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
         JLabel lblOrigin = new JLabel("origin");
         GridBagConstraints gbc_lblOrigin = new GridBagConstraints();
+        gbc_lblOrigin.anchor = GridBagConstraints.EAST;
         gbc_lblOrigin.insets = new Insets(0, 0, 5, 5);
         gbc_lblOrigin.gridx = 0;
         gbc_lblOrigin.gridy = 1;
@@ -87,6 +88,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
 
         JLabel lblProcess = new JLabel("process");
         GridBagConstraints gbc_lblProcess = new GridBagConstraints();
+        gbc_lblProcess.anchor = GridBagConstraints.EAST;
         gbc_lblProcess.insets = new Insets(0, 0, 5, 5);
         gbc_lblProcess.gridx = 0;
         gbc_lblProcess.gridy = 2;

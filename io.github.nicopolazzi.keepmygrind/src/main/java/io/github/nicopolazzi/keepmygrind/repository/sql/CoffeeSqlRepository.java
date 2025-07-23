@@ -9,6 +9,7 @@ import io.github.nicopolazzi.keepmygrind.model.Coffee;
 import io.github.nicopolazzi.keepmygrind.repository.CoffeeRepository;
 
 public class CoffeeSqlRepository implements CoffeeRepository {
+
     private SessionFactory sessionFactory;
 
     public CoffeeSqlRepository(SessionFactory sessionFactory) {

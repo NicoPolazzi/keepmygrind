@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(GUITestRunner.class)
 public class KeepMyGrindSwingViewTest extends AssertJSwingJUnitTestCase {
+
     private FrameFixture window;
 
     @Override

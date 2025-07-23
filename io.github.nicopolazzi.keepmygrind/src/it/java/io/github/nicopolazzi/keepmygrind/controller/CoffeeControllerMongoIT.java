@@ -24,6 +24,7 @@ import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 @ExtendWith(MockitoExtension.class)
 @Testcontainers
 class CoffeeControllerMongoIT {
+
     private static final String COFFEE_FIXTURE_ID = "1";
     private static final String COFFEE_FIXTURE_ORIGIN = "origin";
     private static final String COFFEE_FIXTURE_PROCESS = "process";
