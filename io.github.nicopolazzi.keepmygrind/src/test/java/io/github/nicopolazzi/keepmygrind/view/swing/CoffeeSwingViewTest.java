@@ -111,6 +111,33 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         originTextBox.enterText(" ");
         processTextBox.enterText("test");
         window.button(JButtonMatcher.withText("Add")).requireDisabled();
+
+        idTextBox.setText("");
+        originTextBox.setText("");
+        processTextBox.setText("");
+
+        idTextBox.enterText("1");
+        originTextBox.enterText(" ");
+        processTextBox.enterText(" ");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+
+        idTextBox.setText("");
+        originTextBox.setText("");
+        processTextBox.setText("");
+
+        idTextBox.enterText(" ");
+        originTextBox.enterText("test");
+        processTextBox.enterText("test");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
+
+        idTextBox.setText("");
+        originTextBox.setText("");
+        processTextBox.setText("");
+
+        idTextBox.enterText(" ");
+        originTextBox.enterText("test");
+        processTextBox.enterText(" ");
+        window.button(JButtonMatcher.withText("Add")).requireDisabled();
     }
 
     @Test
