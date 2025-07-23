@@ -15,21 +15,16 @@
     <maven.compiler.release>17</maven.compiler.release>
     <junit.version>5.12.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
-    <assertj.version>3.27.3</assertj.version>
     <mongo.version>3.12.14</mongo.version>
     <mongo.server.version>1.46.0</mongo.server.version>
     <hibernate.version>6.6.13.Final</hibernate.version>
     <h2.version>2.3.232</h2.version>
     <mysql.version>9.3.0</mysql.version>
     <testcontainers.version>1.21.3</testcontainers.version>
-    <logback.version>1.5.18</logback.version>
     <assertj.swing.version>3.17.1</assertj.swing.version>
     <argLine></argLine>
-    
-    <sonar.host.url>http://localhost:9000</sonar.host.url>
-    
+        
     <sonar.issue.ignore.multicriteria>e11,e12,e13</sonar.issue.ignore.multicriteria>
-    
     <!-- this rule is exclude becasue it produces a false positive when using JPA bi-directional entities
          https://community.sonarsource.com/t/advanced-class-cycle-detection-for-java/127500 -->
     <sonar.issue.ignore.multicriteria.e11.ruleKey>
@@ -41,7 +36,6 @@
     <sonar.issue.ignore.multicriteria.e11.resourceKey>
       **/GrindProfile.java
     </sonar.issue.ignore.multicriteria.e11.resourceKey>
-    
     <!-- Disable rule for "Tests should include assertions" -->
     <sonar.issue.ignore.multicriteria.e12.ruleKey>
       java:S2699    
@@ -49,7 +43,6 @@
     <sonar.issue.ignore.multicriteria.e12.resourceKey>
       **/*SwingViewTest.java
     </sonar.issue.ignore.multicriteria.e12.resourceKey>
-    
     <!-- Disable rule for "Local variable and method parameter names should comply with a naming convention" -->
     <sonar.issue.ignore.multicriteria.e13.ruleKey>
       java:S117    
@@ -67,7 +60,7 @@
     <sonar.junit.reportPaths>
       ${project.build.directory}/surefire-reports,
       ${project.build.directory}/failsafe-reports
-    </sonar.junit.reportPaths>
+    </sonar.junit.reportPaths>    
     
     <sonar.coverage.exclusions>
       **/model/*.*,
@@ -103,30 +96,29 @@
   
   <dependencies>
     <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <scope>test</scope>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-junit-jupiter</artifactId>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-swing-junit</artifactId>
-      <version>${assertj.swing.version}</version>
+ <!--   <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
       <scope>test</scope>
+    </dependency>-->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+      <version>${mongo.version}</version>
     </dependency>
     <dependency>
       <groupId>de.bwaldvogel</groupId>
@@ -146,14 +138,9 @@
       <version>${hibernate.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongo-java-driver</artifactId>
-      <version>${mongo.version}</version>
-    </dependency>
-    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
+      <version>1.5.18</version>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
@@ -176,6 +163,12 @@
       <version>${mysql.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-swing-junit</artifactId>
+      <version>${assertj.swing.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>4.7.6</version>
@@ -185,81 +178,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>build-helper-maven-plugin</artifactId>
-          <version>3.6.0</version>
-          <executions>
-            <execution>
-              <id>add-test-source</id>
-              <phase>generate-test-sources</phase>
-              <goals>
-                <goal>add-test-source</goal>
-              </goals>
-              <configuration>
-                <sources>
-                  <source>src/it/java</source>
-                  <source>src/e2e/java</source>
-                </sources>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.14.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.0</version>
-           <!-- Remove the warning: OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes 
-           because bootstrap classpath has been appended. https://github.com/mockito/mockito/issues/3111
-           -->
-           <configuration>
-                <argLine>@{argLine} -Xshare:off</argLine>
-            </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.5.2</version>
-          <executions>
-            <execution>
-              <id>default-it</id>
-              <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>e2e-tests</id>
-              <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-              </goals>
-              <configuration>
-                <excludes>
-                  <exclude>**/*IT.java</exclude>
-                </excludes>
-                <includes>
-                  <include>**/*E2E.java</include>
-                </includes>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.4.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.2</version>
-        </plugin>
         <plugin>
           <groupId>org.pitest</groupId>
           <artifactId>pitest-maven</artifactId>
@@ -307,16 +225,13 @@
           <executions>
             <execution>
               <goals>
-                <!-- binds by default to the phase "initialize" -->
                 <goal>prepare-agent</goal>
-                <!-- binds by default to the phase "verify" -->
                 <goal>report</goal>
               </goals>
             </execution>
             <execution>
               <id>jacoco-check</id>
               <goals>
-                <!-- binds by default to the phase "verify" -->
                 <goal>check</goal>
               </goals>
               <configuration>
@@ -362,12 +277,70 @@
     
     <plugins>
       <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+            <!-- Remove the warning: OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes 
+            because bootstrap classpath has been appended. https://github.com/mockito/mockito/issues/3111
+            -->
+            <argLine>@{argLine} -Xshare:off</argLine>
+            <!-- Suppress java.lang.reflect.InaccessibleObjectException thrown by a TimerTask when using assertj.swing.
+            The problem seems to be caused by the module system used in Java 17. 
+            -->
+            <argLine>--add-opens=java.base/java.util=ALL-UNNAMED</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/it/java</source>
+                <source>src/e2e/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.5.2</version>
+        <configuration>
+          <argLine>--add-opens=java.base/java.util=ALL-UNNAMED</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-it</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>e2e-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/*IT.java</exclude>
+              </excludes>
+              <includes>
+                <include>**/*E2E.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
