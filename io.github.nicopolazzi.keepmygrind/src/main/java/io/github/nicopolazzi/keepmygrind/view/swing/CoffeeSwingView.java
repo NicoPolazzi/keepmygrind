@@ -34,6 +34,8 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
     private DefaultListModel<Coffee> listCoffeesModel;
     private JLabel lblErrorMessage;
 
+    private JButton btnAdd;
+
     public void setCoffeeController(CoffeeController coffeeController) {
         this.coffeeController = coffeeController;
     }
@@ -104,7 +106,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         add(txtProcess, gbc_txtProcess);
         txtProcess.setColumns(10);
 
-        JButton btnAdd = new JButton("Add");
+        btnAdd = new JButton("Add");
 
         btnAdd.setEnabled(false);
         GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -151,8 +153,7 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         KeyAdapter btnAddEnabler = new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                btnAdd.setEnabled(!txtId.getText().trim().isEmpty() && !txtOrigin.getText().trim().isEmpty()
-                        && !txtProcess.getText().trim().isEmpty());
+                updateAddButtonEnabled();
             }
         };
 
@@ -163,6 +164,11 @@ public class CoffeeSwingView extends JPanel implements CoffeeView {
         btnAdd.addActionListener(e -> coffeeController
                 .newCoffee(new Coffee(txtId.getText(), txtOrigin.getText(), txtProcess.getText())));
         btnDeleteSelected.addActionListener(e -> coffeeController.deleteCoffee(listCoffees.getSelectedValue()));
+    }
+
+    private void updateAddButtonEnabled() {
+        btnAdd.setEnabled(!txtId.getText().trim().isEmpty() && !txtOrigin.getText().trim().isEmpty()
+                && !txtProcess.getText().trim().isEmpty());
     }
 
     @Override

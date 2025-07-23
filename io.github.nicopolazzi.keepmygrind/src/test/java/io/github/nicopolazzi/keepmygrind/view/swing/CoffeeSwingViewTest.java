@@ -127,7 +127,7 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
 
         idTextBox.enterText(" ");
         originTextBox.enterText("test");
-        processTextBox.enterText("test");
+        processTextBox.enterText(" ");
         window.button(JButtonMatcher.withText("Add")).requireDisabled();
 
         idTextBox.setText("");
@@ -135,8 +135,8 @@ public class CoffeeSwingViewTest extends AssertJSwingJUnitTestCase {
         processTextBox.setText("");
 
         idTextBox.enterText(" ");
-        originTextBox.enterText("test");
-        processTextBox.enterText(" ");
+        originTextBox.enterText(" ");
+        processTextBox.enterText("test");
         window.button(JButtonMatcher.withText("Add")).requireDisabled();
     }
 

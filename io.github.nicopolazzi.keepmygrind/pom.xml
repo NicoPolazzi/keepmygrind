@@ -12,7 +12,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
-    <junit.version>5.12.2</junit.version>
+    <junit.version>5.13.4</junit.version>
     <mockito.version>4.11.0</mockito.version>
     <mongo.version>3.12.14</mongo.version>
     <mongo.server.version>1.46.0</mongo.server.version>
@@ -21,7 +21,6 @@
     <mysql.version>9.3.0</mysql.version>
     <testcontainers.version>1.21.3</testcontainers.version>
     <assertj.swing.version>3.17.1</assertj.swing.version>
-    <argLine></argLine>
         
     <sonar.issue.ignore.multicriteria>e11,e12,e13</sonar.issue.ignore.multicriteria>
     <!-- this rule is exclude becasue it produces a false positive when using JPA bi-directional entities
@@ -264,20 +263,6 @@
     </pluginManagement>
     
     <plugins>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.0</version>
-        <configuration>
-            <!-- Remove the warning: OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes 
-            because bootstrap classpath has been appended. https://github.com/mockito/mockito/issues/3111
-            -->
-            <argLine>@{argLine} -Xshare:off</argLine>
-            <!-- Suppress java.lang.reflect.InaccessibleObjectException thrown by a TimerTask when using assertj.swing.
-            The problem seems to be caused by the module system used in Java 17. 
-            -->
-            <argLine>--add-opens=java.base/java.util=ALL-UNNAMED</argLine>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
