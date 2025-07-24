@@ -27,6 +27,7 @@ import io.github.nicopolazzi.keepmygrind.model.GrindProfile;
 
 @RunWith(GUITestRunner.class)
 public class GrindProfileSwingViewTest extends AssertJSwingJUnitTestCase {
+
     private FrameFixture window;
     private GrindProfileSwingView grindProfileView;
 

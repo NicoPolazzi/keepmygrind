@@ -26,6 +26,7 @@ import io.github.nicopolazzi.keepmygrind.view.GrindProfileView;
 @ExtendWith(MockitoExtension.class)
 @Testcontainers
 class GrindProfileControllerMongoIT {
+
     private static final String GRINDPROFILE_FIXTURE_ID = "1";
     private static final Coffee GRINDPROFILE_FIXTURE_COFFEE = new Coffee("1", "test", "test");
     private static final String GRINDPROFILE_FIXTURE_BREW = "V60";

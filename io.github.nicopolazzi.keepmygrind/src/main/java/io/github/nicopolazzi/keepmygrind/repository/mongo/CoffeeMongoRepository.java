@@ -22,6 +22,7 @@ public class CoffeeMongoRepository implements CoffeeRepository {
 
     public static final String KEEPMYGRIND_DB_NAME = "keepmygrind";
     public static final String COFFEE_COLLECTION_NAME = "coffee";
+
     private MongoCollection<Coffee> coffeeCollection;
 
     public CoffeeMongoRepository(MongoClient client) {

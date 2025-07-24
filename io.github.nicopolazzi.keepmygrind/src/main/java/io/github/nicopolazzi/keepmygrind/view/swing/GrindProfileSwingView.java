@@ -59,7 +59,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
     }
 
     public GrindProfileSwingView() {
-        setPreferredSize(new Dimension(700, 500));
+        setPreferredSize(new Dimension(709, 503));
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 79, 0, 0 };
         gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -79,11 +79,10 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         KeyAdapter btnAddEnabler = new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                btnAdd.setEnabled(!txtId.getText().trim().isEmpty() && comboBoxCoffees.getSelectedItem() != null
-                        && !txtBrew.getText().trim().isEmpty() && !txtGrams.getText().trim().isEmpty()
-                        && !txtWater.getText().trim().isEmpty() && !txtClicks.getText().trim().isEmpty());
+                updateAddButtonEnabled();
             }
         };
+
         txtId.addKeyListener(btnAddEnabler);
         txtId.setName("idTextBox");
         GridBagConstraints gbc_textField_5 = new GridBagConstraints();
@@ -105,6 +104,7 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         comboBoxCoffeeModel = new DefaultComboBoxModel<>();
         comboBoxCoffees = new JComboBox<>(comboBoxCoffeeModel);
         comboBoxCoffees.addKeyListener(btnAddEnabler);
+        comboBoxCoffees.addActionListener(e -> updateAddButtonEnabled());
         comboBoxCoffees.setName("coffeeComboBox");
         GridBagConstraints gbc_comboBox = new GridBagConstraints();
         gbc_comboBox.insets = new Insets(0, 0, 5, 0);
@@ -237,6 +237,12 @@ public class GrindProfileSwingView extends JPanel implements GrindProfileView {
         gbc_lblErrorMessage.gridx = 0;
         gbc_lblErrorMessage.gridy = 9;
         add(lblErrorMessageProfile, gbc_lblErrorMessage);
+    }
+
+    private void updateAddButtonEnabled() {
+        btnAdd.setEnabled(!txtId.getText().trim().isEmpty() && comboBoxCoffees.getSelectedItem() != null
+                && !txtBrew.getText().trim().isEmpty() && !txtGrams.getText().trim().isEmpty()
+                && !txtWater.getText().trim().isEmpty() && !txtClicks.getText().trim().isEmpty());
     }
 
     @Override
